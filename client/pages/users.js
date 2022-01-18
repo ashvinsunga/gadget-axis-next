@@ -3,8 +3,8 @@ import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 import styled from 'styled-components';
 import { Button, Row, Col } from 'antd';
-import 'antd/dist/antd.css';
 import { Spin } from 'antd';
+import { toast } from 'react-toastify';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -15,12 +15,14 @@ export default function UsersList() {
   const [users, setUsers] = useState([]);
   const [gridApi, setGridApi] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(true);
+  const [ok, setOk] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     description: '',
     password: '',
-    phone: '',
     confirmpassword: '',
+    phone: '',
     permission: '',
   });
 
@@ -52,11 +54,24 @@ export default function UsersList() {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    clearForm();
   };
 
   //Loading
 
   const [loading, setLoading] = useState(false);
+
+  //clear form
+  const clearForm = () => {
+    setFormData({
+      username: '',
+      description: '',
+      phone: '',
+      password: '',
+      confirmpassword: '',
+      permission: '',
+    });
+  };
   //--------------------------------------
   useEffect(() => {
     // runs the fetchGadgets on load
@@ -90,14 +105,22 @@ export default function UsersList() {
     setFormData({ ...formData, [id]: value });
   };
 
-  const handleSubmit = () => {
-    axios
-      .post('http://localhost:8000/admin/users/adduser', formData)
-      .then((res) => {
-        console.log('This is it!');
-        setIsModalVisible(false);
-      })
-      .catch((err) => console.log(err));
+  const handleSubmit = async () => {
+    try {
+      setConfirmLoading(true);
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/adduser`,
+        formData
+      );
+      setOk(data.ok);
+      setConfirmLoading(false);
+      setIsModalVisible(false);
+      clearForm();
+      toast.success('User successfully added');
+    } catch (err) {
+      setConfirmLoading(false);
+      toast.error(err.response.data);
+    }
   };
   if (loading)
     return (
@@ -132,6 +155,8 @@ export default function UsersList() {
         formData={formData}
         setFormData={setFormData}
         onChange={onChange}
+        setOk={setOk}
+        confirmLoading={confirmLoading}
       />
     </UserLists>
   );

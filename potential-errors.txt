@@ -1,0 +1,2 @@
+Usage of fs on server to load routes
+Await is not used on finding User and hashing the password

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'antd';
+import { Modal, Button } from 'antd';
 
 export default function Dialog({
   handleSubmit,
@@ -7,6 +7,8 @@ export default function Dialog({
   isModalVisible,
   formData,
   onChange,
+  confirmLoading,
+  clearForm,
 }) {
   const {
     username,
@@ -20,15 +22,32 @@ export default function Dialog({
   return (
     <Modal
       title="ADD USER"
-      visible={isModalVisible}
-      onOk={handleSubmit}
-      okText={'SAVE'}
-      onCancel={handleCancel}
-      cancelText={'CANCEL'}
+      // okText={'SAVE'}
+      // cancelText={'CANCEL'}
       width={470}
       closable={false}
       keyboard={true}
-      confirmLoading={false}
+      visible={isModalVisible}
+      // onOk={handleSubmit}
+      // confirmLoading={confirmLoading}
+      // onCancel={handleCancel}
+      footer={[
+        <Button
+          type="primary"
+          disabled={
+            !username ||
+            !description ||
+            !password ||
+            !confirmpassword ||
+            !permission
+          }
+          onClick={handleSubmit}
+          confirmLoading={confirmLoading}
+        >
+          SAVE
+        </Button>,
+        <Button onClick={handleCancel}>CANCEL</Button>,
+      ]}
     >
       <form>
         {/* <div className="mb-2 row">

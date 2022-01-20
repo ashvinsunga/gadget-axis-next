@@ -1,13 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { SyncOutlined } from '@ant-design/icons';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { UserContext } from '../context';
 
 export default function Login() {
-  const [username, setUsername] = useState('Administrator');
+  const [state, setState] = useContext(UserContext);
+  const [username, setUsername] = useState('ashvinsunga');
   const [password, setPassword] = useState('123456');
+  const [loading, setLoading] = useState(false);
 
-  const loginSubmit = (event) => {
-    event.preventDefault();
-    console.log('USERNAME =', username);
-    console.log('PASSWORD =', password);
+  const router = useRouter();
+  const loginSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const { data } = await axios.post(`http://localhost:8000/loginuser`, {
+        username,
+        password,
+      });
+      // update context
+      setState({
+        user: data.user,
+        token: data.token,
+      });
+      // save in local storage
+      window.localStorage.setItem('axistoken', JSON.stringify(data));
+      router.push('/rentnow');
+      setUsername('');
+      setPassword('');
+      setLoading(false);
+    } catch (err) {
+      toast.error(err.response.data);
+      setLoading(false);
+    }
   };
 
   return (
@@ -15,7 +42,16 @@ export default function Login() {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Gadget Axis</h5>
+            <div className="h4 justiy-content">
+              <img
+                src="images/logo-black.png"
+                width="40"
+                height="30"
+                class="d-inline-block h1 "
+                alt=""
+              />
+              ADGET AXIS GADGET RENTAL SYSTEM
+            </div>
           </div>
           <div className="modal-body col-md-10 offset-1">
             <form onSubmit={loginSubmit}>
@@ -38,8 +74,13 @@ export default function Login() {
                   placeholder="Password"
                 />
               </div>
-              <button type="submit" className="btn btn-primary">
-                Login
+              <button
+                width={400}
+                disabled={!username || !password || loading}
+                type="submit"
+                className="btn btn-primary btn-sm"
+              >
+                {loading ? <SyncOutlined spin className="py-1" /> : 'Login'}
               </button>
             </form>
           </div>

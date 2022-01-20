@@ -1,5 +1,6 @@
 const User = require('../models/user.model');
-const { hashPassword } = require('../helpers/auth.helper');
+const { hashPassword, comparePassword } = require('../helpers/auth.helper');
+const jwt = require('jsonwebtoken');
 
 const addUser = async (req, res) => {
   // console.log('REGISTER ENDPOINT =>', req.body);
@@ -44,4 +45,30 @@ const addUser = async (req, res) => {
   }
 };
 
-module.exports = { addUser };
+const loginUser = async (req, res) => {
+  console.log(req.body);
+
+  try {
+    const { username, password } = req.body;
+    // check if user exist on db
+    const user = await User.findOne({ username });
+    if (!user) return res.status(400).send('Invalid username');
+    // check password
+    const match = await comparePassword(password, user.password);
+    if (!match) return res.status(400).send('Invalid password');
+    // create signed token
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: 180,
+    });
+    user.password = undefined;
+    res.json({
+      user,
+      token,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send('Error. Try again!');
+  }
+};
+
+module.exports = { addUser, loginUser };

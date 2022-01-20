@@ -14,7 +14,7 @@ import Dialog from '../components/Dialog.component';
 export default function UsersList() {
   const [users, setUsers] = useState([]);
   const [gridApi, setGridApi] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [ok, setOk] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -92,7 +92,7 @@ export default function UsersList() {
     // native style of requesting data from the api/server
     //   fetch('http://localhost:8000/admin/customers', {
     //   method: 'GET',
-    // })
+    // })onChange
     //   .then((response) => {
     //     return response.json();
     //   })
@@ -104,7 +104,6 @@ export default function UsersList() {
     const { value, id } = e.target;
     setFormData({ ...formData, [id]: value });
   };
-
   const handleSubmit = async () => {
     try {
       setConfirmLoading(true);
@@ -113,8 +112,8 @@ export default function UsersList() {
         formData
       );
       setOk(data.ok);
-      setConfirmLoading(false);
       setIsModalVisible(false);
+      setConfirmLoading(false);
       clearForm();
       toast.success('User successfully added');
     } catch (err) {
@@ -155,7 +154,6 @@ export default function UsersList() {
         formData={formData}
         setFormData={setFormData}
         onChange={onChange}
-        setOk={setOk}
         confirmLoading={confirmLoading}
       />
     </UserLists>

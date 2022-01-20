@@ -18,10 +18,13 @@ app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('dev'));
-// autoload routes
+// autoload routes for admin route requests
 readdirSync('./routes').map((route) =>
   app.use('/admin/users', require(`./routes/${route}`))
 );
+
+//manual importing of route
+app.use('/', require(`./routes/auth.route`));
 
 const port = process.env.PORT || 8000;
 

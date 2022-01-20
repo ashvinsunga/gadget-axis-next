@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../context/';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 import styled from 'styled-components';
 import { Button, Row, Col } from 'antd';
 import { Spin } from 'antd';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -12,6 +14,7 @@ import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import Dialog from '../components/Dialog.component';
 
 export default function UsersList() {
+  const [state, setState] = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [gridApi, setGridApi] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -25,7 +28,8 @@ export default function UsersList() {
     phone: '',
     permission: '',
   });
-
+  const router = useRouter();
+  if (state === null) router.push('/');
   // data grid
   const columnDefs = [
     { headerName: 'User pangalan', field: 'username' },
@@ -73,10 +77,10 @@ export default function UsersList() {
     });
   };
   //--------------------------------------
-  useEffect(() => {
-    // runs the fetchGadgets on load
-    fetchUsers();
-  }, []);
+  // useEffect(() => {
+  //   // runs the fetchGadgets on load
+  //   fetchUsers();
+  // }, []);
 
   const fetchUsers = () => {
     // axios based data request from the api/server

@@ -37,6 +37,7 @@ export default function Login() {
     }
   };
 
+  if (state && state.token) router.push('/rentnow');
   return (
     <div className="container">
       <div className="modal-dialog">

@@ -46,8 +46,6 @@ const addUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  console.log(req.body);
-
   try {
     const { username, password } = req.body;
     // check if user exist on db

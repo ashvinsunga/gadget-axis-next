@@ -10,7 +10,7 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {
     setState(JSON.parse(window.localStorage.getItem('axistoken')));
-  });
+  }, []);
   return (
     <UserContext.Provider value={[state, setState]}>
       {children}

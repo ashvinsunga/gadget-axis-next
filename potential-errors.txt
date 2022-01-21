@@ -1,3 +1,6 @@
 Usage of fs on server to load routes
 Await is not used on finding User and hashing the password
 Navbar Component function structure, es6 was used
+
+Axios interceptor is used
+I didn't use axios config to shorthand the base url and token headers

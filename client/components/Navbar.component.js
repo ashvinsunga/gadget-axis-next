@@ -15,8 +15,8 @@ export default function Navbar() {
 
   const logout = () => {
     window.localStorage.removeItem('axistoken');
-    router.push('/');
     setState(null);
+    router.push('/');
   };
   return (
     <nav className="nav bg-dark d-flex justify-content-end">

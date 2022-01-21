@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../context/';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 import styled from 'styled-components';
 import { Button, Row, Col } from 'antd';
 import { Spin } from 'antd';
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
+import UserVerifier from '../components/routes/UserVerifier';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -14,7 +13,6 @@ import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import Dialog from '../components/Dialog.component';
 
 export default function UsersList() {
-  const [state, setState] = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [gridApi, setGridApi] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -28,8 +26,6 @@ export default function UsersList() {
     phone: '',
     permission: '',
   });
-  const router = useRouter();
-  if (state === null) router.push('/');
   // data grid
   const columnDefs = [
     { headerName: 'User pangalan', field: 'username' },
@@ -115,11 +111,17 @@ export default function UsersList() {
         `${process.env.NEXT_PUBLIC_ADMIN_API}/users/adduser`,
         formData
       );
-      setOk(data.ok);
-      setIsModalVisible(false);
-      setConfirmLoading(false);
-      clearForm();
-      toast.success('User successfully added');
+
+      if (data.error) {
+        toast.error(data.error);
+        setConfirmLoading(false);
+      } else {
+        setOk(data.ok);
+        setIsModalVisible(false);
+        setConfirmLoading(false);
+        clearForm();
+        toast.success('User successfully added');
+      }
     } catch (err) {
       setConfirmLoading(false);
       toast.error(err.response.data);
@@ -134,33 +136,38 @@ export default function UsersList() {
     );
 
   return (
-    <UserLists className="ag-theme-alpine" style={{ height: 400, width: 1280 }}>
-      <AgGridReact
-        rowData={users}
-        columnDefs={columnDefs}
-        defaultColDef={defaultColDef}
-        onGridReady={onGridReady}
-      ></AgGridReact>
+    <UserVerifier>
+      <UserLists
+        className="ag-theme-alpine"
+        style={{ height: 400, width: 1280 }}
+      >
+        <AgGridReact
+          rowData={users}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          onGridReady={onGridReady}
+        ></AgGridReact>
 
-      <br />
-      <Row>
-        <Col>
-          <Button type="primary" onClick={showModal}>
-            {' '}
-            ADD USER ...{' '}
-          </Button>
-        </Col>
-      </Row>
-      <Dialog
-        handleSubmit={handleSubmit}
-        handleCancel={handleCancel}
-        isModalVisible={isModalVisible}
-        formData={formData}
-        setFormData={setFormData}
-        onChange={onChange}
-        confirmLoading={confirmLoading}
-      />
-    </UserLists>
+        <br />
+        <Row>
+          <Col>
+            <Button type="primary" onClick={showModal}>
+              {' '}
+              ADD USER ...{' '}
+            </Button>
+          </Col>
+        </Row>
+        <Dialog
+          handleSubmit={handleSubmit}
+          handleCancel={handleCancel}
+          isModalVisible={isModalVisible}
+          formData={formData}
+          setFormData={setFormData}
+          onChange={onChange}
+          confirmLoading={confirmLoading}
+        />
+      </UserLists>
+    </UserVerifier>
   );
 }
 

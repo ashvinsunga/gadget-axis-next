@@ -1,12 +1,21 @@
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
+const { Schema, ObjectId } = mongoose.Schema;
 
 const rentSchema = new Schema(
   {
-    customer: [{ type: Schema.ObjectId, ref: 'Customer' }],
-    gadget: [{ type: Schema.ObjectId, ref: 'Gadget' }],
-    rented_by: [{ type: Schema.ObjectId, ref: 'User' }],
+    customer: {
+      type: ObjectId,
+      ref: 'Customer',
+    },
+    gadget: {
+      type: ObjectId,
+      ref: 'Gadget',
+    },
+    rented_by: {
+      type: ObjectId,
+      ref: 'User',
+    },
     rent_end: {
       type: Date,
       required: true,

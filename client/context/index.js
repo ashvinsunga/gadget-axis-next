@@ -9,6 +9,7 @@ const UserProvider = ({ children }) => {
     user: {},
     token: '',
   });
+  const router = useRouter();
 
   useEffect(() => {
     setState(JSON.parse(window.localStorage.getItem('axistoken')));

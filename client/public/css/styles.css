@@ -9,3 +9,9 @@
 .active {
   background-color: darkgrey;
 }
+label ~ div {
+  padding-left: 0 !important;
+}
+input {
+  padding-left: 0 !important;
+}

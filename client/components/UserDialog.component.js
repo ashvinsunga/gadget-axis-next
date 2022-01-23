@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Button } from 'antd';
 import UserForm from './UserForm.component';
 
-export default function Dialog({
+export default function UserDialog({
   handleSubmit,
   handleCancel,
   isModalVisible,
@@ -16,14 +16,10 @@ export default function Dialog({
   return (
     <Modal
       title="ADD USER"
-      // okText={'SAVE'}
-      // cancelText={'CANCEL'}
       width={470}
       closable={false}
       keyboard={true}
       visible={isModalVisible}
-      // onOk={handleSubmit}
-      // onCancel={handleCancel}
       footer={[
         <Button
           type="primary"

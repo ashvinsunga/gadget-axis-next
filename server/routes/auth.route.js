@@ -5,12 +5,14 @@ const router = express.Router();
 const verifyToken = require('../middlewares/auth.middleware');
 //controllers
 const {
-  addUser,
   loginUser,
   currentUser,
+  getUsers,
+  addUser,
 } = require('../controllers/auth.controller');
 
 router.post('/loginuser', loginUser);
+router.get('/getusers', getUsers);
 router.post('/adduser', addUser);
 router.get('/currentuser', verifyToken, currentUser);
 module.exports = router;

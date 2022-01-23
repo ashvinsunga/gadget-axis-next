@@ -2,6 +2,7 @@ import React from 'react';
 
 export default function UserForm({ formData, onChange }) {
   const {
+    modalType,
     username,
     description,
     phone,

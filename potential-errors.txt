@@ -4,3 +4,5 @@ Navbar Component function structure, es6 was used
 
 Axios interceptor is used
 I didn't use axios config to shorthand the base url and token headers
+'name' on UniForm on customer is marked as deprecated
+Text inputs padding are defined globally on CSS file

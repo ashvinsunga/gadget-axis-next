@@ -2,6 +2,50 @@ const User = require('../models/user.model');
 const { hashPassword, comparePassword } = require('../helpers/auth.helper');
 const jwt = require('jsonwebtoken');
 
+const loginUser = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    // check if user exist on db
+    const user = await User.findOne({ username });
+    if (!user) return res.json({ error: 'Invalid username' });
+    // check password
+    const match = await comparePassword(password, user.password);
+    if (!match) return res.json({ error: 'Invalid password' });
+    // create signed token
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '7d',
+    });
+    user.password = undefined;
+    res.json({
+      user,
+      token,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send('Error. Try again!');
+  }
+};
+
+const currentUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    // res.json(user);
+    res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
+    res.status(400);
+  }
+};
+
+const getUsers = async (req, res) => {
+  try {
+    const data = User.find();
+  } catch (err) {
+    console.log(err);
+    res.status(400);
+  }
+};
+
 const addUser = async (req, res) => {
   // console.log('REGISTER ENDPOINT =>', req.body);
   const {
@@ -54,39 +98,4 @@ const addUser = async (req, res) => {
   }
 };
 
-const loginUser = async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    // check if user exist on db
-    const user = await User.findOne({ username });
-    if (!user) return res.json({ error: 'Invalid username' });
-    // check password
-    const match = await comparePassword(password, user.password);
-    if (!match) return res.json({ error: 'Invalid password' });
-    // create signed token
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: 180,
-    });
-    user.password = undefined;
-    res.json({
-      user,
-      token,
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(400).send('Error. Try again!');
-  }
-};
-
-const currentUser = async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id);
-    // res.json(user);
-    res.json({ ok: true });
-  } catch (err) {
-    console.log(err);
-    res.status(400);
-  }
-};
-
-module.exports = { addUser, loginUser, currentUser };
+module.exports = { addUser, loginUser, currentUser, getUsers };

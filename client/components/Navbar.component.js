@@ -28,7 +28,7 @@ export default function Navbar() {
                 src="images/logo-white.png"
                 width="40"
                 height="30"
-                class="d-inline-block align-top h1 "
+                className="d-inline-block align-top h1 "
                 alt=""
               />
               ADGET AXIS
@@ -42,6 +42,16 @@ export default function Navbar() {
               }`}
             >
               USERS
+            </a>
+          </Link>
+
+          <Link href="/admin">
+            <a
+              className={`nav-link text-light ${
+                current === '/admin' && 'active'
+              }`}
+            >
+              ADMIN
             </a>
           </Link>
 

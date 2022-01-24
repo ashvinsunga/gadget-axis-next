@@ -3,15 +3,27 @@ import React from 'react';
 export default function UserForm({
   // GENERIC
   formFor,
+  setIsButtonSaveOff,
   // USER
   username,
+  setUsername,
   description,
+  setDescription,
   phone,
+  setPhone,
+  // for edit function
   oldpassword,
+  setOldPassword,
   newpassword,
+  setNewPassword,
+  //
   password,
+  setPassword,
   confirmpassword,
+  setConfirmpassword,
   permission,
+  setPermission,
+
   // GADGET
   brand,
   product,
@@ -30,14 +42,23 @@ export default function UserForm({
       {/* USER FORM */}
       {(formFor == 'addUser' || formFor == 'editUser') && (
         <>
+          {setIsButtonSaveOff(
+            !username ||
+              !description ||
+              !password ||
+              !confirmpassword ||
+              !permission
+          )}
           <div className="mb-2 row">
             <label for="username" className="col-sm-5 col-form-label">
               USERNAME
             </label>
-            <div className="col-sm-5">
+            <div className="col-sm-6">
               <input
                 value={username}
-                onChange={(e) => onChange(e)}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
                 type="text"
                 className="form-control"
                 id="username"
@@ -49,10 +70,10 @@ export default function UserForm({
             <label for="description" className="col-sm-5 col-form-label">
               DESCRIPTION
             </label>
-            <div className="col-sm-5">
+            <div className="col-sm-6">
               <input
                 value={description}
-                onChange={(e) => onChange(e)}
+                onChange={(e) => setDescription(e.target.value)}
                 type="text"
                 className="form-control"
                 id="description"
@@ -64,10 +85,10 @@ export default function UserForm({
             <label for="phone" className="col-sm-5 col-form-label">
               PHONE
             </label>
-            <div className="col-sm-5">
+            <div className="col-sm-6">
               <input
                 value={phone}
-                onChange={(e) => onChange(e)}
+                onChange={(e) => setPhone(e.target.value)}
                 type="text"
                 className="form-control"
                 id="phone"
@@ -80,7 +101,7 @@ export default function UserForm({
               <label for="oldpassword" className="col-sm-5 col-form-label">
                 OLD PASSWORD
               </label>
-              <div className="col-sm-5">
+              <div className="col-sm-6">
                 <input
                   value={oldpassword}
                   onChange={(e) => onChange(e)}
@@ -95,13 +116,13 @@ export default function UserForm({
 
           {formFor == 'addUser' && (
             <div className="mb-2 row">
-              <label for="password" className="col-sm-3 col-form-label">
+              <label for="password" className="col-sm-5 col-form-label">
                 PASSWORD
               </label>
-              <div className="col-sm-5">
+              <div className="col-sm-6">
                 <input
                   value={password}
-                  onChange={(e) => onChange(e)}
+                  onChange={(e) => setPassword(e.target.value)}
                   type="text"
                   className="form-control"
                   id="password"
@@ -115,7 +136,7 @@ export default function UserForm({
                 NEW PASSWORD
               </label>
 
-              <div className="col-sm-5">
+              <div className="col-sm-6">
                 <input
                   value={newpassword}
                   onChange={(e) => onChange(e)}
@@ -131,10 +152,10 @@ export default function UserForm({
             <label for="confirmpassword" className="col-sm-5 col-form-label">
               CONFIRM PASSWORD
             </label>
-            <div className="col-sm-5">
+            <div className="col-sm-6">
               <input
                 value={confirmpassword}
-                onChange={(e) => onChange(e)}
+                onChange={(e) => setConfirmpassword(e.target.value)}
                 type="text"
                 className="form-control"
                 id="confirmpassword"
@@ -144,18 +165,18 @@ export default function UserForm({
 
           {formFor == 'addUser' && (
             <div className="mb-2 row form-group">
-              <label for="permission" className="col-sm-3 col-form-label">
+              <label for="permission" className="col-sm-5 col-form-label">
                 PERMISSION
               </label>
               <div className="col-sm-4">
                 <select
                   required
                   value={permission}
-                  onChange={(e) => onChange(e)}
+                  onChange={(e) => setPermission(e.target.value)}
                   className="form-control"
                   id="permission"
                 >
-                  <option value="" selected hidden>
+                  <option value="" hidden>
                     --
                   </option>
                   <option>Read only</option>
@@ -170,10 +191,10 @@ export default function UserForm({
       {(formFor == 'addGadget' || formFor == 'editGadget') && (
         <div className="mb-2 row form-group">
           <div className="mb-2 row">
-            <label for="brand" className="col-sm-3 col-form-label">
+            <label for="brand" className="col-sm-4 col-form-label">
               BRAND
             </label>
-            <div className="col-sm-4">
+            <div className="col-sm-5">
               <select
                 required
                 value={brand}
@@ -192,10 +213,10 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="product" className="col-sm-3 col-form-label">
+            <label for="product" className="col-sm-4 col-form-label">
               PRODUCT
             </label>
-            <div className="col-sm-6">
+            <div className="col-sm-7">
               <input
                 value={product}
                 onChange={(e) => onChange(e)}
@@ -207,10 +228,10 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="model" className="col-sm-3 col-form-label">
+            <label for="model" className="col-sm-4 col-form-label">
               MODEL
             </label>
-            <div className="col-sm-6">
+            <div className="col-sm-7">
               <input
                 value={model}
                 onChange={(e) => onChange(e)}
@@ -222,10 +243,10 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="serial" className="col-sm-3 col-form-label">
+            <label for="serial" className="col-sm-4 col-form-label">
               SERIAL
             </label>
-            <div className="col-sm-6">
+            <div className="col-sm-7">
               <input
                 value={serial}
                 onChange={(e) => onChange(e)}
@@ -237,10 +258,10 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="color" className="col-sm-3 col-form-label">
+            <label for="color" className="col-sm-4 col-form-label">
               COLOR
             </label>
-            <div className="col-sm-6">
+            <div className="col-sm-4">
               <input
                 value={color}
                 onChange={(e) => onChange(e)}
@@ -253,10 +274,10 @@ export default function UserForm({
           {/* ALWAYS USE FRAGMENTS WHEN CONDITIONALLY RENDERING MULTIPLE ELEMENTS */}
 
           <div className="mb-2 row">
-            <label for="rate" className="col-sm-3 col-form-label">
+            <label for="rate" className="col-sm-4 col-form-label">
               RATE
             </label>
-            <div className="col-sm-6">
+            <div className="col-sm-4">
               <input
                 value={rate}
                 onChange={(e) => onChange(e)}
@@ -273,7 +294,7 @@ export default function UserForm({
       {(formFor == 'addCustomer' || formFor == 'editCustomer') && (
         <>
           <div className="mb-2 row">
-            <label for="name" className="col-sm-3 col-form-label">
+            <label for="name" className="col-sm-4 col-form-label">
               NAME
             </label>
             <div className="col-sm-6">
@@ -288,7 +309,7 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="idpresented" className="col-sm-3 col-form-label">
+            <label for="idpresented" className="col-sm-4 col-form-label">
               ID PRESENTED
             </label>
             <div className="col-sm-6">
@@ -303,7 +324,7 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="idno" className="col-sm-3 col-form-label">
+            <label for="idno" className="col-sm-4 col-form-label">
               ID NO
             </label>
             <div className="col-sm-6">
@@ -318,7 +339,7 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="phone" className="col-sm-3 col-form-label">
+            <label for="phone" className="col-sm-4 col-form-label">
               PHONE
             </label>
             <div className="col-sm-6">
@@ -333,7 +354,7 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="email" className="col-sm-3 col-form-label">
+            <label for="email" className="col-sm-4 col-form-label">
               EMAIL
             </label>
             <div className="col-sm-6">

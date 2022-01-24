@@ -12,13 +12,13 @@ import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import UniModal from '../components/UniModal.component';
 import UniForm from '../components/UniForm.component';
 
-export default function Users() {
+export default function Customers() {
   const [users, setUsers] = useState([]);
   const [gridApi, setGridApi] = useState(null);
   const [ok, setOk] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   // for modal
-  const [modalFor, setModalFor] = useState('addUser');
+  const [modalFor, setModalFor] = useState('addCustomer');
   const [isModalVisible, setIsModalVisible] = useState(false);
   // for form
   const [username, setUsername] = useState('');
@@ -137,7 +137,7 @@ export default function Users() {
           <Col>
             <Button type="primary" onClick={showModal}>
               {' '}
-              ADD USER ...{' '}
+              ADD CUSTOMER ...{' '}
             </Button>
           </Col>
         </Row>
@@ -149,6 +149,8 @@ export default function Users() {
           handleCancel={handleCancel}
           confirmLoading={confirmLoading}
           isButtonSaveOff={isButtonSaveOff}
+          // GENERIC (FORM)
+          formFor={modalFor}
         >
           <UniForm
             formFor={modalFor}

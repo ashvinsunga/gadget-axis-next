@@ -2,39 +2,50 @@ import React from 'react';
 import { Modal, Button } from 'antd';
 
 function UniModal({
-  modalFor,
   children,
+  // GENERIC
+  modalFor,
+  modalButtonText,
   handleCancel,
-  isModalVisible = true,
+  isModalVisible,
   confirmLoading,
-  username,
-  description,
-  password,
-  confirmpassword,
-  permission,
-  handleSubmit,
+  handleSaveUser,
+  isButtonSaveOff,
+  // USER > UniForm
+  // username,
+  // setUsername,
+  // description,
+  // setDescription,
+  // phone,
+  // setPhone,
+  // password,
+  // setPassword,
+  // confirmpassword,
+  // setConfirmpassword,
+  // permission,
+  // setPermission,
 }) {
   const getValues = (value = modalFor) => {
     // USER
     if (value == 'addUser') {
-      return { modalTitle: 'ADD USER', modalWidth: 470 };
+      return { modalTitle: 'ADD USER', modalWidth: 412 };
     } else if (value == 'editUser') {
-      return { modalTitle: 'EDIT USER', modalWidth: 420 };
+      return { modalTitle: 'EDIT USER', modalWidth: 412 };
     }
     // CUSTOMER
     if (value == 'addCustomer') {
-      return ['ADD CUSTOMER', 500];
+      return { modalTitle: 'ADD CUSTOMER', modalWidth: 380 };
     } else if (value == 'editCustomer') {
-      return 'EDIT CUSTOMER';
+      return { modalTitle: 'EDIT CUSTOMER', modalWidth: 380 };
     }
     // GADGET
     if (value == 'addGadget') {
-      return { modalTitle: 'ADD GADGET', modalWidth: 400 };
+      return { modalTitle: 'ADD GADGET', modalWidth: 340 };
     } else if (value == 'editGadget') {
-      return { modalTitle: 'EDIT GADGET', modalWidth: 400 };
+      return { modalTitle: 'EDIT GADGET', modalWidth: 340 };
     }
   };
-  console.log(getValues().modalWidth);
+
   return (
     <Modal
       title={getValues().modalTitle}
@@ -45,17 +56,11 @@ function UniModal({
       footer={[
         <Button
           type="primary"
-          disabled={
-            (modalFor == 'addUser' && !username) ||
-            !description ||
-            !password ||
-            !confirmpassword ||
-            !permission
-          }
-          onClick={modalFor == 'addUser' && handleSubmit}
+          disabled={isButtonSaveOff}
+          onClick={handleSaveUser}
           loading={confirmLoading}
         >
-          {modalFor == 'addUser' && 'SAVE'}
+          SAVE
         </Button>,
         <Button onClick={handleCancel}>CANCEL</Button>,
       ]}

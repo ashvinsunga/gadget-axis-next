@@ -38,6 +38,7 @@ const currentUser = async (req, res) => {
 };
 
 const getUsers = async (req, res) => {
+  console.log('boom');
   try {
     const data = User.find();
   } catch (err) {

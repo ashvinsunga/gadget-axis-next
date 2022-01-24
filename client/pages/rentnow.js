@@ -8,7 +8,7 @@ const { TabPane } = Tabs;
 
 export default function RentNow() {
   const [state, setState] = useContext(UserContext);
-  const [modalFor, setModalFor] = useState('editUser');
+  const [modalFor, setModalFor] = useState('addUser');
 
   return (
     <UserVerifier>

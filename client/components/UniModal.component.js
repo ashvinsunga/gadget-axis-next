@@ -5,25 +5,12 @@ function UniModal({
   children,
   // GENERIC
   modalFor,
-  modalButtonText,
   handleCancel,
   isModalVisible,
   confirmLoading,
-  handleSaveUser,
+  saveFunction,
   isButtonSaveOff,
-  // USER > UniForm
-  // username,
-  // setUsername,
-  // description,
-  // setDescription,
-  // phone,
-  // setPhone,
-  // password,
-  // setPassword,
-  // confirmpassword,
-  // setConfirmpassword,
-  // permission,
-  // setPermission,
+
 }) {
   const getValues = (value = modalFor) => {
     // USER
@@ -57,7 +44,7 @@ function UniModal({
         <Button
           type="primary"
           disabled={isButtonSaveOff}
-          onClick={handleSaveUser}
+          onClick={saveFunction}
           loading={confirmLoading}
         >
           SAVE

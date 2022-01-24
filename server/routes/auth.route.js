@@ -9,10 +9,14 @@ const {
   currentUser,
   getUsers,
   addUser,
+  addGadget,
+  addCustomer,
 } = require('../controllers/auth.controller');
 
 router.post('/loginuser', loginUser);
 router.get('/getusers', getUsers);
 router.post('/adduser', addUser);
+router.post('/addgadget', addGadget);
+router.post('/addcustomer', addCustomer);
 router.get('/currentuser', verifyToken, currentUser);
 module.exports = router;

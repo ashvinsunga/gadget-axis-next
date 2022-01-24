@@ -1,4 +1,6 @@
 const User = require('../models/user.model');
+const Gadget = require('../models/gadget.model');
+const Customer = require('../models/customer.model');
 const { hashPassword, comparePassword } = require('../helpers/auth.helper');
 const jwt = require('jsonwebtoken');
 
@@ -99,4 +101,88 @@ const addUser = async (req, res) => {
   }
 };
 
-module.exports = { addUser, loginUser, currentUser, getUsers };
+const addGadget = async (req, res) => {
+  // console.log('REGISTER ENDPOINT =>', req.body);
+  const { brand, product, model, serial, color, rate } = req.body;
+  // validation
+  if (!brand) {
+    return res.json({ error: 'Brand is required' });
+  }
+  if (!product) {
+    return res.json({ error: 'Product is required' });
+  }
+  if (!model) {
+    return res.json({ error: 'Model is required' });
+  }
+  if (!serial) {
+    return res.json({ error: 'Serial is required' });
+  }
+
+  if (!color) {
+    return res.json({ error: 'Color is required' });
+  }
+  if (rate < 0) {
+    return res.json({ error: 'Negative number is not allowed!' });
+  }
+
+  const gadget = new Gadget({
+    brand,
+    product,
+    model,
+    serial,
+    color,
+    rate,
+    status: 'Available',
+  });
+  try {
+    await gadget.save(); // await
+    // console.log('REGISTERED GADGET =>', gadget);
+    return res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: 'Error. Try again' });
+  }
+};
+
+const addCustomer = async (req, res) => {
+  // console.log('REGISTER ENDPOINT =>', req.body);
+  const { name, idpresented, idno, phone, email } = req.body;
+  // validation
+  if (!name) {
+    return res.json({ error: 'Name is required' });
+  }
+  if (!idpresented) {
+    return res.json({ error: 'ID presented is required' });
+  }
+  if (!idno) {
+    return res.json({ error: 'ID no is required' });
+  }
+  if (!phone) {
+    return res.json({ error: 'Phone is required' });
+  }
+
+  const customer = new Customer({
+    name,
+    id_presented: idpresented,
+    id_no: idno,
+    phone,
+    email,
+  });
+  try {
+    await customer.save(); // await
+    // console.log('REGISTERED GADGET =>', gadget);
+    return res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: 'Error. Try again' });
+  }
+};
+
+module.exports = {
+  addUser,
+  addGadget,
+  addCustomer,
+  loginUser,
+  currentUser,
+  getUsers,
+};

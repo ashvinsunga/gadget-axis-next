@@ -21,14 +21,12 @@ export default function Customers() {
   const [modalFor, setModalFor] = useState('addCustomer');
   const [isModalVisible, setIsModalVisible] = useState(false);
   // for form
-  const [username, setUsername] = useState('');
-  const [description, setDescription] = useState('');
-  const [oldpassword, setOldPassword] = useState('');
-  const [newpassword, setNewPassword] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmpassword, setConfirmpassword] = useState('');
+  const [name, setName] = useState('');
+  const [idpresented, setIdpresented] = useState('');
+  const [idno, setIdno] = useState('');
   const [phone, setPhone] = useState('');
-  const [permission, setPermission] = useState('');
+  const [email, setEmail] = useState('');
+  // modal and form
   const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
   // data grid
   const columnDefs = [
@@ -63,12 +61,11 @@ export default function Customers() {
 
   //clear form
   const clearForm = () => {
-    setUsername('');
-    setDescription('');
+    setName('');
+    setIdpresented('');
+    setIdno('');
     setPhone('');
-    setPassword('');
-    setConfirmpassword('');
-    setPermission('');
+    setEmail('');
   };
   //--------------------------------------
   useEffect(() => {
@@ -95,12 +92,12 @@ export default function Customers() {
     //   .catch((err) => console.log(err));
   };
 
-  const handleSaveUser = async () => {
+  const handleSaveCustomer = async () => {
     try {
       setConfirmLoading(true);
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/adduser`,
-        { username, description, phone, password, confirmpassword, permission }
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/customers/addCustomer`,
+        { name, idpresented, idno, phone, email }
       );
 
       if (data.error) {
@@ -111,7 +108,7 @@ export default function Customers() {
         setIsModalVisible(false);
         setConfirmLoading(false);
         clearForm();
-        toast.success('User successfully added');
+        toast.success('Customer added successfully ');
       }
     } catch (err) {
       setConfirmLoading(false);
@@ -145,7 +142,7 @@ export default function Customers() {
           // GENERIC (MODAL)
           modalFor={modalFor}
           isModalVisible={isModalVisible}
-          handleSaveUser={handleSaveUser}
+          saveFunction={handleSaveCustomer}
           handleCancel={handleCancel}
           confirmLoading={confirmLoading}
           isButtonSaveOff={isButtonSaveOff}
@@ -154,25 +151,19 @@ export default function Customers() {
         >
           <UniForm
             formFor={modalFor}
-            username={username}
-            setUsername={setUsername}
-            description={description}
-            setDescription={setDescription}
+            setIsButtonSaveOff={setIsButtonSaveOff}
+            name={name}
+            setName={setName}
+            idpresented={idpresented}
+            setIdpresented={setIdpresented}
+            idno={idno}
+            setIdno={setIdno}
             phone={phone}
             setPhone={setPhone}
-            // for edit function
-            newpassword={newpassword}
-            setNewPassword={setNewPassword}
-            oldpassword={oldpassword}
-            setOldPassword={setOldPassword}
-            //
-            password={password}
-            setPassword={setPassword}
-            confirmpassword={confirmpassword}
-            setConfirmpassword={setConfirmpassword}
-            permission={permission}
-            setPermission={setPermission}
-            setIsButtonSaveOff={setIsButtonSaveOff}
+            email={email}
+            setEmail={setEmail}
+            phone={phone}
+            setPhone={setPhone}
           />
         </UniModal>
       </div>

@@ -21,8 +21,8 @@ const customerSchema = new Schema(
     },
     email: {
       type: String,
-      required: true,
       trim: true,
+      lowercase: true,
     },
     current_rent: [{ type: Schema.ObjectId, ref: 'Gadget' }],
   },

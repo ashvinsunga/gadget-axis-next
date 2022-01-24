@@ -20,16 +20,15 @@ export default function Gadgets() {
   // for modal
   const [modalFor, setModalFor] = useState('addGadget');
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
   // for form
-  const [username, setUsername] = useState('');
-  const [description, setDescription] = useState('');
-  const [oldpassword, setOldPassword] = useState('');
-  const [newpassword, setNewPassword] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmpassword, setConfirmpassword] = useState('');
-  const [phone, setPhone] = useState('');
-  const [permission, setPermission] = useState('');
-  const [isButtonSaveOff, setIsButtonSaveOff] = useState(false);
+  const [brand, setBrand] = useState('');
+  const [product, setProduct] = useState('');
+  const [model, setModel] = useState('');
+  const [serial, setSerial] = useState('');
+  const [color, setColor] = useState('');
+  const [rate, setRate] = useState('');
+
   // data grid
   const columnDefs = [
     { headerName: 'User pangalan', field: 'username' },
@@ -63,12 +62,12 @@ export default function Gadgets() {
 
   //clear form
   const clearForm = () => {
-    setUsername('');
-    setDescription('');
-    setPhone('');
-    setPassword('');
-    setConfirmpassword('');
-    setPermission('');
+    setBrand('');
+    setProduct('');
+    setModel('');
+    setSerial('');
+    setColor('');
+    setRate('');
   };
   //--------------------------------------
   useEffect(() => {
@@ -95,12 +94,12 @@ export default function Gadgets() {
     //   .catch((err) => console.log(err));
   };
 
-  const handleSaveUser = async () => {
+  const handleSaveGadget = async () => {
     try {
       setConfirmLoading(true);
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/adduser`,
-        { username, description, phone, password, confirmpassword, permission }
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/gadgets/addgadget`,
+        { brand, product, model, serial, color, rate }
       );
 
       if (data.error) {
@@ -111,7 +110,7 @@ export default function Gadgets() {
         setIsModalVisible(false);
         setConfirmLoading(false);
         clearForm();
-        toast.success('User successfully added');
+        toast.success('Gadget added successfully');
       }
     } catch (err) {
       setConfirmLoading(false);
@@ -145,34 +144,26 @@ export default function Gadgets() {
           // GENERIC (MODAL)
           modalFor={modalFor}
           isModalVisible={isModalVisible}
-          handleSaveUser={handleSaveUser}
+          saveFunction={handleSaveGadget}
           handleCancel={handleCancel}
           confirmLoading={confirmLoading}
           isButtonSaveOff={isButtonSaveOff}
-          // GENERIC (FORM)
-          formFor={modalFor}
         >
           <UniForm
             formFor={modalFor}
-            username={username}
-            setUsername={setUsername}
-            description={description}
-            setDescription={setDescription}
-            phone={phone}
-            setPhone={setPhone}
-            // for edit function
-            newpassword={newpassword}
-            setNewPassword={setNewPassword}
-            oldpassword={oldpassword}
-            setOldPassword={setOldPassword}
-            //
-            password={password}
-            setPassword={setPassword}
-            confirmpassword={confirmpassword}
-            setConfirmpassword={setConfirmpassword}
-            permission={permission}
-            setPermission={setPermission}
             setIsButtonSaveOff={setIsButtonSaveOff}
+            brand={brand}
+            setBrand={setBrand}
+            product={product}
+            setProduct={setProduct}
+            model={model}
+            setModel={setModel}
+            serial={serial}
+            setSerial={setSerial}
+            color={color}
+            setColor={setColor}
+            rate={rate}
+            setRate={setRate}
           />
         </UniModal>
       </div>

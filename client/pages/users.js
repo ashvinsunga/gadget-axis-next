@@ -111,7 +111,7 @@ export default function Users() {
         setIsModalVisible(false);
         setConfirmLoading(false);
         clearForm();
-        toast.success('User successfully added');
+        toast.success('User added successfully');
       }
     } catch (err) {
       setConfirmLoading(false);
@@ -145,7 +145,7 @@ export default function Users() {
           // GENERIC (MODAL)
           modalFor={modalFor}
           isModalVisible={isModalVisible}
-          handleSaveUser={handleSaveUser}
+          saveFunction={handleSaveUser}
           handleCancel={handleCancel}
           confirmLoading={confirmLoading}
           isButtonSaveOff={isButtonSaveOff}

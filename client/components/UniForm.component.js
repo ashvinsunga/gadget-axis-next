@@ -26,16 +26,26 @@ export default function UserForm({
 
   // GADGET
   brand,
+  setBrand,
   product,
+  setProduct,
   model,
+  setModel,
   serial,
+  setSerial,
   color,
+  setColor,
   rate,
+  setRate,
   // CUSTOMER
   name,
+  setName,
   idpresented,
+  setIdpresented,
   idno,
+  setIdno,
   email,
+  setEmail,
 }) {
   return (
     <form>
@@ -112,7 +122,6 @@ export default function UserForm({
               </div>
             </div>
           )}
-          {/* ALWAYS USE FRAGMENTS WHEN CONDITIONALLY RENDERING MULTIPLE ELEMENTS */}
 
           {formFor == 'addUser' && (
             <div className="mb-2 row">
@@ -189,110 +198,115 @@ export default function UserForm({
       )}
       {/* GADGET FORM - the only difference is the submit (add or update)*/}
       {(formFor == 'addGadget' || formFor == 'editGadget') && (
-        <div className="mb-2 row form-group">
-          <div className="mb-2 row">
-            <label for="brand" className="col-sm-4 col-form-label">
-              BRAND
-            </label>
-            <div className="col-sm-5">
-              <select
-                required
-                value={brand}
-                onChange={(e) => onChange(e)}
-                className="form-control"
-                id="brand"
-              >
-                <option value="" selected hidden>
-                  --
-                </option>
-                <option>Sony</option>
-                <option>Nintendo</option>
-                <option>Microsoft</option>
-              </select>
+        <>
+          {setIsButtonSaveOff(
+            !brand || !product || !model || !serial || !color || !rate
+          )}
+          <div className="mb-2 row form-group">
+            <div className="mb-2 row">
+              <label for="brand" className="col-sm-4 col-form-label">
+                BRAND
+              </label>
+              <div className="col-sm-5">
+                <select
+                  required
+                  value={brand}
+                  onChange={(e) => setBrand(e.target.value)}
+                  className="form-control"
+                  id="brand"
+                >
+                  <option value="" selected hidden>
+                    --
+                  </option>
+                  <option>Sony</option>
+                  <option>Nintendo</option>
+                  <option>Microsoft</option>
+                </select>
+              </div>
             </div>
-          </div>
 
-          <div className="mb-2 row">
-            <label for="product" className="col-sm-4 col-form-label">
-              PRODUCT
-            </label>
-            <div className="col-sm-7">
-              <input
-                value={product}
-                onChange={(e) => onChange(e)}
-                type="text"
-                className="form-control"
-                id="product"
-              />
+            <div className="mb-2 row">
+              <label for="product" className="col-sm-4 col-form-label">
+                PRODUCT
+              </label>
+              <div className="col-sm-7">
+                <input
+                  value={product}
+                  onChange={(e) => setProduct(e.target.value)}
+                  type="text"
+                  className="form-control"
+                  id="product"
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="mb-2 row">
-            <label for="model" className="col-sm-4 col-form-label">
-              MODEL
-            </label>
-            <div className="col-sm-7">
-              <input
-                value={model}
-                onChange={(e) => onChange(e)}
-                type="text"
-                className="form-control"
-                id="model"
-              />
+            <div className="mb-2 row">
+              <label for="model" className="col-sm-4 col-form-label">
+                MODEL
+              </label>
+              <div className="col-sm-7">
+                <input
+                  value={model}
+                  onChange={(e) => setModel(e.target.value)}
+                  type="text"
+                  className="form-control"
+                  id="model"
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="mb-2 row">
-            <label for="serial" className="col-sm-4 col-form-label">
-              SERIAL
-            </label>
-            <div className="col-sm-7">
-              <input
-                value={serial}
-                onChange={(e) => onChange(e)}
-                type="text"
-                className="form-control"
-                id="serial"
-              />
+            <div className="mb-2 row">
+              <label for="serial" className="col-sm-4 col-form-label">
+                SERIAL
+              </label>
+              <div className="col-sm-7">
+                <input
+                  value={serial}
+                  onChange={(e) => setSerial(e.target.value)}
+                  type="text"
+                  className="form-control"
+                  id="serial"
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="mb-2 row">
-            <label for="color" className="col-sm-4 col-form-label">
-              COLOR
-            </label>
-            <div className="col-sm-4">
-              <input
-                value={color}
-                onChange={(e) => onChange(e)}
-                type="text"
-                className="form-control"
-                id="color"
-              />
+            <div className="mb-2 row">
+              <label for="color" className="col-sm-4 col-form-label">
+                COLOR
+              </label>
+              <div className="col-sm-4">
+                <input
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                  type="text"
+                  className="form-control"
+                  id="color"
+                />
+              </div>
             </div>
-          </div>
-          {/* ALWAYS USE FRAGMENTS WHEN CONDITIONALLY RENDERING MULTIPLE ELEMENTS */}
 
-          <div className="mb-2 row">
-            <label for="rate" className="col-sm-4 col-form-label">
-              RATE
-            </label>
-            <div className="col-sm-4">
-              <input
-                value={rate}
-                onChange={(e) => onChange(e)}
-                type="text"
-                className="form-control"
-                id="rate"
-              />
+            <div className="mb-2 row">
+              <label for="rate" className="col-sm-4 col-form-label">
+                RATE
+              </label>
+              <div className="col-sm-4">
+                <input
+                  value={rate}
+                  onChange={(e) => setRate(e.target.value)}
+                  type="number"
+                  className="form-control"
+                  id="rate"
+                />
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
 
       {/* CUSTOMER FORM */}
       {(formFor == 'addCustomer' || formFor == 'editCustomer') && (
         <>
+          {setIsButtonSaveOff(!name || !idpresented || !idno || !phone)}
           <div className="mb-2 row">
             <label for="name" className="col-sm-4 col-form-label">
               NAME
@@ -300,7 +314,7 @@ export default function UserForm({
             <div className="col-sm-6">
               <input
                 value={name}
-                onChange={(e) => onChange(e)}
+                onChange={(e) => setName(e.target.value)}
                 type="text"
                 className="form-control"
                 id="name"
@@ -315,7 +329,7 @@ export default function UserForm({
             <div className="col-sm-6">
               <input
                 value={idpresented}
-                onChange={(e) => onChange(e)}
+                onChange={(e) => setIdpresented(e.target.value)}
                 type="text"
                 className="form-control"
                 id="idpresented"
@@ -330,7 +344,7 @@ export default function UserForm({
             <div className="col-sm-6">
               <input
                 value={idno}
-                onChange={(e) => onChange(e)}
+                onChange={(e) => setIdno(e.target.value)}
                 type="text"
                 className="form-control"
                 id="idno"
@@ -345,7 +359,7 @@ export default function UserForm({
             <div className="col-sm-6">
               <input
                 value={phone}
-                onChange={(e) => onChange(e)}
+                onChange={(e) => setPhone(e.target.value)}
                 type="text"
                 className="form-control"
                 id="phone"
@@ -360,8 +374,8 @@ export default function UserForm({
             <div className="col-sm-6">
               <input
                 value={email}
-                onChange={(e) => onChange(e)}
-                type="text"
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
                 className="form-control"
                 id="email"
               />

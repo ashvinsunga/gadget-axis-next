@@ -23,6 +23,13 @@ readdirSync('./routes').map((route) =>
   app.use('/admin/users', require(`./routes/${route}`))
 );
 
+readdirSync('./routes').map((route) =>
+  app.use('/admin/gadgets', require(`./routes/${route}`))
+);
+
+readdirSync('./routes').map((route) =>
+  app.use('/admin/customers', require(`./routes/${route}`))
+);
 //manual importing of route
 app.use('/', require(`./routes/auth.route`));
 

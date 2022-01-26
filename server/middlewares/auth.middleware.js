@@ -1,6 +1,6 @@
 const expressJwt = require('express-jwt');
 
-// returns user once confirmed
+// if confirmed, adds user._id to the request body
 const verifyToken = expressJwt({
   secret: process.env.JWT_SECRET,
   algorithms: ['HS256'],

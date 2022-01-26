@@ -15,6 +15,11 @@ const UserProvider = ({ children }) => {
     setState(JSON.parse(window.localStorage.getItem('axistoken')));
   }, []);
 
+  // With this, you don't need to attach token as headers in axios requests and send it as a payload
+  const token = state && state.token ? state.token : '';
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+  // Dissallows unauthorized access to pages
   axios.interceptors.response.use(
     function (response) {
       return response;
@@ -23,7 +28,7 @@ const UserProvider = ({ children }) => {
       let res = error.response;
       if (res.status === 401 && res.config && !res.config.__isRetryRequest) {
         setState(null);
-        window.localStorage.removeItem('auth');
+        window.localStorage.removeItem('axistoken');
         router.push('/');
       }
     }

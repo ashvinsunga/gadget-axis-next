@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../context';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 // import styled from 'styled-components';
 import { Button, Row, Col } from 'antd';
 import { toast } from 'react-toastify';
-import UserVerifier from '../components/routes/UserVerifier';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -13,6 +13,7 @@ import UniModal from '../components/UniModal.component';
 import UniForm from '../components/UniForm.component';
 
 export default function Users() {
+  const [state, setState] = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [gridApi, setGridApi] = useState(null);
   const [ok, setOk] = useState(false);
@@ -32,13 +33,10 @@ export default function Users() {
   const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
   // data grid
   const columnDefs = [
-    { headerName: 'User pangalan', field: 'username' },
-    { headerName: 'Password nya', field: 'password' },
-    { headerName: 'Sikreto', field: 'secret' },
-    { headerName: 'Deskripsyon', field: 'description' },
-    { headerName: 'Telepono', field: 'phone' },
-    { headerName: 'Permisyon', field: 'permission' },
-    { headerName: 'Nagawa', field: 'createdAt' },
+    { headerName: 'Username', field: 'username' },
+    { headerName: 'Description', field: 'description' },
+    { headerName: 'Phone', field: 'phone' },
+    { headerName: 'Permission', field: 'permission' },
   ];
 
   const defaultColDef = {
@@ -72,15 +70,17 @@ export default function Users() {
   };
   //--------------------------------------
   useEffect(() => {
-    getUsers();
-  }, []);
+    if (state && state.token) getUsers();
+  }, [state && state.token]);
 
   const getUsers = async () => {
     // axios based data request from the api/server
+
     try {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_ADMIN_API}/users/getusers`
       );
+      setUsers(data);
     } catch (err) {
       console.log(err);
     }
@@ -120,61 +120,59 @@ export default function Users() {
   };
 
   return (
-    <UserVerifier>
-      <div
-        className="ag-theme-alpine"
-        style={{ height: 400, width: 1280, padding: 6 }}
+    <div
+      className="ag-theme-alpine"
+      style={{ height: 400, width: '100%', padding: 6 }}
+    >
+      <AgGridReact
+        rowData={users}
+        columnDefs={columnDefs}
+        defaultColDef={defaultColDef}
+        onGridReady={onGridReady}
+        onRowClicked={(e) => console.log(e.data._id)}
+      ></AgGridReact>
+      <br />
+      <Row>
+        <Col>
+          <Button type="primary" onClick={showModal}>
+            {' '}
+            ADD USER ...{' '}
+          </Button>
+        </Col>
+      </Row>
+      <UniModal
+        // GENERIC (MODAL)
+        modalFor={modalFor}
+        isModalVisible={isModalVisible}
+        saveFunction={handleSaveUser}
+        handleCancel={handleCancel}
+        confirmLoading={confirmLoading}
+        isButtonSaveOff={isButtonSaveOff}
       >
-        <AgGridReact
-          rowData={users}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          onGridReady={onGridReady}
-        ></AgGridReact>
-
-        <br />
-        <Row>
-          <Col>
-            <Button type="primary" onClick={showModal}>
-              {' '}
-              ADD USER ...{' '}
-            </Button>
-          </Col>
-        </Row>
-        <UniModal
-          // GENERIC (MODAL)
-          modalFor={modalFor}
-          isModalVisible={isModalVisible}
-          saveFunction={handleSaveUser}
-          handleCancel={handleCancel}
-          confirmLoading={confirmLoading}
-          isButtonSaveOff={isButtonSaveOff}
-        >
-          <UniForm
-            formFor={modalFor}
-            username={username}
-            setUsername={setUsername}
-            description={description}
-            setDescription={setDescription}
-            phone={phone}
-            setPhone={setPhone}
-            // for edit function
-            newpassword={newpassword}
-            setNewPassword={setNewPassword}
-            oldpassword={oldpassword}
-            setOldPassword={setOldPassword}
-            //
-            password={password}
-            setPassword={setPassword}
-            confirmpassword={confirmpassword}
-            setConfirmpassword={setConfirmpassword}
-            permission={permission}
-            setPermission={setPermission}
-            setIsButtonSaveOff={setIsButtonSaveOff}
-          />
-        </UniModal>
-      </div>
-    </UserVerifier>
+        <UniForm
+          formFor={modalFor}
+          username={username}
+          setUsername={setUsername}
+          description={description}
+          setDescription={setDescription}
+          phone={phone}
+          setPhone={setPhone}
+          // for edit function
+          newpassword={newpassword}
+          setNewPassword={setNewPassword}
+          oldpassword={oldpassword}
+          setOldPassword={setOldPassword}
+          //
+          password={password}
+          setPassword={setPassword}
+          confirmpassword={confirmpassword}
+          setConfirmpassword={setConfirmpassword}
+          permission={permission}
+          setPermission={setPermission}
+          setIsButtonSaveOff={setIsButtonSaveOff}
+        />
+      </UniModal>
+    </div>
   );
 }
 

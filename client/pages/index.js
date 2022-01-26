@@ -52,7 +52,7 @@ export default function Login() {
                     src="images/logo-black.png"
                     width="40"
                     height="30"
-                    class="d-inline-block h1 "
+                    className="d-inline-block h1 "
                     alt=""
                   />
                   ADGET AXIS GADGET RENTAL SYSTEM

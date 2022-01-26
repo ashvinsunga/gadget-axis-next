@@ -3,6 +3,13 @@ const Gadget = require('../models/gadget.model');
 const Customer = require('../models/customer.model');
 const { hashPassword, comparePassword } = require('../helpers/auth.helper');
 const jwt = require('jsonwebtoken');
+const cloudinary = require('cloudinary');
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
+});
 
 const loginUser = async (req, res) => {
   try {
@@ -35,14 +42,17 @@ const currentUser = async (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     console.log(err);
-    res.status(400);
+    res.sendStatus(400);
   }
 };
 
 const getUsers = async (req, res) => {
-  console.log('boom');
   try {
-    const data = User.find();
+    const data = await User.find({}).sort({ createdAt: -1 });
+    // .sort({ createdAt: -1})
+    // .limit(10);
+    // console.log(data);
+    res.json(data);
   } catch (err) {
     console.log(err);
     res.status(400);
@@ -101,9 +111,36 @@ const addUser = async (req, res) => {
   }
 };
 
+const uploadImage = async (req, res) => {
+  try {
+    const result = await cloudinary.uploader.upload(req.files.image.path);
+    // console.log('uploaded image url =>', result);
+    res.json({
+      url: result.secure_url,
+      public_id: result.public_id,
+    });
+  } catch (err) {
+    res.sendStatus(400);
+    console.log(err);
+  }
+};
+
+const getGadgets = async (req, res) => {
+  try {
+    const data = await Gadget.find({}).sort({ createdAt: -1 });
+    // .sort({ createdAt: -1})
+    // .limit(10);
+    // console.log(data);
+    res.json(data);
+  } catch (err) {
+    console.log(err);
+    res.status(400);
+  }
+};
+
 const addGadget = async (req, res) => {
   // console.log('REGISTER ENDPOINT =>', req.body);
-  const { brand, product, model, serial, color, rate } = req.body;
+  const { brand, product, model, serial, color, image, rate } = req.body;
   // validation
   if (!brand) {
     return res.json({ error: 'Brand is required' });
@@ -131,6 +168,7 @@ const addGadget = async (req, res) => {
     model,
     serial,
     color,
+    image,
     rate,
     status: 'Available',
   });
@@ -141,6 +179,19 @@ const addGadget = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.json({ error: 'Error. Try again' });
+  }
+};
+
+const getCustomers = async (req, res) => {
+  try {
+    const data = await Customer.find({}).sort({ createdAt: -1 });
+    // .sort({ createdAt: -1})
+    // .limit(10);
+    // console.log(data);
+    res.json(data);
+  } catch (err) {
+    console.log(err);
+    res.status(400);
   }
 };
 
@@ -179,10 +230,13 @@ const addCustomer = async (req, res) => {
 };
 
 module.exports = {
+  getUsers,
   addUser,
+  getGadgets,
   addGadget,
+  uploadImage,
+  getCustomers,
   addCustomer,
   loginUser,
   currentUser,
-  getUsers,
 };

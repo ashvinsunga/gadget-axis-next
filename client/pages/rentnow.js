@@ -12,7 +12,7 @@ export default function RentNow() {
 
   return (
     <UserVerifier>
-      {state !== null && <h6> {JSON.stringify(state)} Rent now!</h6>}
+      {state !== null && <h6> {state.token} Rent now!</h6>}
 
       <Tabs
         defaultActiveKey="1"

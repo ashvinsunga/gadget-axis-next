@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../context';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 // import styled from 'styled-components';
@@ -13,7 +14,8 @@ import UniModal from '../components/UniModal.component';
 import UniForm from '../components/UniForm.component';
 
 export default function Gadgets() {
-  const [users, setUsers] = useState([]);
+  const [state, setState] = useContext(UserContext);
+  const [gadgets, setGadgets] = useState([]);
   const [gridApi, setGridApi] = useState(null);
   const [ok, setOk] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -26,18 +28,20 @@ export default function Gadgets() {
   const [product, setProduct] = useState('');
   const [model, setModel] = useState('');
   const [serial, setSerial] = useState('');
+  const [image, setImage] = useState({});
+  const [uploading, setUploading] = useState(false);
   const [color, setColor] = useState('');
   const [rate, setRate] = useState('');
 
   // data grid
   const columnDefs = [
-    { headerName: 'User pangalan', field: 'username' },
-    { headerName: 'Password nya', field: 'password' },
-    { headerName: 'Sikreto', field: 'secret' },
-    { headerName: 'Deskripsyon', field: 'description' },
-    { headerName: 'Telepono', field: 'phone' },
-    { headerName: 'Permisyon', field: 'permission' },
-    { headerName: 'Nagawa', field: 'createdAt' },
+    { headerName: 'Brand', field: 'brand' },
+    { headerName: 'Product', field: 'product' },
+    { headerName: 'Model', field: 'model' },
+    { headerName: 'Serial no.', field: 'serial' },
+    { headerName: 'Color', field: 'color' },
+    { headerName: 'Rate', field: 'rate' },
+    // { headerName: 'Date Added', field: 'createdAt' },
   ];
 
   const defaultColDef = {
@@ -66,20 +70,22 @@ export default function Gadgets() {
     setProduct('');
     setModel('');
     setSerial('');
+    setImage({});
     setColor('');
     setRate('');
   };
   //--------------------------------------
   useEffect(() => {
-    getUsers();
-  }, []);
+    if (state && state.token) getGadgets();
+  }, [state && state.token]);
 
-  const getUsers = async () => {
+  const getGadgets = async () => {
     // axios based data request from the api/server
     try {
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/getusers`
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/getgadgets`
       );
+      setGadgets(data);
     } catch (err) {
       console.log(err);
     }
@@ -94,12 +100,35 @@ export default function Gadgets() {
     //   .catch((err) => console.log(err));
   };
 
+  const handleUploadImage = async (e) => {
+    const file = e.target.files[0];
+    let formData = new FormData();
+    formData.append('image', file);
+    setUploading(true);
+    console.log(state);
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/gadgets/uploadimage`,
+        formData
+      );
+      console.log('uploaded image ==>', data);
+      setImage({
+        url: data.url,
+        public_id: data.public_id,
+      });
+      setUploading(false);
+    } catch (err) {
+      console.log(err);
+      setUploading(false);
+    }
+  };
+
   const handleSaveGadget = async () => {
     try {
       setConfirmLoading(true);
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_ADMIN_API}/gadgets/addgadget`,
-        { brand, product, model, serial, color, rate }
+        { brand, product, model, serial, image, color, rate }
       );
 
       if (data.error) {
@@ -119,55 +148,56 @@ export default function Gadgets() {
   };
 
   return (
-    <UserVerifier>
-      <div
-        className="ag-theme-alpine"
-        style={{ height: 400, width: 1280, padding: 6 }}
-      >
-        <AgGridReact
-          rowData={users}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          onGridReady={onGridReady}
-        ></AgGridReact>
+    <div
+      className="ag-theme-alpine"
+      style={{ height: 400, width: '100%', padding: 6 }}
+    >
+      <AgGridReact
+        rowData={gadgets}
+        columnDefs={columnDefs}
+        defaultColDef={defaultColDef}
+        onGridReady={onGridReady}
+      ></AgGridReact>
 
-        <br />
-        <Row>
-          <Col>
-            <Button type="primary" onClick={showModal}>
-              {' '}
-              ADD GADGET ...{' '}
-            </Button>
-          </Col>
-        </Row>
-        <UniModal
-          // GENERIC (MODAL)
-          modalFor={modalFor}
-          isModalVisible={isModalVisible}
-          saveFunction={handleSaveGadget}
-          handleCancel={handleCancel}
-          confirmLoading={confirmLoading}
-          isButtonSaveOff={isButtonSaveOff}
-        >
-          <UniForm
-            formFor={modalFor}
-            setIsButtonSaveOff={setIsButtonSaveOff}
-            brand={brand}
-            setBrand={setBrand}
-            product={product}
-            setProduct={setProduct}
-            model={model}
-            setModel={setModel}
-            serial={serial}
-            setSerial={setSerial}
-            color={color}
-            setColor={setColor}
-            rate={rate}
-            setRate={setRate}
-          />
-        </UniModal>
-      </div>
-    </UserVerifier>
+      <br />
+      <Row>
+        <Col>
+          <Button type="primary" onClick={showModal}>
+            {' '}
+            ADD GADGET ...{' '}
+          </Button>
+        </Col>
+      </Row>
+      <UniModal
+        // GENERIC (MODAL)
+        modalFor={modalFor}
+        isModalVisible={isModalVisible}
+        saveFunction={handleSaveGadget}
+        handleCancel={handleCancel}
+        confirmLoading={confirmLoading}
+        isButtonSaveOff={isButtonSaveOff}
+      >
+        <UniForm
+          formFor={modalFor}
+          setIsButtonSaveOff={setIsButtonSaveOff}
+          uploading={uploading}
+          image={image}
+          handleUploadImage={handleUploadImage}
+          brand={brand}
+          setBrand={setBrand}
+          product={product}
+          setProduct={setProduct}
+          model={model}
+          setModel={setModel}
+          serial={serial}
+          setSerial={setSerial}
+          color={color}
+          setColor={setColor}
+          rate={rate}
+          setRate={setRate}
+        />
+      </UniModal>
+    </div>
   );
 }
 

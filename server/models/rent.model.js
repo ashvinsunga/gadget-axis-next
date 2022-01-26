@@ -16,6 +16,10 @@ const rentSchema = new Schema(
       type: ObjectId,
       ref: 'User',
     },
+    rent_start: {
+      type: Date,
+      default: Date.now,
+    },
     rent_end: {
       type: Date,
       required: true,

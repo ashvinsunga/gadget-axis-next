@@ -1,9 +1,11 @@
-import React from 'react';
-
+import React, { useState } from 'react';
+import { Avatar } from 'antd';
+import { CameraOutlined, LoadingOutlined } from '@ant-design/icons';
 export default function UserForm({
   // GENERIC
   formFor,
   setIsButtonSaveOff,
+
   // USER
   username,
   setUsername,
@@ -25,6 +27,8 @@ export default function UserForm({
   setPermission,
 
   // GADGET
+  handleUploadImage,
+  uploading,
   brand,
   setBrand,
   product,
@@ -33,6 +37,7 @@ export default function UserForm({
   setModel,
   serial,
   setSerial,
+  image,
   color,
   setColor,
   rate,
@@ -47,6 +52,7 @@ export default function UserForm({
   email,
   setEmail,
 }) {
+  const [checkDefault, setCheckDefault] = useState(null);
   return (
     <form>
       {/* USER FORM */}
@@ -60,7 +66,7 @@ export default function UserForm({
               !permission
           )}
           <div className="mb-2 row">
-            <label for="username" className="col-sm-5 col-form-label">
+            <label htmlFor="username" className="col-sm-5 col-form-label">
               USERNAME
             </label>
             <div className="col-sm-6">
@@ -77,7 +83,7 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="description" className="col-sm-5 col-form-label">
+            <label htmlFor="description" className="col-sm-5 col-form-label">
               DESCRIPTION
             </label>
             <div className="col-sm-6">
@@ -92,7 +98,7 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="phone" className="col-sm-5 col-form-label">
+            <label htmlFor="phone" className="col-sm-5 col-form-label">
               PHONE
             </label>
             <div className="col-sm-6">
@@ -108,7 +114,7 @@ export default function UserForm({
 
           {formFor == 'editUser' && (
             <div className="mb-2 row">
-              <label for="oldpassword" className="col-sm-5 col-form-label">
+              <label htmlFor="oldpassword" className="col-sm-5 col-form-label">
                 OLD PASSWORD
               </label>
               <div className="col-sm-6">
@@ -125,7 +131,7 @@ export default function UserForm({
 
           {formFor == 'addUser' && (
             <div className="mb-2 row">
-              <label for="password" className="col-sm-5 col-form-label">
+              <label htmlFor="password" className="col-sm-5 col-form-label">
                 PASSWORD
               </label>
               <div className="col-sm-6">
@@ -141,7 +147,7 @@ export default function UserForm({
           )}
           {formFor == 'editUser' && (
             <div className="mb-2 row ">
-              <label for="newpassword" className="col-sm-5 col-form-label ">
+              <label htmlFor="newpassword" className="col-sm-5 col-form-label ">
                 NEW PASSWORD
               </label>
 
@@ -158,7 +164,10 @@ export default function UserForm({
           )}
 
           <div className="mb-2 row">
-            <label for="confirmpassword" className="col-sm-5 col-form-label">
+            <label
+              htmlFor="confirmpassword"
+              className="col-sm-5 col-form-label"
+            >
               CONFIRM PASSWORD
             </label>
             <div className="col-sm-6">
@@ -174,7 +183,7 @@ export default function UserForm({
 
           {formFor == 'addUser' && (
             <div className="mb-2 row form-group">
-              <label for="permission" className="col-sm-5 col-form-label">
+              <label htmlFor="permission" className="col-sm-5 col-form-label">
                 PERMISSION
               </label>
               <div className="col-sm-4">
@@ -204,7 +213,7 @@ export default function UserForm({
           )}
           <div className="mb-2 row form-group">
             <div className="mb-2 row">
-              <label for="brand" className="col-sm-4 col-form-label">
+              <label htmlFor="brand" className="col-sm-4 col-form-label">
                 BRAND
               </label>
               <div className="col-sm-5">
@@ -215,7 +224,7 @@ export default function UserForm({
                   className="form-control"
                   id="brand"
                 >
-                  <option value="" selected hidden>
+                  <option value="" hidden>
                     --
                   </option>
                   <option>Sony</option>
@@ -226,7 +235,7 @@ export default function UserForm({
             </div>
 
             <div className="mb-2 row">
-              <label for="product" className="col-sm-4 col-form-label">
+              <label htmlFor="product" className="col-sm-4 col-form-label">
                 PRODUCT
               </label>
               <div className="col-sm-7">
@@ -241,7 +250,7 @@ export default function UserForm({
             </div>
 
             <div className="mb-2 row">
-              <label for="model" className="col-sm-4 col-form-label">
+              <label htmlFor="model" className="col-sm-4 col-form-label">
                 MODEL
               </label>
               <div className="col-sm-7">
@@ -256,7 +265,7 @@ export default function UserForm({
             </div>
 
             <div className="mb-2 row">
-              <label for="serial" className="col-sm-4 col-form-label">
+              <label htmlFor="serial" className="col-sm-4 col-form-label">
                 SERIAL
               </label>
               <div className="col-sm-7">
@@ -271,7 +280,34 @@ export default function UserForm({
             </div>
 
             <div className="mb-2 row">
-              <label for="color" className="col-sm-4 col-form-label">
+              <label htmlFor="gadgetimage" className="col-sm-4 col-form-label">
+                IMAGE
+              </label>
+
+              <div className="col-sm-5 mt-1">
+                <label>
+                  {image && image.url ? (
+                    <Avatar size={30} src={image.url} />
+                  ) : uploading ? (
+                    <LoadingOutlined />
+                  ) : (
+                    <CameraOutlined />
+                  )}
+
+                  <input
+                    onChange={handleUploadImage}
+                    type="file"
+                    accept="images/*"
+                    hidden
+                    className="form-control"
+                    id="gadgetimage"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div className="mb-2 row">
+              <label htmlFor="color" className="col-sm-4 col-form-label">
                 COLOR
               </label>
               <div className="col-sm-4">
@@ -286,7 +322,7 @@ export default function UserForm({
             </div>
 
             <div className="mb-2 row">
-              <label for="rate" className="col-sm-4 col-form-label">
+              <label htmlFor="rate" className="col-sm-4 col-form-label">
                 RATE
               </label>
               <div className="col-sm-4">
@@ -308,7 +344,7 @@ export default function UserForm({
         <>
           {setIsButtonSaveOff(!name || !idpresented || !idno || !phone)}
           <div className="mb-2 row">
-            <label for="name" className="col-sm-4 col-form-label">
+            <label htmlFor="name" className="col-sm-4 col-form-label">
               NAME
             </label>
             <div className="col-sm-6">
@@ -323,7 +359,7 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="idpresented" className="col-sm-4 col-form-label">
+            <label htmlFor="idpresented" className="col-sm-4 col-form-label">
               ID PRESENTED
             </label>
             <div className="col-sm-6">
@@ -338,7 +374,7 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="idno" className="col-sm-4 col-form-label">
+            <label htmlFor="idno" className="col-sm-4 col-form-label">
               ID NO
             </label>
             <div className="col-sm-6">
@@ -353,7 +389,7 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="phone" className="col-sm-4 col-form-label">
+            <label htmlFor="phone" className="col-sm-4 col-form-label">
               PHONE
             </label>
             <div className="col-sm-6">
@@ -368,7 +404,7 @@ export default function UserForm({
           </div>
 
           <div className="mb-2 row">
-            <label for="email" className="col-sm-4 col-form-label">
+            <label htmlFor="email" className="col-sm-4 col-form-label">
               EMAIL
             </label>
             <div className="col-sm-6">

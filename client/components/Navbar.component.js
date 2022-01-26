@@ -29,19 +29,19 @@ export default function Navbar() {
                 width="40"
                 height="30"
                 className="d-inline-block align-top h1 "
-                alt=""
+                alt="System logo"
               />
               ADGET AXIS
             </a>
           </Link>
 
-          <Link href="/users">
+          <Link href="/rentnow">
             <a
               className={`nav-link text-light ${
-                current === '/users' && 'active'
+                current === '/rentnow' && 'active'
               }`}
             >
-              USERS
+              RENT NOW!
             </a>
           </Link>
 

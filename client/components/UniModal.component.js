@@ -10,7 +10,6 @@ function UniModal({
   confirmLoading,
   saveFunction,
   isButtonSaveOff,
-
 }) {
   const getValues = (value = modalFor) => {
     // USER

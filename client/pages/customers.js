@@ -118,54 +118,53 @@ export default function Customers() {
   };
 
   return (
-    <div
-      className="ag-theme-alpine"
-      style={{ height: 400, width: '100%', padding: 6 }}
-    >
-      <AgGridReact
-        rowData={customers}
-        columnDefs={columnDefs}
-        defaultColDef={defaultColDef}
-        onGridReady={onGridReady}
-      ></AgGridReact>
+    <div style={{ marginLeft: 200 }}>
+      <div className="ag-theme-alpine" style={{ height: 500, width: '100%' }}>
+        <AgGridReact
+          rowData={customers}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          onGridReady={onGridReady}
+        ></AgGridReact>
 
-      <br />
-      <Row>
-        <Col>
-          <Button type="primary" onClick={showModal}>
-            {' '}
-            ADD CUSTOMER ...{' '}
-          </Button>
-        </Col>
-      </Row>
-      <UniModal
-        // GENERIC (MODAL)
-        modalFor={modalFor}
-        isModalVisible={isModalVisible}
-        saveFunction={handleSaveCustomer}
-        handleCancel={handleCancel}
-        confirmLoading={confirmLoading}
-        isButtonSaveOff={isButtonSaveOff}
-        // GENERIC (FORM)
-        formFor={modalFor}
-      >
-        <UniForm
+        <br />
+        <Row>
+          <Col>
+            <Button type="primary" onClick={showModal}>
+              {' '}
+              ADD CUSTOMER ...{' '}
+            </Button>
+          </Col>
+        </Row>
+        <UniModal
+          // GENERIC (MODAL)
+          modalFor={modalFor}
+          isModalVisible={isModalVisible}
+          saveFunction={handleSaveCustomer}
+          handleCancel={handleCancel}
+          confirmLoading={confirmLoading}
+          isButtonSaveOff={isButtonSaveOff}
+          // GENERIC (FORM)
           formFor={modalFor}
-          setIsButtonSaveOff={setIsButtonSaveOff}
-          name={name}
-          setName={setName}
-          idpresented={idpresented}
-          setIdpresented={setIdpresented}
-          idno={idno}
-          setIdno={setIdno}
-          phone={phone}
-          setPhone={setPhone}
-          email={email}
-          setEmail={setEmail}
-          phone={phone}
-          setPhone={setPhone}
-        />
-      </UniModal>
+        >
+          <UniForm
+            formFor={modalFor}
+            setIsButtonSaveOff={setIsButtonSaveOff}
+            name={name}
+            setName={setName}
+            idpresented={idpresented}
+            setIdpresented={setIdpresented}
+            idno={idno}
+            setIdno={setIdno}
+            phone={phone}
+            setPhone={setPhone}
+            email={email}
+            setEmail={setEmail}
+            phone={phone}
+            setPhone={setPhone}
+          />
+        </UniModal>
+      </div>
     </div>
   );
 }

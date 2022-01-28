@@ -148,55 +148,54 @@ export default function Gadgets() {
   };
 
   return (
-    <div
-      className="ag-theme-alpine"
-      style={{ height: 400, width: '100%', padding: 6 }}
-    >
-      <AgGridReact
-        rowData={gadgets}
-        columnDefs={columnDefs}
-        defaultColDef={defaultColDef}
-        onGridReady={onGridReady}
-      ></AgGridReact>
+    <div style={{ marginLeft: 200 }}>
+      <div className="ag-theme-alpine" style={{ height: 500, width: '100%' }}>
+        <AgGridReact
+          rowData={gadgets}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          onGridReady={onGridReady}
+        ></AgGridReact>
 
-      <br />
-      <Row>
-        <Col>
-          <Button type="primary" onClick={showModal}>
-            {' '}
-            ADD GADGET ...{' '}
-          </Button>
-        </Col>
-      </Row>
-      <UniModal
-        // GENERIC (MODAL)
-        modalFor={modalFor}
-        isModalVisible={isModalVisible}
-        saveFunction={handleSaveGadget}
-        handleCancel={handleCancel}
-        confirmLoading={confirmLoading}
-        isButtonSaveOff={isButtonSaveOff}
-      >
-        <UniForm
-          formFor={modalFor}
-          setIsButtonSaveOff={setIsButtonSaveOff}
-          uploading={uploading}
-          image={image}
-          handleUploadImage={handleUploadImage}
-          brand={brand}
-          setBrand={setBrand}
-          product={product}
-          setProduct={setProduct}
-          model={model}
-          setModel={setModel}
-          serial={serial}
-          setSerial={setSerial}
-          color={color}
-          setColor={setColor}
-          rate={rate}
-          setRate={setRate}
-        />
-      </UniModal>
+        <br />
+        <Row>
+          <Col>
+            <Button type="primary" onClick={showModal}>
+              {' '}
+              ADD GADGET ...{' '}
+            </Button>
+          </Col>
+        </Row>
+        <UniModal
+          // GENERIC (MODAL)
+          modalFor={modalFor}
+          isModalVisible={isModalVisible}
+          saveFunction={handleSaveGadget}
+          handleCancel={handleCancel}
+          confirmLoading={confirmLoading}
+          isButtonSaveOff={isButtonSaveOff}
+        >
+          <UniForm
+            formFor={modalFor}
+            setIsButtonSaveOff={setIsButtonSaveOff}
+            uploading={uploading}
+            image={image}
+            handleUploadImage={handleUploadImage}
+            brand={brand}
+            setBrand={setBrand}
+            product={product}
+            setProduct={setProduct}
+            model={model}
+            setModel={setModel}
+            serial={serial}
+            setSerial={setSerial}
+            color={color}
+            setColor={setColor}
+            rate={rate}
+            setRate={setRate}
+          />
+        </UniModal>
+      </div>
     </div>
   );
 }

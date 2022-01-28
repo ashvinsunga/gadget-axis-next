@@ -122,12 +122,13 @@ export default function Users() {
         setOk(data.ok);
         setIsModalVisible(false);
         setConfirmLoading(false);
-        clearForm();
+        clearFormAddUser();
         toast.success('User added successfully');
       }
     } catch (err) {
       setConfirmLoading(false);
-      toast.error(err.response.data);
+      clearFormAddUser();
+      toast.error(err);
     }
   };
 
@@ -188,93 +189,92 @@ export default function Users() {
   };
 
   return (
-    <div
-      className="ag-theme-alpine"
-      style={{ height: 400, width: '100%', padding: 6 }}
-    >
-      <AgGridReact
-        rowData={users}
-        columnDefs={columnDefs}
-        defaultColDef={defaultColDef}
-        onGridReady={onGridReady}
-        onRowClicked={(e) => {
-          setSelecteditem(e.data._id);
-        }}
-      ></AgGridReact>
-      <br />
+    <div style={{ marginLeft: 200 }}>
+      <div className="ag-theme-alpine" style={{ height: 500, width: '100%' }}>
+        <AgGridReact
+          rowData={users}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          onGridReady={onGridReady}
+          onRowClicked={(e) => {
+            setSelecteditem(e.data._id);
+          }}
+        ></AgGridReact>
+        <br />
 
-      <div className="col-sm-8">
-        <div className="row">
-          <div className="col-sm-2">
-            <Button
-              type="primary"
-              onClick={() => {
-                setModalFor('addUser');
-                showModal();
-              }}
-            >
-              {' '}
-              ADD USER ...{' '}
-            </Button>
-          </div>
+        <div className="col-sm-8">
+          <div className="row">
+            <div className="col-sm-2">
+              <Button
+                type="primary"
+                onClick={() => {
+                  setModalFor('addUser');
+                  showModal();
+                }}
+              >
+                {' '}
+                ADD USER ...{' '}
+              </Button>
+            </div>
 
-          <div className="col-sm-2">
-            <Button
-              type="primary"
-              onClick={() => {
-                setModalFor('editUser');
-                handleQueryUser();
-                showModal();
-              }}
-            >
-              {' '}
-              EDIT USER ...{' '}
-            </Button>
-          </div>
+            <div className="col-sm-2">
+              <Button
+                type="primary"
+                onClick={() => {
+                  setModalFor('editUser');
+                  handleQueryUser();
+                  showModal();
+                }}
+              >
+                {' '}
+                EDIT USER ...{' '}
+              </Button>
+            </div>
 
-          <div className="col-sm-2">
-            <Button type="primary" onClick={showModal}>
-              {' '}
-              DELETE USER ...{' '}
-            </Button>
+            <div className="col-sm-2">
+              <Button type="primary" onClick={showModal}>
+                {' '}
+                DELETE USER ...{' '}
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <UniModal
-        // GENERIC (MODAL)
-        modalFor={modalFor}
-        isModalVisible={isModalVisible}
-        saveFunction={
-          modalFor == 'addUser' ? handleSaveUser : handleSaveEditedUser
-        }
-        handleCancel={handleCancel}
-        confirmLoading={confirmLoading}
-        isButtonSaveOff={isButtonSaveOff}
-      >
-        <UniForm
-          formFor={modalFor}
-          username={username}
-          setUsername={setUsername}
-          description={description}
-          setDescription={setDescription}
-          phone={phone}
-          setPhone={setPhone}
-          // for edit function
-          newpassword={newpassword}
-          setNewPassword={setNewPassword}
-          oldpassword={oldpassword}
-          setOldPassword={setOldPassword}
-          //
-          password={password}
-          setPassword={setPassword}
-          confirmpassword={confirmpassword}
-          setConfirmpassword={setConfirmpassword}
-          permission={permission}
-          setPermission={setPermission}
-          setIsButtonSaveOff={setIsButtonSaveOff}
-        />
-      </UniModal>
+        <UniModal
+          // GENERIC (MODAL)
+          modalFor={modalFor}
+          isModalVisible={isModalVisible}
+          saveFunction={
+            modalFor == 'addUser' ? handleSaveUser : handleSaveEditedUser
+          }
+          handleCancel={handleCancel}
+          confirmLoading={confirmLoading}
+          isButtonSaveOff={isButtonSaveOff}
+        >
+          <UniForm
+            formFor={modalFor}
+            username={username}
+            setUsername={setUsername}
+            description={description}
+            setDescription={setDescription}
+            phone={phone}
+            setPhone={setPhone}
+            // for edit function
+            newpassword={newpassword}
+            setNewPassword={setNewPassword}
+            oldpassword={oldpassword}
+            setOldPassword={setOldPassword}
+            //
+            password={password}
+            setPassword={setPassword}
+            confirmpassword={confirmpassword}
+            setConfirmpassword={setConfirmpassword}
+            permission={permission}
+            setPermission={setPermission}
+            setIsButtonSaveOff={setIsButtonSaveOff}
+          />
+        </UniModal>
+      </div>
     </div>
   );
 }

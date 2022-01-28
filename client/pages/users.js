@@ -24,12 +24,14 @@ export default function Users() {
   // for form
   const [username, setUsername] = useState('');
   const [description, setDescription] = useState('');
+  const [dbpassword, setDbpassword] = useState('');
   const [oldpassword, setOldPassword] = useState('');
   const [newpassword, setNewPassword] = useState('');
   const [password, setPassword] = useState('');
   const [confirmpassword, setConfirmpassword] = useState('');
   const [phone, setPhone] = useState('');
   const [permission, setPermission] = useState('');
+  const [selecteditem, setSelecteditem] = useState('DOG');
   const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
   // data grid
   const columnDefs = [
@@ -56,11 +58,11 @@ export default function Users() {
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    clearForm();
+    modalFor == 'addUser' ? clearFormAddUser() : clearFormEditUser();
   };
 
   //clear form
-  const clearForm = () => {
+  const clearFormAddUser = () => {
     setUsername('');
     setDescription('');
     setPhone('');
@@ -68,9 +70,19 @@ export default function Users() {
     setConfirmpassword('');
     setPermission('');
   };
+  const clearFormEditUser = () => {
+    setUsername('');
+    setDescription('');
+    setPhone('');
+    setOldPassword('');
+    setNewPassword('');
+    setConfirmpassword('');
+  };
   //--------------------------------------
   useEffect(() => {
-    if (state && state.token) getUsers();
+    if (state && state.token) {
+      getUsers();
+    }
   }, [state && state.token]);
 
   const getUsers = async () => {
@@ -119,6 +131,62 @@ export default function Users() {
     }
   };
 
+  const handleSaveEditedUser = async () => {
+    console.log('User updated!');
+    try {
+      // setConfirmLoading(true);
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/edituser`,
+        {
+          selecteditem,
+          description,
+          phone,
+          dbpassword,
+          oldpassword,
+          newpassword,
+          confirmpassword,
+          permission,
+        }
+      );
+      console.log(data);
+      if (data.error) {
+        toast.error(data.error);
+        setConfirmLoading(false);
+      } else {
+        setOk(data.ok);
+        setIsModalVisible(false);
+        setConfirmLoading(false);
+        clearFormEditUser();
+        toast.success('User update successful');
+      }
+    } catch (err) {
+      setConfirmLoading(false);
+      toast.error(err);
+    }
+  };
+
+  const handleQueryUser = async () => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/queryuser`,
+        { selecteditem }
+      );
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        // console.log(data);
+        setUsername(data.username);
+        setDescription(data.description);
+        setDbpassword(data.password);
+        setPhone(data.phone);
+        setPermission(data.permission);
+      }
+    } catch (err) {
+      setConfirmLoading(false);
+      toast.error(err);
+    }
+  };
+
   return (
     <div
       className="ag-theme-alpine"
@@ -129,22 +197,57 @@ export default function Users() {
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         onGridReady={onGridReady}
-        onRowClicked={(e) => console.log(e.data._id)}
+        onRowClicked={(e) => {
+          setSelecteditem(e.data._id);
+        }}
       ></AgGridReact>
       <br />
-      <Row>
-        <Col>
-          <Button type="primary" onClick={showModal}>
-            {' '}
-            ADD USER ...{' '}
-          </Button>
-        </Col>
-      </Row>
+
+      <div className="col-sm-8">
+        <div className="row">
+          <div className="col-sm-2">
+            <Button
+              type="primary"
+              onClick={() => {
+                setModalFor('addUser');
+                showModal();
+              }}
+            >
+              {' '}
+              ADD USER ...{' '}
+            </Button>
+          </div>
+
+          <div className="col-sm-2">
+            <Button
+              type="primary"
+              onClick={() => {
+                setModalFor('editUser');
+                handleQueryUser();
+                showModal();
+              }}
+            >
+              {' '}
+              EDIT USER ...{' '}
+            </Button>
+          </div>
+
+          <div className="col-sm-2">
+            <Button type="primary" onClick={showModal}>
+              {' '}
+              DELETE USER ...{' '}
+            </Button>
+          </div>
+        </div>
+      </div>
+
       <UniModal
         // GENERIC (MODAL)
         modalFor={modalFor}
         isModalVisible={isModalVisible}
-        saveFunction={handleSaveUser}
+        saveFunction={
+          modalFor == 'addUser' ? handleSaveUser : handleSaveEditedUser
+        }
         handleCancel={handleCancel}
         confirmLoading={confirmLoading}
         isButtonSaveOff={isButtonSaveOff}

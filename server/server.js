@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
-const { readdirSync } = require('fs');
+// const { readdirSync } = require('fs');
 require('dotenv').config();
 
 const app = express();
@@ -19,19 +19,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('dev'));
 // autoload routes for admin route requests
-readdirSync('./routes').map((route) =>
-  app.use('/admin/users', require(`./routes/${route}`))
-);
+// readdirSync('./routes').map((route) =>
+//   app.use('/admin/users', require(`./routes/${route}`))
+// );
 
-readdirSync('./routes').map((route) =>
-  app.use('/admin/gadgets', require(`./routes/${route}`))
-);
+// readdirSync('./routes').map((route) =>
+//   app.use('/admin/gadgets', require(`./routes/${route}`))
+// );
 
-readdirSync('./routes').map((route) =>
-  app.use('/admin/customers', require(`./routes/${route}`))
-);
+// readdirSync('./routes').map((route) =>
+//   app.use('/admin/customers', require(`./routes/${route}`))
+// );
 //manual importing of route
 app.use('/', require(`./routes/auth.route`));
+app.use('/admin/users', require(`./routes/auth.route`));
+app.use('/admin/customers', require(`./routes/auth.route`));
+app.use('/admin/gadgets', require(`./routes/auth.route`));
 
 const port = process.env.PORT || 8000;
 

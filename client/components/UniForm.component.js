@@ -58,13 +58,16 @@ export default function UserForm({
       {/* USER FORM */}
       {(formFor == 'addUser' || formFor == 'editUser') && (
         <>
-          {setIsButtonSaveOff(
-            !username ||
-              !description ||
-              !password ||
-              !confirmpassword ||
-              !permission
-          )}
+          {formFor == 'addUser'
+            ? setIsButtonSaveOff(
+                !username ||
+                  !description ||
+                  !password ||
+                  !confirmpassword ||
+                  !permission
+              )
+            : setIsButtonSaveOff(!description)}
+
           <div className="mb-2 row">
             <label htmlFor="username" className="col-sm-5 col-form-label">
               USERNAME
@@ -72,6 +75,7 @@ export default function UserForm({
             <div className="col-sm-6">
               <input
                 value={username}
+                disabled={formFor == 'editUser' && true}
                 onChange={(e) => {
                   setUsername(e.target.value);
                 }}
@@ -113,20 +117,28 @@ export default function UserForm({
           </div>
 
           {formFor == 'editUser' && (
-            <div className="mb-2 row">
-              <label htmlFor="oldpassword" className="col-sm-5 col-form-label">
-                OLD PASSWORD
-              </label>
-              <div className="col-sm-6">
-                <input
-                  value={oldpassword}
-                  onChange={(e) => onChange(e)}
-                  type="text"
-                  className="form-control"
-                  id="oldpassword"
-                />
+            <>
+              {oldpassword == '' &&
+                (setConfirmpassword(''), setNewPassword(''))}
+
+              <div className="mb-2 row">
+                <label
+                  htmlFor="oldpassword"
+                  className="col-sm-5 col-form-label"
+                >
+                  OLD PASSWORD
+                </label>
+                <div className="col-sm-6">
+                  <input
+                    value={oldpassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                    type="text"
+                    className="form-control"
+                    id="oldpassword"
+                  />
+                </div>
               </div>
-            </div>
+            </>
           )}
 
           {formFor == 'addUser' && (
@@ -154,7 +166,8 @@ export default function UserForm({
               <div className="col-sm-6">
                 <input
                   value={newpassword}
-                  onChange={(e) => onChange(e)}
+                  disabled={formFor == 'editUser' && !oldpassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                   type="text"
                   className="form-control"
                   id="newpassword"
@@ -173,6 +186,7 @@ export default function UserForm({
             <div className="col-sm-6">
               <input
                 value={confirmpassword}
+                disabled={formFor == 'editUser' && !oldpassword}
                 onChange={(e) => setConfirmpassword(e.target.value)}
                 type="text"
                 className="form-control"
@@ -181,28 +195,26 @@ export default function UserForm({
             </div>
           </div>
 
-          {formFor == 'addUser' && (
-            <div className="mb-2 row form-group">
-              <label htmlFor="permission" className="col-sm-5 col-form-label">
-                PERMISSION
-              </label>
-              <div className="col-sm-4">
-                <select
-                  required
-                  value={permission}
-                  onChange={(e) => setPermission(e.target.value)}
-                  className="form-control"
-                  id="permission"
-                >
-                  <option value="" hidden>
-                    --
-                  </option>
-                  <option>Read only</option>
-                  <option>Full</option>
-                </select>
-              </div>
+          <div className="mb-2 row form-group">
+            <label htmlFor="permission" className="col-sm-5 col-form-label">
+              PERMISSION
+            </label>
+            <div className="col-sm-4">
+              <select
+                required
+                value={permission}
+                onChange={(e) => setPermission(e.target.value)}
+                className="form-control"
+                id="permission"
+              >
+                <option value="" hidden>
+                  --
+                </option>
+                <option>Read only</option>
+                <option>Full</option>
+              </select>
             </div>
-          )}
+          </div>
         </>
       )}
       {/* GADGET FORM - the only difference is the submit (add or update)*/}

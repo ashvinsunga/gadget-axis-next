@@ -10,6 +10,8 @@ const {
   currentUser,
   getUsers,
   addUser,
+  editUser,
+  queryUser,
   getGadgets,
   addGadget,
   getCustomers,
@@ -20,6 +22,8 @@ const {
 router.post('/loginuser', loginUser);
 router.get('/getusers', getUsers);
 router.post('/adduser', addUser);
+router.post('/edituser', editUser);
+router.post('/queryuser', queryUser);
 router.get('/getgadgets', getGadgets);
 router.post(
   '/uploadimage',

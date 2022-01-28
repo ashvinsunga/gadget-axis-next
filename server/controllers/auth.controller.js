@@ -111,6 +111,83 @@ const addUser = async (req, res) => {
   }
 };
 
+const editUser = async (req, res) => {
+  // console.log('EDIT ENDPOINT =>',req.body);
+
+  const {
+    selecteditem,
+    description,
+    phone,
+    dbpassword,
+    oldpassword,
+    permission,
+  } = req.body;
+
+  let { newpassword, confirmpassword } = req.body;
+  // validation
+
+  if (!description) {
+    return res.json({ error: 'Description is required' });
+  }
+
+  if (oldpassword) {
+    if (!newpassword || newpassword.length < 6) {
+      return res.json({ error: 'Password must be longer than 6 characters' });
+    }
+    if (newpassword != confirmpassword) {
+      return res.json({ error: 'Passwords do not match' });
+    }
+    const match = await comparePassword(oldpassword, dbpassword);
+    if (!match) {
+      return res.json({ error: 'Old password is invalid' });
+    }
+
+    const matchNew = await comparePassword(newpassword, dbpassword);
+    if (matchNew) {
+      return res.json({
+        error: 'Your new password cannot be same as old password',
+      });
+    }
+
+    // // hash password
+    // hashedPassword = await hashPassword(newpassword);
+  }
+
+  if (!permission) {
+    return res.json({
+      error: 'Permission is required',
+      newpassword,
+      confirmpassword,
+    });
+  }
+
+  // const user = new User({
+  //   username,
+  //   description,
+  //   phone,
+  //   password: hashedPassword;
+  //   permission,
+  // });
+  try {
+    console.log('Passed all validations!', newpassword, confirmpassword);
+    //   const user = await User.findByIdAndUpdate(selecteditem,(); // await
+    //   // console.log('REGISTERED USER =>', user);
+    //   return res.json({ ok: true });
+  } catch (err) {
+    return res.json({ error: 'Error. Try again' });
+  }
+};
+
+const queryUser = async (req, res) => {
+  try {
+    const data = await User.findById(req.body.selecteditem);
+    res.json(data);
+  } catch (err) {
+    res.sendStatus(400);
+    console.log(err);
+  }
+};
+
 const uploadImage = async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.files.image.path);
@@ -232,6 +309,8 @@ const addCustomer = async (req, res) => {
 module.exports = {
   getUsers,
   addUser,
+  editUser,
+  queryUser,
   getGadgets,
   addGadget,
   uploadImage,

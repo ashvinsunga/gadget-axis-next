@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../context';
+import { UserContext } from '../../context';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 // import styled from 'styled-components';
@@ -9,8 +9,10 @@ import { toast } from 'react-toastify';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
-import UniModal from '../components/UniModal.component';
-import UniForm from '../components/UniForm.component';
+import UniModal from '../../components/UniModal.component';
+import UniForm from '../../components/UniForm.component';
+
+import AdminLayout from '../../components/layouts/AdminLayout.component';
 
 export default function Customers() {
   const [state, setState] = useContext(UserContext);
@@ -118,57 +120,56 @@ export default function Customers() {
   };
 
   return (
-    <div style={{ marginLeft: 200 }}>
-      <div className="ag-theme-alpine" style={{ height: 500, width: '100%' }}>
-        <AgGridReact
-          rowData={customers}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          onGridReady={onGridReady}
-        ></AgGridReact>
+    <div className="ag-theme-alpine" style={{ height: 500, width: '103%' }}>
+      <AgGridReact
+        rowData={customers}
+        columnDefs={columnDefs}
+        defaultColDef={defaultColDef}
+        onGridReady={onGridReady}
+      ></AgGridReact>
 
-        <br />
-        <Row>
-          <Col>
-            <Button type="primary" onClick={showModal}>
-              {' '}
-              ADD CUSTOMER ...{' '}
-            </Button>
-          </Col>
-        </Row>
-        <UniModal
-          // GENERIC (MODAL)
-          modalFor={modalFor}
-          isModalVisible={isModalVisible}
-          saveFunction={handleSaveCustomer}
-          handleCancel={handleCancel}
-          confirmLoading={confirmLoading}
-          isButtonSaveOff={isButtonSaveOff}
-          // GENERIC (FORM)
+      <br />
+      <Row>
+        <Col>
+          <Button type="primary" onClick={showModal}>
+            {' '}
+            ADD CUSTOMER ...{' '}
+          </Button>
+        </Col>
+      </Row>
+      <UniModal
+        // GENERIC (MODAL)
+        modalFor={modalFor}
+        isModalVisible={isModalVisible}
+        saveFunction={handleSaveCustomer}
+        handleCancel={handleCancel}
+        confirmLoading={confirmLoading}
+        isButtonSaveOff={isButtonSaveOff}
+        // GENERIC (FORM)
+        formFor={modalFor}
+      >
+        <UniForm
           formFor={modalFor}
-        >
-          <UniForm
-            formFor={modalFor}
-            setIsButtonSaveOff={setIsButtonSaveOff}
-            name={name}
-            setName={setName}
-            idpresented={idpresented}
-            setIdpresented={setIdpresented}
-            idno={idno}
-            setIdno={setIdno}
-            phone={phone}
-            setPhone={setPhone}
-            email={email}
-            setEmail={setEmail}
-            phone={phone}
-            setPhone={setPhone}
-          />
-        </UniModal>
-      </div>
+          setIsButtonSaveOff={setIsButtonSaveOff}
+          name={name}
+          setName={setName}
+          idpresented={idpresented}
+          setIdpresented={setIdpresented}
+          idno={idno}
+          setIdno={setIdno}
+          phone={phone}
+          setPhone={setPhone}
+          email={email}
+          setEmail={setEmail}
+          phone={phone}
+          setPhone={setPhone}
+        />
+      </UniModal>
     </div>
   );
 }
 
+Customers.Layout = AdminLayout;
 // Styled components
 // const UserLists = styled.div`
 //   padding: 5px;

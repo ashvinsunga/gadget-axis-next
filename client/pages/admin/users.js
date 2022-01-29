@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../context';
+import { UserContext } from '../../context';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 // import styled from 'styled-components';
@@ -9,8 +9,9 @@ import { toast } from 'react-toastify';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
-import UniModal from '../components/UniModal.component';
-import UniForm from '../components/UniForm.component';
+import UniModal from '../../components/UniModal.component';
+import UniForm from '../../components/UniForm.component';
+import AdminLayout from '../../components/layouts/AdminLayout.component';
 
 export default function Users() {
   const [state, setState] = useContext(UserContext);
@@ -189,96 +190,95 @@ export default function Users() {
   };
 
   return (
-    <div style={{ marginLeft: 200 }}>
-      <div className="ag-theme-alpine" style={{ height: 500, width: '100%' }}>
-        <AgGridReact
-          rowData={users}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          onGridReady={onGridReady}
-          onRowClicked={(e) => {
-            setSelecteditem(e.data._id);
-          }}
-        ></AgGridReact>
+    <div className="ag-theme-alpine" style={{ height: 500, width: '103%' }}>
+      <AgGridReact
+        rowData={users}
+        columnDefs={columnDefs}
+        defaultColDef={defaultColDef}
+        onGridReady={onGridReady}
+        onRowClicked={(e) => {
+          setSelecteditem(e.data._id);
+        }}
+      />
+      <br />
+
+      <div className="col-sm-10">
         <br />
+        <div className="row">
+          <div className="col-sm-2">
+            <Button
+              type="primary"
+              onClick={() => {
+                setModalFor('addUser');
+                showModal();
+              }}
+            >
+              {' '}
+              ADD USER ...{' '}
+            </Button>
+          </div>
 
-        <div className="col-sm-8">
-          <div className="row">
-            <div className="col-sm-2">
-              <Button
-                type="primary"
-                onClick={() => {
-                  setModalFor('addUser');
-                  showModal();
-                }}
-              >
-                {' '}
-                ADD USER ...{' '}
-              </Button>
-            </div>
+          <div className="col-sm-2">
+            <Button
+              type="primary"
+              onClick={() => {
+                setModalFor('editUser');
+                handleQueryUser();
+                showModal();
+              }}
+            >
+              {' '}
+              EDIT USER ...{' '}
+            </Button>
+          </div>
 
-            <div className="col-sm-2">
-              <Button
-                type="primary"
-                onClick={() => {
-                  setModalFor('editUser');
-                  handleQueryUser();
-                  showModal();
-                }}
-              >
-                {' '}
-                EDIT USER ...{' '}
-              </Button>
-            </div>
-
-            <div className="col-sm-2">
-              <Button type="primary" onClick={showModal}>
-                {' '}
-                DELETE USER ...{' '}
-              </Button>
-            </div>
+          <div className="col-sm-2">
+            <Button type="primary" onClick={showModal}>
+              {' '}
+              DELETE USER ...{' '}
+            </Button>
           </div>
         </div>
-
-        <UniModal
-          // GENERIC (MODAL)
-          modalFor={modalFor}
-          isModalVisible={isModalVisible}
-          saveFunction={
-            modalFor == 'addUser' ? handleSaveUser : handleSaveEditedUser
-          }
-          handleCancel={handleCancel}
-          confirmLoading={confirmLoading}
-          isButtonSaveOff={isButtonSaveOff}
-        >
-          <UniForm
-            formFor={modalFor}
-            username={username}
-            setUsername={setUsername}
-            description={description}
-            setDescription={setDescription}
-            phone={phone}
-            setPhone={setPhone}
-            // for edit function
-            newpassword={newpassword}
-            setNewPassword={setNewPassword}
-            oldpassword={oldpassword}
-            setOldPassword={setOldPassword}
-            //
-            password={password}
-            setPassword={setPassword}
-            confirmpassword={confirmpassword}
-            setConfirmpassword={setConfirmpassword}
-            permission={permission}
-            setPermission={setPermission}
-            setIsButtonSaveOff={setIsButtonSaveOff}
-          />
-        </UniModal>
       </div>
+
+      <UniModal
+        // GENERIC (MODAL)
+        modalFor={modalFor}
+        isModalVisible={isModalVisible}
+        saveFunction={
+          modalFor == 'addUser' ? handleSaveUser : handleSaveEditedUser
+        }
+        handleCancel={handleCancel}
+        confirmLoading={confirmLoading}
+        isButtonSaveOff={isButtonSaveOff}
+      >
+        <UniForm
+          formFor={modalFor}
+          username={username}
+          setUsername={setUsername}
+          description={description}
+          setDescription={setDescription}
+          phone={phone}
+          setPhone={setPhone}
+          // for edit function
+          newpassword={newpassword}
+          setNewPassword={setNewPassword}
+          oldpassword={oldpassword}
+          setOldPassword={setOldPassword}
+          //
+          password={password}
+          setPassword={setPassword}
+          confirmpassword={confirmpassword}
+          setConfirmpassword={setConfirmpassword}
+          permission={permission}
+          setPermission={setPermission}
+          setIsButtonSaveOff={setIsButtonSaveOff}
+        />
+      </UniModal>
     </div>
   );
 }
-
+Users.Layout = AdminLayout;
 // Styled components
 // const UserLists = styled.div`
 //   padding: 5px;

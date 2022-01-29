@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../context';
+import { UserContext } from '../../context';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 // import styled from 'styled-components';
 import { Button, Row, Col } from 'antd';
 import { toast } from 'react-toastify';
-import UserVerifier from '../components/routes/UserVerifier';
+import UserVerifier from '../../components/routes/UserVerifier';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
-import UniModal from '../components/UniModal.component';
-import UniForm from '../components/UniForm.component';
+import UniModal from '../../components/UniModal.component';
+import UniForm from '../../components/UniForm.component';
+
+import AdminLayout from '../../components/layouts/AdminLayout.component';
 
 export default function Gadgets() {
   const [state, setState] = useContext(UserContext);
@@ -148,58 +150,56 @@ export default function Gadgets() {
   };
 
   return (
-    <div style={{ marginLeft: 200 }}>
-      <div className="ag-theme-alpine" style={{ height: 500, width: '100%' }}>
-        <AgGridReact
-          rowData={gadgets}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          onGridReady={onGridReady}
-        ></AgGridReact>
+    <div className="ag-theme-alpine" style={{ height: 500, width: '103%' }}>
+      <AgGridReact
+        rowData={gadgets}
+        columnDefs={columnDefs}
+        defaultColDef={defaultColDef}
+        onGridReady={onGridReady}
+      ></AgGridReact>
 
-        <br />
-        <Row>
-          <Col>
-            <Button type="primary" onClick={showModal}>
-              {' '}
-              ADD GADGET ...{' '}
-            </Button>
-          </Col>
-        </Row>
-        <UniModal
-          // GENERIC (MODAL)
-          modalFor={modalFor}
-          isModalVisible={isModalVisible}
-          saveFunction={handleSaveGadget}
-          handleCancel={handleCancel}
-          confirmLoading={confirmLoading}
-          isButtonSaveOff={isButtonSaveOff}
-        >
-          <UniForm
-            formFor={modalFor}
-            setIsButtonSaveOff={setIsButtonSaveOff}
-            uploading={uploading}
-            image={image}
-            handleUploadImage={handleUploadImage}
-            brand={brand}
-            setBrand={setBrand}
-            product={product}
-            setProduct={setProduct}
-            model={model}
-            setModel={setModel}
-            serial={serial}
-            setSerial={setSerial}
-            color={color}
-            setColor={setColor}
-            rate={rate}
-            setRate={setRate}
-          />
-        </UniModal>
-      </div>
+      <br />
+      <Row>
+        <Col>
+          <Button type="primary" onClick={showModal}>
+            {' '}
+            ADD GADGET ...{' '}
+          </Button>
+        </Col>
+      </Row>
+      <UniModal
+        // GENERIC (MODAL)
+        modalFor={modalFor}
+        isModalVisible={isModalVisible}
+        saveFunction={handleSaveGadget}
+        handleCancel={handleCancel}
+        confirmLoading={confirmLoading}
+        isButtonSaveOff={isButtonSaveOff}
+      >
+        <UniForm
+          formFor={modalFor}
+          setIsButtonSaveOff={setIsButtonSaveOff}
+          uploading={uploading}
+          image={image}
+          handleUploadImage={handleUploadImage}
+          brand={brand}
+          setBrand={setBrand}
+          product={product}
+          setProduct={setProduct}
+          model={model}
+          setModel={setModel}
+          serial={serial}
+          setSerial={setSerial}
+          color={color}
+          setColor={setColor}
+          rate={rate}
+          setRate={setRate}
+        />
+      </UniModal>
     </div>
   );
 }
-
+Gadgets.Layout = AdminLayout;
 // Styled components
 // const UserLists = styled.div`
 //   padding: 5px;

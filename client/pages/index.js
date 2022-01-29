@@ -12,6 +12,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+
   const loginSubmit = async (e) => {
     e.preventDefault();
     try {

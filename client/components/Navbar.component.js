@@ -40,7 +40,7 @@ export default function Navbar() {
             <Link href="/rentnow/nintendo">
               <a
                 className={`nav-link text-light ${
-                  current === '/rentnow' && 'active'
+                  current === '/rentnow/nintendo' && 'active'
                 }`}
               >
                 RENT NOW!
@@ -50,7 +50,7 @@ export default function Navbar() {
             <Link href="/admin/users">
               <a
                 className={`nav-link text-light ${
-                  current === '/admin' && 'active'
+                  current === '/admin/users' && 'active'
                 }`}
               >
                 ADMIN

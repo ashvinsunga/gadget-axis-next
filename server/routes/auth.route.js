@@ -17,6 +17,7 @@ const {
   getCustomers,
   addCustomer,
   uploadImage,
+  listNintendo,
 } = require('../controllers/auth.controller');
 
 router.post('/loginuser', loginUser);
@@ -35,4 +36,7 @@ router.post('/addgadget', addGadget);
 router.get('/getcustomers', getCustomers);
 router.post('/addcustomer', addCustomer);
 router.get('/currentuser', verifyToken, currentUser);
+
+//Rent
+router.get('/listnintendo', verifyToken, listNintendo);
 module.exports = router;

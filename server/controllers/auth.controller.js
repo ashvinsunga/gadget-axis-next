@@ -4,6 +4,7 @@ const Customer = require('../models/customer.model');
 const { hashPassword, comparePassword } = require('../helpers/auth.helper');
 const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary');
+const { post } = require('../routes/auth.route');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -306,6 +307,20 @@ const addCustomer = async (req, res) => {
   }
 };
 
+const listNintendo = async (req, res) => {
+  //
+  try {
+    const nintendo = await Gadget.find({
+      brand: 'Nintendo',
+      status: 'Available',
+    });
+    console.log(nintendo);
+    res.json(nintendo);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 module.exports = {
   getUsers,
   addUser,
@@ -318,4 +333,5 @@ module.exports = {
   addCustomer,
   loginUser,
   currentUser,
+  listNintendo,
 };

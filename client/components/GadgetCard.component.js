@@ -14,11 +14,17 @@ export default function GadgetCard({
   status,
   isModalVisible,
   setIsModalVisible,
+  setNintendostatus,
+  setNintendorate,
 }) {
   return (
     <>
       <Card
-        onClick={(e) => setIsModalVisible(true)}
+        onClick={(e) => {
+          setNintendorate(rate);
+          setNintendostatus(status);
+          setIsModalVisible(true);
+        }}
         hoverable={status == 'Available' && true}
         style={
           status == 'Available'
@@ -34,6 +40,7 @@ export default function GadgetCard({
                 width: '20%',
                 height: '40%',
                 backgroundColor: 'grey',
+                opacity: 0.5,
               }
         }
         // style={status != 'Available' && { backgroundColor: 'grey' }}
@@ -68,7 +75,7 @@ export default function GadgetCard({
             </ul>
           </div>
         }
-        <h6>PHP{rate} / DAY</h6>
+        <h6>PHP {rate} / DAY</h6>
       </Card>
     </>
   );

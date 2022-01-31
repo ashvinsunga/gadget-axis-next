@@ -273,6 +273,20 @@ const getCustomers = async (req, res) => {
   }
 };
 
+const getCustomersName = async (req, res) => {
+  try {
+    const data = await Customer.find({}, 'name')
+    .sort({ createdAt: -1 });
+    // .sort({ createdAt: -1})
+    // .limit(10);
+    // console.log(data);
+    res.json(data);
+  } catch (err) {
+    console.log(err);
+    res.status(400);
+  }
+};
+
 const addCustomer = async (req, res) => {
   // console.log('REGISTER ENDPOINT =>', req.body);
   const { name, idpresented, idno, phone, email } = req.body;
@@ -329,6 +343,7 @@ module.exports = {
   addGadget,
   uploadImage,
   getCustomers,
+  getCustomersName,
   addCustomer,
   loginUser,
   currentUser,

@@ -15,6 +15,7 @@ const {
   getGadgets,
   addGadget,
   getCustomers,
+  getCustomersName,
   addCustomer,
   uploadImage,
   listNintendo,
@@ -34,6 +35,7 @@ router.post(
 );
 router.post('/addgadget', addGadget);
 router.get('/getcustomers', getCustomers);
+router.get('/getcustomersname', getCustomersName);
 router.post('/addcustomer', addCustomer);
 router.get('/currentuser', verifyToken, currentUser);
 

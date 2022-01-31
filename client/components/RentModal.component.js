@@ -11,14 +11,17 @@ function RentModal({
   confirmLoading,
   saveFunction,
   isButtonSaveOff,
+  nintendostatus,
+  nintendorate,
+
 }) {
   return (
     <Modal
-      title="PHP250 / DAY"
+      title={`PHP ${nintendorate} / DAY`}
       width={500}
       closable={false}
       keyboard={true}
-      visible={isModalVisible}
+      visible={nintendostatus == 'Available' && isModalVisible}
       footer={[
         <Button
           type="primary"

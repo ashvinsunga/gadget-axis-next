@@ -11,10 +11,12 @@ export default function Nintendo() {
   const { Meta } = Card;
   const [state, setState] = useContext(UserContext);
   const [nintendos, setNintendos] = useState('');
-  const [customer, setCustomer] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [nintendostatus, setNintendostatus] = useState('');
+  const [nintendorate, setNintendorate] = useState('');
+  const [customers, setCustomers] = useState('');
   useEffect(() => {
-    if (state && state.token) listNintendo();
+    if (state && state.token) listNintendo(), queryCustomersName();
   }, [state && state.token]);
 
   const listNintendo = async (req, res) => {
@@ -28,6 +30,19 @@ export default function Nintendo() {
       console.log(err);
     }
   };
+
+  const queryCustomersName = async (req, res) => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/customers/getcustomersname`
+      );
+      setCustomers(data);
+      // console.log(customersname);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <div className="d-flex flex-wrap">
@@ -45,14 +60,18 @@ export default function Nintendo() {
               image_url={nintendo.image && nintendo.image.url}
               status={nintendo.status}
               setIsModalVisible={setIsModalVisible}
+              setNintendostatus={setNintendostatus}
+              setNintendorate={setNintendorate}
             />
           ))}
       </div>
       <RentModal
+        nintendostatus={nintendostatus}
+        nintendorate={nintendorate}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
       >
-        <RentForm customer={customer} setCustomer={setCustomer} />
+        <RentForm customers={customers} />
       </RentModal>
     </>
   );

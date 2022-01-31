@@ -59,7 +59,10 @@ export default function Navbar() {
 
             <div>
               <Avatar size={40} className="mt-1">
-                {state.user.username}
+                {state &&
+                  state.user &&
+                  state.user.username &&
+                  state.user.username[0].toUpperCase()}
               </Avatar>
             </div>
             {/* <h6 className="nav-link text-light">

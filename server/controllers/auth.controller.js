@@ -312,7 +312,6 @@ const listNintendo = async (req, res) => {
   try {
     const nintendo = await Gadget.find({
       brand: 'Nintendo',
-      status: 'Available',
     });
     console.log(nintendo);
     res.json(nintendo);

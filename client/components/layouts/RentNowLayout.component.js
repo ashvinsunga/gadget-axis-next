@@ -19,6 +19,8 @@ export default function RentNowLayout({ children }) {
               bottom: 0,
             }}
           >
+            <br />
+            <div className="container text-light">WHICH GADGET?</div>
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
               <Menu.Item key="1">
                 <Link href="/rentnow/nintendo">Nintendo</Link>

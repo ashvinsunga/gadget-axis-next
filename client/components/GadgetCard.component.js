@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { Card, Button } from 'antd';
-
+import RentModal from './RentModal.component';
 const { Meta } = Card;
 
 export default function GadgetCard({
+  id,
   product,
   model,
   serial,
@@ -10,40 +12,64 @@ export default function GadgetCard({
   rate,
   image_url,
   status,
+  isModalVisible,
+  setIsModalVisible,
 }) {
   return (
-    // <Card
-    //   hoverable
-    //   type="inner"
-    //   title={
-    //     <h5>
-    //       {product} : {color}
-    //     </h5>
-    //   }
-    //   size="small"
-    // >
-    <Card
-      hoverable
-      style={{ marginTop: 10, marginRight: 15, width: '20%', height: '40%' }}
-      cover={<img alt="example" src={image_url} />}
-      onClick={(e) => console.log('BOOM!!!')}
-      // actions={[
-      //   <SettingOutlined key="setting" />,
-      //   <EditOutlined key="edit" />,
-      //   <EllipsisOutlined key="ellipsis" />,
-      // ]}
-    >
-      {/* <Meta title={`${product}`} style={{ textAlign: 'left' }} /> */}
-      <h6> {product}</h6>
-      {
-        <div style={{ textAlign: 'left' }}>
-          <ul>
-            <li>Color: {color}</li>
-            <li>Model: {model}</li>
-          </ul>
+    <>
+      <Card
+        onClick={(e) => setIsModalVisible(true)}
+        hoverable={status == 'Available' && true}
+        style={
+          status == 'Available'
+            ? {
+                marginTop: 10,
+                marginRight: 15,
+                width: '20%',
+                height: '40%',
+              }
+            : {
+                marginTop: 10,
+                marginRight: 15,
+                width: '20%',
+                height: '40%',
+                backgroundColor: 'grey',
+              }
+        }
+        // style={status != 'Available' && { backgroundColor: 'grey' }}
+        // cover={<img alt="example" src={image_url} />}
+
+        // actions={[
+        //   <SettingOutlined key="setting" />,
+        //   <EditOutlined key="edit" />,
+        //   <EllipsisOutlined key="ellipsis" />,
+        // ]}
+      >
+        <div
+          style={{
+            backgroundImage: 'url(' + image_url + ')',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center center',
+            backgroundSize: 'cover',
+            height: '150px',
+          }}
+        >
+          <br />
+          <h3>{status != 'Available' && status.toUpperCase()}</h3>
         </div>
-      }
-      <h6>PHP{rate} / DAY</h6>
-    </Card>
+        <br />
+        {/* <Meta title={`${product}`} style={{ textAlign: 'left' }} /> */}
+        <h6> {product}</h6>
+        {
+          <div style={{ textAlign: 'left' }}>
+            <ul>
+              <li>Color: {color}</li>
+              <li>Model: {model}</li>
+            </ul>
+          </div>
+        }
+        <h6>PHP{rate} / DAY</h6>
+      </Card>
+    </>
   );
 }

@@ -113,7 +113,7 @@ export default function Gadgets() {
         `${process.env.NEXT_PUBLIC_ADMIN_API}/gadgets/uploadimage`,
         formData
       );
-      console.log('uploaded image ==>', data);
+      // console.log('uploaded image ==>', data);
       setImage({
         url: data.url,
         public_id: data.public_id,

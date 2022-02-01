@@ -14,7 +14,9 @@ export default function Nintendo() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [nintendostatus, setNintendostatus] = useState('');
   const [nintendorate, setNintendorate] = useState('');
+  const [days, setDays] = useState('');
   const [customers, setCustomers] = useState('');
+  const [customername, setCustomername] = useState('');
   useEffect(() => {
     if (state && state.token) listNintendo(), queryCustomersName();
   }, [state && state.token]);
@@ -71,7 +73,14 @@ export default function Nintendo() {
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
       >
-        <RentForm customers={customers} />
+        <RentForm
+          customers={customers}
+          customername={customername}
+          setCustomername={setCustomername}
+          nintendorate={nintendorate}
+          days={days}
+          setDays={setDays}
+        />
       </RentModal>
     </>
   );

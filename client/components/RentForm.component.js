@@ -4,11 +4,16 @@ import { DatePicker, Button } from 'antd';
 export default function RentForm({
   // GENERIC
   setIsButtonSaveOff,
+  customername,
+  setCustomername,
+  nintendorate,
+  days,
+  setDays,
   customers,
 }) {
-  let customer = '';
   let startDate = '';
   let endDate = '';
+
   const { RangePicker } = DatePicker;
   return (
     <form>
@@ -26,8 +31,8 @@ export default function RentForm({
         <div className="col-sm-7">
           <select
             required
-            value={customer}
-            onChange={(e) => (customer = e.target.value)}
+            value={customername}
+            onChange={(e) => setCustomername(e.target.value)}
             className="form-control"
             id="customer"
           >
@@ -50,7 +55,9 @@ export default function RentForm({
         </label>
         <div className="col-sm-7 mb-4">
           <RangePicker
+            showNow={true}
             onCalendarChange={(e) => {
+              const oneDay = 1000 * 60 * 60 * 24;
               try {
                 startDate = e[0]._d;
               } catch (err) {
@@ -62,8 +69,8 @@ export default function RentForm({
               } catch (err) {
                 endDate = '';
               }
-
-              console.log('START DATE', startDate, 'END DATE', endDate);
+              const diffInTime = endDate - startDate;
+              setDays(diffInTime / oneDay);
             }}
           />
         </div>
@@ -73,7 +80,7 @@ export default function RentForm({
         <div className="col-sm-3 col-form-label">TOTAL</div>
         <div className="col-sm-7 mb-2">
           <Button type="primary" danger ghost shape="round">
-            PHP 250
+            PHP {nintendorate * days}
           </Button>
         </div>
       </div>

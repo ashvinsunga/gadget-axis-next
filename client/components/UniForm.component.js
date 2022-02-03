@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Avatar } from 'antd';
 import { CameraOutlined, LoadingOutlined } from '@ant-design/icons';
+
 export default function UserForm({
   // GENERIC
   formFor,
@@ -51,10 +52,37 @@ export default function UserForm({
   setIdno,
   email,
   setEmail,
+  // DELETE
+  deletionpassword,
+  setDeletionpassword,
 }) {
-  const [checkDefault, setCheckDefault] = useState(null);
   return (
     <form>
+      {/* DELETE FORM */}
+      {formFor == 'deleteUser' && (
+        <>
+          {setIsButtonSaveOff(!deletionpassword)}
+          <div
+            htmlFor="deletionpassword"
+            className="d-flex justify-content-center mb-2 row"
+          >
+            ENTER YOUR PASSWORD TO CONFIRM DELETION
+          </div>
+          <div className="d-flex justify-content-center row">
+            <div className="col-md-7">
+              <input
+                value={deletionpassword}
+                onChange={(e) => {
+                  setDeletionpassword(e.target.value);
+                }}
+                type="text"
+                className="form-control"
+                id="deletionPassword"
+              />
+            </div>
+          </div>
+        </>
+      )}
       {/* USER FORM */}
       {(formFor == 'addUser' || formFor == 'editUser') && (
         <>
@@ -230,6 +258,7 @@ export default function UserForm({
               </label>
               <div className="col-sm-5">
                 <select
+                  disabled={formFor == 'editGadget' && true}
                   required
                   value={brand}
                   onChange={(e) => setBrand(e.target.value)}
@@ -239,6 +268,7 @@ export default function UserForm({
                   <option value="" hidden>
                     --
                   </option>
+
                   <option>Sony</option>
                   <option>Nintendo</option>
                   <option>Microsoft</option>
@@ -251,13 +281,66 @@ export default function UserForm({
                 PRODUCT
               </label>
               <div className="col-sm-7">
-                <input
+                <select
+                  required
                   value={product}
                   onChange={(e) => setProduct(e.target.value)}
-                  type="text"
                   className="form-control"
                   id="product"
-                />
+                >
+                  <option value="" hidden>
+                    --
+                  </option>
+                  {brand == 'Nintendo' && (
+                    <>
+                      <option>Nintendo Switch</option>
+                      <option>Nintendo Switch Lite</option>
+                      <option>Nintendo Switch OLED</option>
+                      <option>New Nintendo 3DS XL</option>
+                      <option>New Nintendo 2DS XL</option>
+                      <option>New Nintendo 3DS</option>
+                      <option>Nintendo 2DS</option>
+                      <option>Nintendo 3DS XL</option>
+                      <option>Nintendo DSi</option>
+                      <option>Nintendo DS</option>
+                      <option>Nintendo Lite</option>
+                      <option>Gameboy Advance</option>
+                      <option>Gameboy Color</option>
+                      <option>Gameboy</option>
+                      <option>Nintendo GameCube</option>
+                      <option>Nintendo 64</option>
+                      <option>SNES</option>
+                      <option>NES</option>
+                    </>
+                  )}
+
+                  {brand == 'Sony' && (
+                    <>
+                      <option>PlayStation 5</option>
+                      <option>PlayStation 4 Pro</option>
+                      <option>PlayStation 4 Slim</option>
+                      <option>PlayStation 4</option>
+                      <option>PlayStation Vita (PS Vita)</option>
+                      <option>PlayStation 3 Super Slim</option>
+                      <option>PlayStation 3 Slim</option>
+                      <option>PlayStation Portable (PSP)</option>
+                      <option>PlayStation 2 Slim</option>
+                      <option>PlayStation 2 </option>
+                      <option>PS One </option>
+                      <option>PlayStation</option>
+                    </>
+                  )}
+
+                  {brand == 'Microsoft' && (
+                    <>
+                      <option>XBOX</option>
+                      <option>XBOX 360</option>
+                      <option>XBOX One</option>
+                      <option>XBOX Series X</option>
+                      <option>XBOX Series S</option>
+                    </>
+                  )}
+                </select>
               </div>
             </div>
 

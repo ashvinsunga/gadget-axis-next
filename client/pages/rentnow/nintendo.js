@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useEffect, useContext, useState } from 'react';
-import { Card } from 'antd';
 import RentNowLayout from '../../components/layouts/RentNowLayout.component';
 import { UserContext } from '../../context';
 import GadgetCard from '../../components/GadgetCard.component';
@@ -8,15 +7,17 @@ import RentModal from '../../components/RentModal.component';
 import RentForm from '../../components/RentForm.component';
 
 export default function Nintendo() {
-  const { Meta } = Card;
-  const [state, setState] = useContext(UserContext);
+  const [state] = useContext(UserContext);
   const [nintendos, setNintendos] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [nintendostatus, setNintendostatus] = useState('');
-  const [nintendorate, setNintendorate] = useState('');
+  const [nintendorate, setNintendorate] = useState(0);
   const [days, setDays] = useState('');
   const [customers, setCustomers] = useState('');
+  const [customerid, setCustomernameid] = useState('');
   const [customername, setCustomername] = useState('');
+  const [totalrate, setTotalrate] = useState(0);
+
   useEffect(() => {
     if (state && state.token) listNintendo(), queryCustomersName();
   }, [state && state.token]);
@@ -64,6 +65,7 @@ export default function Nintendo() {
               setIsModalVisible={setIsModalVisible}
               setNintendostatus={setNintendostatus}
               setNintendorate={setNintendorate}
+              setCustomernameid={setCustomernameid}
             />
           ))}
       </div>
@@ -72,6 +74,8 @@ export default function Nintendo() {
         nintendorate={nintendorate}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
+        setDays={setDays}
+        setNintendorate={setNintendorate}
       >
         <RentForm
           customers={customers}
@@ -80,6 +84,8 @@ export default function Nintendo() {
           nintendorate={nintendorate}
           days={days}
           setDays={setDays}
+          totalrate={totalrate}
+          setTotalrate={setTotalrate}
         />
       </RentModal>
     </>

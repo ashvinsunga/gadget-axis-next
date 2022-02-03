@@ -10,6 +10,7 @@ function UniModal({
   confirmLoading,
   saveFunction,
   isButtonSaveOff,
+  deleteFunction,
 }) {
   const getValues = (value = modalFor) => {
     // USER
@@ -17,6 +18,8 @@ function UniModal({
       return { modalTitle: 'ADD USER', modalWidth: 412 };
     } else if (value == 'editUser') {
       return { modalTitle: 'EDIT USER', modalWidth: 412 };
+    } else if (value == 'deleteUser') {
+      return { modalTitle: 'DELETE USER', modalWidth: 412 };
     }
     // CUSTOMER
     if (value == 'addCustomer') {
@@ -43,10 +46,10 @@ function UniModal({
         <Button
           type="primary"
           disabled={isButtonSaveOff}
-          onClick={saveFunction}
+          onClick={modalFor == 'deleteUser' ? deleteFunction : saveFunction}
           loading={confirmLoading}
         >
-          SAVE
+          {modalFor != 'deleteUser' ? 'SAVE' : 'DELETE'}
         </Button>,
         <Button onClick={handleCancel}>CANCEL</Button>,
       ]}

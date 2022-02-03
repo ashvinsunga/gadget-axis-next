@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { DatePicker, Button } from 'antd';
+import moment from 'moment';
 
 export default function RentForm({
   // GENERIC
@@ -10,11 +11,14 @@ export default function RentForm({
   days,
   setDays,
   customers,
+  totalrate,
+  setTotalrate,
 }) {
   let startDate = '';
   let endDate = '';
 
   const { RangePicker } = DatePicker;
+
   return (
     <form>
       {/* {setIsButtonSaveOff(
@@ -70,6 +74,7 @@ export default function RentForm({
                 endDate = '';
               }
               const diffInTime = endDate - startDate;
+
               setDays(diffInTime / oneDay);
             }}
           />
@@ -80,7 +85,8 @@ export default function RentForm({
         <div className="col-sm-3 col-form-label">TOTAL</div>
         <div className="col-sm-7 mb-2">
           <Button type="primary" danger ghost shape="round">
-            PHP {nintendorate * days}
+            {setTotalrate(nintendorate * days)}
+            PHP {totalrate}
           </Button>
         </div>
       </div>

@@ -4,7 +4,6 @@ const Customer = require('../models/customer.model');
 const { hashPassword, comparePassword } = require('../helpers/auth.helper');
 const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary');
-const { post } = require('../routes/auth.route');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -20,7 +19,11 @@ const loginUser = async (req, res) => {
     if (!user) return res.json({ error: 'Invalid username' });
     // check password
     const match = await comparePassword(password, user.password);
-    if (!match) return res.json({ error: 'Invalid password' });
+    if (!match) {
+      // console.log(password, user.password);
+      return res.json({ error: 'Invalid password' });
+    }
+
     // create signed token
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: '7d',
@@ -150,15 +153,13 @@ const editUser = async (req, res) => {
       });
     }
 
-    // // hash password
-    // hashedPassword = await hashPassword(newpassword);
+    // hash password
+    hashedPassword = await hashPassword(newpassword);
   }
 
   if (!permission) {
     return res.json({
       error: 'Permission is required',
-      newpassword,
-      confirmpassword,
     });
   }
 
@@ -170,12 +171,57 @@ const editUser = async (req, res) => {
   //   permission,
   // });
   try {
-    console.log('Passed all validations!', newpassword, confirmpassword);
-    //   const user = await User.findByIdAndUpdate(selecteditem,(); // await
+    if (oldpassword) {
+      const user = await User.findByIdAndUpdate(
+        selecteditem,
+        {
+          description,
+          phone,
+          password: hashedPassword,
+          permission,
+        },
+        { new: true }
+      );
+      res.json(user);
+    } else {
+      const user = await User.findByIdAndUpdate(
+        selecteditem,
+        {
+          description,
+          phone,
+          permission,
+        },
+        { new: true }
+      );
+      res.json(user);
+    }
+    // console.log('Passed all validations!', newpassword, confirmpassword);
+    // await
     //   // console.log('REGISTERED USER =>', user);
     //   return res.json({ ok: true });
   } catch (err) {
     return res.json({ error: 'Error. Try again' });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const { deletionpassword, currentuser, selecteditem } = req.body;
+  const user = await User.findById(currentuser, '_id password');
+
+  if (currentuser == selecteditem) {
+    return res.json({ error: 'Deleting a logged in user is not allowed!' });
+  }
+
+  const match = await comparePassword(deletionpassword, user.password);
+  if (!match) {
+    return res.json({ error: 'Invalid password!' });
+  }
+
+  try {
+    const user = await User.findByIdAndDelete(selecteditem);
+    return res.json({ data: 'ok' });
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -260,6 +306,66 @@ const addGadget = async (req, res) => {
   }
 };
 
+const editGadget = async (req, res) => {
+  // console.log('EDIT ENDPOINT =>',req.body);
+
+  const { selecteditem, brand, product, model, serial, color, rate } = req.body;
+
+  // validation
+  if (!brand) {
+    return res.json({ error: 'Brand is required' });
+  }
+  if (!product) {
+    return res.json({ error: 'Product is required' });
+  }
+  if (!model) {
+    return res.json({ error: 'Model is required' });
+  }
+  if (!serial) {
+    return res.json({ error: 'Serial is required' });
+  }
+
+  if (!color) {
+    return res.json({ error: 'Color is required' });
+  }
+  if (rate < 0) {
+    return res.json({ error: 'Negative number is not allowed!' });
+  }
+
+  try {
+    const gadget = await Gadget.findByIdAndUpdate(
+      selecteditem,
+      {
+        brand,
+        product,
+        model,
+        serial,
+        color,
+        rate,
+      },
+      { new: true }
+    );
+    return res.json(gadget);
+
+    // console.log('Passed all validations!', newpassword, confirmpassword);
+    // await
+    //   // console.log('REGISTERED USER =>', user);
+    return res.json({ ok: true });
+  } catch (err) {
+    return res.json({ error: 'Error. Try again' });
+  }
+};
+
+const queryGadget = async (req, res) => {
+  try {
+    const data = await Gadget.findById(req.body.selecteditem);
+    res.json(data);
+  } catch (err) {
+    res.sendStatus(400);
+    console.log(err);
+  }
+};
+
 const getCustomers = async (req, res) => {
   try {
     const data = await Customer.find({}).sort({ createdAt: -1 });
@@ -275,8 +381,7 @@ const getCustomers = async (req, res) => {
 
 const getCustomersName = async (req, res) => {
   try {
-    const data = await Customer.find({}, 'name')
-    .sort({ createdAt: -1 });
+    const data = await Customer.find({}, 'name').sort({ createdAt: -1 });
     // .sort({ createdAt: -1})
     // .limit(10);
     // console.log(data);
@@ -338,9 +443,12 @@ module.exports = {
   getUsers,
   addUser,
   editUser,
+  deleteUser,
   queryUser,
   getGadgets,
   addGadget,
+  editGadget,
+  queryGadget,
   uploadImage,
   getCustomers,
   getCustomersName,

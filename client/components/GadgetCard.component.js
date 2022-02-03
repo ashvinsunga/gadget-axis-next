@@ -1,7 +1,6 @@
-import { useState } from 'react';
-import { Card, Button } from 'antd';
-import RentModal from './RentModal.component';
-const { Meta } = Card;
+
+import { Card} from 'antd';
+
 
 export default function GadgetCard({
   id,
@@ -14,6 +13,7 @@ export default function GadgetCard({
   status,
   isModalVisible,
   setIsModalVisible,
+  setCustomernameid,
   setNintendostatus,
   setNintendorate,
 }) {
@@ -24,6 +24,7 @@ export default function GadgetCard({
           setNintendorate(rate);
           setNintendostatus(status);
           setIsModalVisible(true);
+          setCustomernameid(id);
         }}
         hoverable={status == 'Available' && true}
         style={

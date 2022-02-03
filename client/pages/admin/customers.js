@@ -112,6 +112,7 @@ export default function Customers() {
         setConfirmLoading(false);
         clearForm();
         toast.success('Customer added successfully ');
+        getCustomers();
       }
     } catch (err) {
       setConfirmLoading(false);

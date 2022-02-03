@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import React from 'react';
-import { Avatar, Layout, Menu } from 'antd';
+import { Avatar } from 'antd';
 import Link from 'next/link';
 import { UserContext } from '../context';
 import { useRouter } from 'next/router';

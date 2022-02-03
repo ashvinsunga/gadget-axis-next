@@ -13,6 +13,7 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <link rel="stylesheet" href="/css/styles.css" />
       </Head>
+
       <Navbar />
       <Layout>
         <Component {...pageProps} />

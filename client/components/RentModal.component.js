@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button, DatePicker } from 'antd';
 
 function RentModal({
   children,
@@ -11,9 +11,10 @@ function RentModal({
   confirmLoading,
   saveFunction,
   isButtonSaveOff,
+  setDays,
   nintendostatus,
   nintendorate,
-
+  setPickerValueNull,
 }) {
   return (
     <Modal
@@ -31,7 +32,15 @@ function RentModal({
         >
           CONFIRM
         </Button>,
-        <Button onClick={(e) => setIsModalVisible(false)}>CANCEL</Button>,
+        <Button
+          onClick={(e) => {
+            setIsModalVisible(false);
+            setDays = 0;
+            setPickerValueNull = true
+          }}
+        >
+          CANCEL
+        </Button>,
       ]}
     >
       {children}

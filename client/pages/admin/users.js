@@ -3,7 +3,7 @@ import { UserContext } from '../../context';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 // import styled from 'styled-components';
-import { Button, Row, Col } from 'antd';
+import { Button } from 'antd';
 import { toast } from 'react-toastify';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -14,11 +14,12 @@ import UniForm from '../../components/UniForm.component';
 import AdminLayout from '../../components/layouts/AdminLayout.component';
 
 export default function Users() {
-  const [state, setState] = useContext(UserContext);
+  const [state] = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [gridApi, setGridApi] = useState(null);
   const [ok, setOk] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [selecteditem, setSelecteditem] = useState('');
   // for modal
   const [modalFor, setModalFor] = useState('addUser');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -32,7 +33,8 @@ export default function Users() {
   const [confirmpassword, setConfirmpassword] = useState('');
   const [phone, setPhone] = useState('');
   const [permission, setPermission] = useState('');
-  const [selecteditem, setSelecteditem] = useState('DOG');
+
+  const [deletionpassword, setDeletionpassword] = useState('');
   const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
   // data grid
   const columnDefs = [
@@ -59,7 +61,11 @@ export default function Users() {
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    modalFor == 'addUser' ? clearFormAddUser() : clearFormEditUser();
+    modalFor == 'addUser'
+      ? clearFormAddUser()
+      : modalFor == 'editUser'
+      ? clearFormEditUser()
+      : clearFormDeleteUser();
   };
 
   //clear form
@@ -79,6 +85,9 @@ export default function Users() {
     setNewPassword('');
     setConfirmpassword('');
   };
+  const clearFormDeleteUser = () => {
+    setDeletionpassword('');
+  };
   //--------------------------------------
   useEffect(() => {
     if (state && state.token) {
@@ -88,7 +97,6 @@ export default function Users() {
 
   const getUsers = async () => {
     // axios based data request from the api/server
-
     try {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_ADMIN_API}/users/getusers`
@@ -125,6 +133,7 @@ export default function Users() {
         setConfirmLoading(false);
         clearFormAddUser();
         toast.success('User added successfully');
+        getUsers();
       }
     } catch (err) {
       setConfirmLoading(false);
@@ -134,10 +143,9 @@ export default function Users() {
   };
 
   const handleSaveEditedUser = async () => {
-    console.log('User updated!');
     try {
       // setConfirmLoading(true);
-      const { data } = await axios.post(
+      const { data } = await axios.put(
         `${process.env.NEXT_PUBLIC_ADMIN_API}/users/edituser`,
         {
           selecteditem,
@@ -150,7 +158,7 @@ export default function Users() {
           permission,
         }
       );
-      console.log(data);
+      // console.log(data);
       if (data.error) {
         toast.error(data.error);
         setConfirmLoading(false);
@@ -160,6 +168,40 @@ export default function Users() {
         setConfirmLoading(false);
         clearFormEditUser();
         toast.success('User update successful');
+        getUsers();
+      }
+    } catch (err) {
+      setConfirmLoading(false);
+      toast.error(err);
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    let currentuser = state.user._id;
+    console.log(currentuser);
+    try {
+      setConfirmLoading(true);
+
+      const { data } = await axios.delete(
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/deleteuser`,
+        {
+          data: {
+            selecteditem,
+            deletionpassword,
+            currentuser,
+          },
+        }
+      );
+      if (data.error) {
+        toast.error(data.error);
+        setConfirmLoading(false);
+      } else {
+        setOk(data.ok);
+        setIsModalVisible(false);
+        setConfirmLoading(false);
+        clearFormDeleteUser();
+        toast.success('User deleted successfully');
+        getUsers();
       }
     } catch (err) {
       setConfirmLoading(false);
@@ -233,7 +275,13 @@ export default function Users() {
           </div>
 
           <div className="col-sm-2">
-            <Button type="primary" onClick={showModal}>
+            <Button
+              type="primary"
+              onClick={() => {
+                setModalFor('deleteUser');
+                showModal();
+              }}
+            >
               {' '}
               DELETE USER ...{' '}
             </Button>
@@ -248,9 +296,11 @@ export default function Users() {
         saveFunction={
           modalFor == 'addUser' ? handleSaveUser : handleSaveEditedUser
         }
+        deleteFunction={handleDeleteUser}
         handleCancel={handleCancel}
         confirmLoading={confirmLoading}
         isButtonSaveOff={isButtonSaveOff}
+        setDeletionpassword={setDeletionpassword}
       >
         <UniForm
           formFor={modalFor}
@@ -273,6 +323,9 @@ export default function Users() {
           permission={permission}
           setPermission={setPermission}
           setIsButtonSaveOff={setIsButtonSaveOff}
+          // for delete function
+          deletionpassword={deletionpassword}
+          setDeletionpassword={setDeletionpassword}
         />
       </UniModal>
     </div>

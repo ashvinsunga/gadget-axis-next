@@ -11,9 +11,12 @@ const {
   getUsers,
   addUser,
   editUser,
+  deleteUser,
   queryUser,
   getGadgets,
   addGadget,
+  editGadget,
+  queryGadget,
   getCustomers,
   getCustomersName,
   addCustomer,
@@ -24,7 +27,8 @@ const {
 router.post('/loginuser', loginUser);
 router.get('/getusers', getUsers);
 router.post('/adduser', addUser);
-router.post('/edituser', editUser);
+router.put('/edituser', verifyToken, editUser);
+router.delete('/deleteuser', deleteUser);
 router.post('/queryuser', queryUser);
 router.get('/getgadgets', getGadgets);
 router.post(
@@ -34,6 +38,8 @@ router.post(
   uploadImage
 );
 router.post('/addgadget', addGadget);
+router.put('/editgadget', verifyToken, editGadget);
+router.post('/querygadget', queryGadget);
 router.get('/getcustomers', getCustomers);
 router.get('/getcustomersname', getCustomersName);
 router.post('/addcustomer', addCustomer);

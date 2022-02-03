@@ -21,6 +21,7 @@ export default function Gadgets() {
   const [gridApi, setGridApi] = useState(null);
   const [ok, setOk] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [selecteditem, setSelecteditem] = useState('');
   // for modal
   const [modalFor, setModalFor] = useState('addGadget');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -35,6 +36,7 @@ export default function Gadgets() {
   const [color, setColor] = useState('');
   const [rate, setRate] = useState('');
 
+  const [deletionpassword, setDeletionpassword] = useState('');
   // data grid
   const columnDefs = [
     { headerName: 'Brand', field: 'brand' },
@@ -63,11 +65,13 @@ export default function Gadgets() {
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    clearForm();
+    modalFor == 'addGadget' || modalFor == 'editGadget'
+      ? clearFormGadget()
+      : clearFormDeleteUser();
   };
 
   //clear form
-  const clearForm = () => {
+  const clearFormGadget = () => {
     setBrand('');
     setProduct('');
     setModel('');
@@ -76,6 +80,11 @@ export default function Gadgets() {
     setColor('');
     setRate('');
   };
+
+  const clearFormDeleteUser = () => {
+    setDeletionpassword('');
+  };
+
   //--------------------------------------
   useEffect(() => {
     if (state && state.token) getGadgets();
@@ -140,12 +149,70 @@ export default function Gadgets() {
         setOk(data.ok);
         setIsModalVisible(false);
         setConfirmLoading(false);
-        clearForm();
+        clearFormAddGadget();
         toast.success('Gadget added successfully');
+        getGadgets();
       }
     } catch (err) {
       setConfirmLoading(false);
       toast.error(err.response.data);
+    }
+  };
+
+  const handleSaveEditedGadget = async () => {
+    try {
+      setConfirmLoading(true);
+      const { data } = await axios.put(
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/gadgets/editgadget`,
+        {
+          selecteditem,
+          brand,
+          product,
+          model,
+          serial,
+          color,
+          rate,
+        }
+      );
+      // console.log(data);
+      if (data.error) {
+        toast.error(data.error);
+        setConfirmLoading(false);
+      } else {
+        setOk(data.ok);
+        setIsModalVisible(false);
+        setConfirmLoading(false);
+        clearFormGadget();
+        toast.success('Gadget update successful');
+        getGadgets();
+      }
+    } catch (err) {
+      setConfirmLoading(false);
+      toast.error(err);
+    }
+  };
+
+  const handleQueryGadget = async () => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/gadgets/querygadget`,
+        { selecteditem }
+      );
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        // console.log(data);
+
+        setBrand(data.brand);
+        setProduct(data.product);
+        setModel(data.model);
+        setSerial(data.serial);
+        setColor(data.color);
+        setRate(data.rate);
+      }
+    } catch (err) {
+      setConfirmLoading(false);
+      toast.error(err);
     }
   };
 
@@ -156,22 +223,73 @@ export default function Gadgets() {
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         onGridReady={onGridReady}
+        onRowClicked={(e) => {
+          // console.log(e);
+          setSelecteditem(e.data._id);
+        }}
       ></AgGridReact>
 
       <br />
-      <Row>
+
+      <div className="col-sm-10">
+        <br />
+        <div className="row">
+          <div className="col-sm-2">
+            <Button
+              type="primary"
+              onClick={() => {
+                setModalFor('addGadget');
+                showModal();
+              }}
+            >
+              {' '}
+              ADD GADGET ...{' '}
+            </Button>
+          </div>
+
+          <div className="col-sm-2">
+            <Button
+              type="primary"
+              onClick={() => {
+                setModalFor('editGadget');
+                handleQueryGadget();
+                showModal();
+              }}
+            >
+              {' '}
+              EDIT GADGET ...{' '}
+            </Button>
+          </div>
+
+          <div className="col-sm-2">
+            <Button
+              type="primary"
+              onClick={() => {
+                setModalFor('deleteUser');
+                showModal();
+              }}
+            >
+              {' '}
+              DELETE GADGET ...{' '}
+            </Button>
+          </div>
+        </div>
+      </div>
+      {/* <Row>
         <Col>
           <Button type="primary" onClick={showModal}>
             {' '}
             ADD GADGET ...{' '}
           </Button>
         </Col>
-      </Row>
+      </Row> */}
       <UniModal
         // GENERIC (MODAL)
         modalFor={modalFor}
         isModalVisible={isModalVisible}
-        saveFunction={handleSaveGadget}
+        saveFunction={
+          modalFor == 'addGadget' ? handleSaveGadget : handleSaveEditedGadget
+        }
         handleCancel={handleCancel}
         confirmLoading={confirmLoading}
         isButtonSaveOff={isButtonSaveOff}

@@ -1,9 +1,8 @@
-
-import { Card} from 'antd';
-
+import { Card } from 'antd';
 
 export default function GadgetCard({
   id,
+  brand,
   product,
   model,
   serial,
@@ -16,6 +15,14 @@ export default function GadgetCard({
   setCustomernameid,
   setNintendostatus,
   setNintendorate,
+  setIsModalVisible,
+  setNintendostatus,
+  setNintendorate,
+  setCustomernameid,
+  setNintendobrand,
+  setNintendoproduct,
+  setNintendomodel,
+  setNintendoserial,
 }) {
   return (
     <>
@@ -25,6 +32,10 @@ export default function GadgetCard({
           setNintendostatus(status);
           setIsModalVisible(true);
           setCustomernameid(id);
+          setNintendobrand(brand),
+            setNintendoproduct(product),
+            setNintendomodel(model),
+            setNintendoserial(serial);
         }}
         hoverable={status == 'Available' && true}
         style={

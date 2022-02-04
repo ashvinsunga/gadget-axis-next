@@ -20,6 +20,7 @@ export default function Customers() {
   const [gridApi, setGridApi] = useState(null);
   const [ok, setOk] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [selecteditem, setSelecteditem] = useState('');
   // for modal
   const [modalFor, setModalFor] = useState('addCustomer');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -29,6 +30,7 @@ export default function Customers() {
   const [idno, setIdno] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [deletionpassword, setDeletionpassword] = useState('');
   // modal and form
   const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
   // data grid
@@ -58,17 +60,21 @@ export default function Customers() {
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    clearForm();
+
+    modalFor == 'addCustomer' || modalFor == 'editCustomer'
+      ? clearFormCustomer()
+      : setDeletionpassword('');
   };
 
   //clear form
-  const clearForm = () => {
+  const clearFormCustomer = () => {
     setName('');
     setIdpresented('');
     setIdno('');
     setPhone('');
     setEmail('');
   };
+
   //--------------------------------------
   useEffect(() => {
     if (state && state.token) getCustomers();
@@ -78,7 +84,7 @@ export default function Customers() {
     // axios based data request from the api/server
     try {
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/getcustomers`
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/customers/getcustomers`
       );
       setCustomers(data);
     } catch (err) {
@@ -110,13 +116,102 @@ export default function Customers() {
         setOk(data.ok);
         setIsModalVisible(false);
         setConfirmLoading(false);
-        clearForm();
+        clearFormCustomer();
         toast.success('Customer added successfully ');
         getCustomers();
       }
     } catch (err) {
       setConfirmLoading(false);
-      toast.error(err.response.data);
+      toast.error(err);
+    }
+  };
+
+  const handleSaveEditedCustomer = async () => {
+    try {
+      setConfirmLoading(true);
+      const { data } = await axios.put(
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/customers/editcustomer`,
+        {
+          selecteditem,
+          name,
+          idpresented,
+          idno,
+          phone,
+          email,
+        }
+      );
+      // console.log(data);
+      if (data.error) {
+        toast.error(data.error);
+        setConfirmLoading(false);
+      } else {
+        setOk(data.ok);
+        setIsModalVisible(false);
+        setConfirmLoading(false);
+        clearFormCustomer();
+        toast.success('Customer update successful');
+        getCustomers();
+      }
+    } catch (err) {
+      setConfirmLoading(false);
+      toast.error(err);
+    }
+  };
+
+  const handleDeleteCustomer = async () => {
+    let currentuser = state.user._id;
+
+    try {
+      setConfirmLoading(true);
+
+      const { data } = await axios.delete(
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/customers/deletecustomer`,
+        {
+          data: {
+            selecteditem,
+            deletionpassword,
+            currentuser,
+          },
+        }
+      );
+      if (data.error) {
+        toast.error(data.error);
+        setConfirmLoading(false);
+      } else {
+        setOk(data.ok);
+        setIsModalVisible(false);
+        setConfirmLoading(false);
+        setDeletionpassword('');
+        toast.success('Customer deleted successfully');
+        getCustomers();
+      }
+    } catch (err) {
+      setConfirmLoading(false);
+      toast.error(err);
+    }
+  };
+
+  const handleQueryCustomer = async () => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/customers/querycustomer`,
+        { selecteditem }
+      );
+      console.log(data);
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        // console.log(data);
+
+        setName(data.name);
+        setIdpresented(data.id_presented);
+        setIdno(data.id_no);
+        setPhone(data.phone);
+        setEmail(data.email);
+      }
+    } catch (err) {
+      setConfirmLoading(false);
+      toast.error(err);
     }
   };
 
@@ -127,23 +222,67 @@ export default function Customers() {
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         onGridReady={onGridReady}
+        onRowClicked={(e) => {
+          setSelecteditem(e.data._id);
+        }}
       ></AgGridReact>
 
       <br />
-      <Row>
-        <Col>
-          <Button type="primary" onClick={showModal}>
-            {' '}
-            ADD CUSTOMER ...{' '}
-          </Button>
-        </Col>
-      </Row>
+      <div className="col-sm-10">
+        <br />
+        <div className="row">
+          <div className="col-sm-2">
+            <Button
+              type="primary"
+              onClick={() => {
+                setModalFor('addCustomer');
+                showModal();
+              }}
+            >
+              {' '}
+              ADD CUSTOMER ...{' '}
+            </Button>
+          </div>
+
+          <div className="col-sm-2">
+            <Button
+              type="primary"
+              onClick={(e) => {
+                setModalFor('editCustomer');
+                handleQueryCustomer();
+                showModal();
+              }}
+            >
+              {' '}
+              EDIT CUSTOMER ...{' '}
+            </Button>
+          </div>
+
+          <div className="col-sm-2">
+            <Button
+              type="primary"
+              onClick={() => {
+                setModalFor('delete');
+                showModal();
+              }}
+            >
+              {' '}
+              DELETE CUSTOMER ...{' '}
+            </Button>
+          </div>
+        </div>
+      </div>
       <UniModal
         // GENERIC (MODAL)
         modalFor={modalFor}
         isModalVisible={isModalVisible}
-        saveFunction={handleSaveCustomer}
+        saveFunction={
+          modalFor == 'addCustomer'
+            ? handleSaveCustomer
+            : handleSaveEditedCustomer
+        }
         handleCancel={handleCancel}
+        deleteFunction={handleDeleteCustomer}
         confirmLoading={confirmLoading}
         isButtonSaveOff={isButtonSaveOff}
         // GENERIC (FORM)
@@ -164,6 +303,8 @@ export default function Customers() {
           setEmail={setEmail}
           phone={phone}
           setPhone={setPhone}
+          deletionpassword={deletionpassword}
+          setDeletionpassword={setDeletionpassword}
         />
       </UniModal>
     </div>

@@ -65,7 +65,7 @@ export default function Users() {
       ? clearFormAddUser()
       : modalFor == 'editUser'
       ? clearFormEditUser()
-      : clearFormDeleteUser();
+      : setDeletionpassword('');
   };
 
   //clear form
@@ -85,9 +85,7 @@ export default function Users() {
     setNewPassword('');
     setConfirmpassword('');
   };
-  const clearFormDeleteUser = () => {
-    setDeletionpassword('');
-  };
+
   //--------------------------------------
   useEffect(() => {
     if (state && state.token) {
@@ -178,7 +176,7 @@ export default function Users() {
 
   const handleDeleteUser = async () => {
     let currentuser = state.user._id;
-    console.log(currentuser);
+
     try {
       setConfirmLoading(true);
 
@@ -199,7 +197,7 @@ export default function Users() {
         setOk(data.ok);
         setIsModalVisible(false);
         setConfirmLoading(false);
-        clearFormDeleteUser();
+        setDeletionpassword('');
         toast.success('User deleted successfully');
         getUsers();
       }
@@ -278,7 +276,7 @@ export default function Users() {
             <Button
               type="primary"
               onClick={() => {
-                setModalFor('deleteUser');
+                setModalFor('delete');
                 showModal();
               }}
             >

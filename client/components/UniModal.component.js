@@ -18,7 +18,7 @@ function UniModal({
       return { modalTitle: 'ADD USER', modalWidth: 412 };
     } else if (value == 'editUser') {
       return { modalTitle: 'EDIT USER', modalWidth: 412 };
-    } else if (value == 'deleteUser') {
+    } else if (value == 'delete') {
       return { modalTitle: 'DELETE USER', modalWidth: 412 };
     }
     // CUSTOMER
@@ -29,9 +29,9 @@ function UniModal({
     }
     // GADGET
     if (value == 'addGadget') {
-      return { modalTitle: 'ADD GADGET', modalWidth: 340 };
+      return { modalTitle: 'ADD GADGET', modalWidth: 430 };
     } else if (value == 'editGadget') {
-      return { modalTitle: 'EDIT GADGET', modalWidth: 340 };
+      return { modalTitle: 'EDIT GADGET', modalWidth: 430 };
     }
   };
 
@@ -46,10 +46,10 @@ function UniModal({
         <Button
           type="primary"
           disabled={isButtonSaveOff}
-          onClick={modalFor == 'deleteUser' ? deleteFunction : saveFunction}
+          onClick={modalFor == 'delete' ? deleteFunction : saveFunction}
           loading={confirmLoading}
         >
-          {modalFor != 'deleteUser' ? 'SAVE' : 'DELETE'}
+          {modalFor != 'delete' ? 'SAVE' : 'DELETE'}
         </Button>,
         <Button onClick={handleCancel}>CANCEL</Button>,
       ]}

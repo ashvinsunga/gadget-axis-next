@@ -67,7 +67,7 @@ export default function Gadgets() {
     setIsModalVisible(false);
     modalFor == 'addGadget' || modalFor == 'editGadget'
       ? clearFormGadget()
-      : clearFormDeleteUser();
+      : setDeletionpassword('');
   };
 
   //clear form
@@ -79,10 +79,6 @@ export default function Gadgets() {
     setImage({});
     setColor('');
     setRate('');
-  };
-
-  const clearFormDeleteUser = () => {
-    setDeletionpassword('');
   };
 
   //--------------------------------------
@@ -116,7 +112,7 @@ export default function Gadgets() {
     let formData = new FormData();
     formData.append('image', file);
     setUploading(true);
-    console.log(state);
+    // console.log(state);
     try {
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_ADMIN_API}/gadgets/uploadimage`,
@@ -149,13 +145,13 @@ export default function Gadgets() {
         setOk(data.ok);
         setIsModalVisible(false);
         setConfirmLoading(false);
-        clearFormAddGadget();
+        clearFormGadget();
         toast.success('Gadget added successfully');
         getGadgets();
       }
     } catch (err) {
       setConfirmLoading(false);
-      toast.error(err.response.data);
+      toast.error(err);
     }
   };
 
@@ -170,6 +166,7 @@ export default function Gadgets() {
           product,
           model,
           serial,
+          image,
           color,
           rate,
         }
@@ -184,6 +181,39 @@ export default function Gadgets() {
         setConfirmLoading(false);
         clearFormGadget();
         toast.success('Gadget update successful');
+        getGadgets();
+      }
+    } catch (err) {
+      setConfirmLoading(false);
+      toast.error(err);
+    }
+  };
+
+  const handleDeleteGadget = async () => {
+    let currentuser = state.user._id;
+    console.log(currentuser);
+    try {
+      setConfirmLoading(true);
+
+      const { data } = await axios.delete(
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/gadgets/deletegadget`,
+        {
+          data: {
+            selecteditem,
+            deletionpassword,
+            currentuser,
+          },
+        }
+      );
+      if (data.error) {
+        toast.error(data.error);
+        setConfirmLoading(false);
+      } else {
+        setOk(data.ok);
+        setIsModalVisible(false);
+        setConfirmLoading(false);
+        setDeletionpassword('');
+        toast.success('Gadget deleted successfully');
         getGadgets();
       }
     } catch (err) {
@@ -207,6 +237,7 @@ export default function Gadgets() {
         setProduct(data.product);
         setModel(data.model);
         setSerial(data.serial);
+        setImage(data.image);
         setColor(data.color);
         setRate(data.rate);
       }
@@ -265,7 +296,7 @@ export default function Gadgets() {
             <Button
               type="primary"
               onClick={() => {
-                setModalFor('deleteUser');
+                setModalFor('delete');
                 showModal();
               }}
             >
@@ -275,14 +306,7 @@ export default function Gadgets() {
           </div>
         </div>
       </div>
-      {/* <Row>
-        <Col>
-          <Button type="primary" onClick={showModal}>
-            {' '}
-            ADD GADGET ...{' '}
-          </Button>
-        </Col>
-      </Row> */}
+
       <UniModal
         // GENERIC (MODAL)
         modalFor={modalFor}
@@ -290,9 +314,11 @@ export default function Gadgets() {
         saveFunction={
           modalFor == 'addGadget' ? handleSaveGadget : handleSaveEditedGadget
         }
+        deleteFunction={handleDeleteGadget}
         handleCancel={handleCancel}
         confirmLoading={confirmLoading}
         isButtonSaveOff={isButtonSaveOff}
+        setDeletionpassword={setDeletionpassword}
       >
         <UniForm
           formFor={modalFor}
@@ -312,6 +338,8 @@ export default function Gadgets() {
           setColor={setColor}
           rate={rate}
           setRate={setRate}
+          deletionpassword={deletionpassword}
+          setDeletionpassword={setDeletionpassword}
         />
       </UniModal>
     </div>

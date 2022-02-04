@@ -8,13 +8,16 @@ function RentModal({
   handleCancel,
   isModalVisible,
   setIsModalVisible,
+  clearRentForm,
   confirmLoading,
-  saveFunction,
+  confirmFunction,
   isButtonSaveOff,
   setDays,
   nintendostatus,
   nintendorate,
-  setPickerValueNull,
+  setCustomername,
+  setStartdate,
+  setEnddate,
 }) {
   return (
     <Modal
@@ -27,7 +30,7 @@ function RentModal({
         <Button
           type="primary"
           disabled={isButtonSaveOff}
-          onClick={saveFunction}
+          onClick={confirmFunction}
           loading={confirmLoading}
         >
           CONFIRM
@@ -35,8 +38,7 @@ function RentModal({
         <Button
           onClick={(e) => {
             setIsModalVisible(false);
-            setDays = 0;
-            setPickerValueNull = true
+            clearRentForm();
           }}
         >
           CANCEL

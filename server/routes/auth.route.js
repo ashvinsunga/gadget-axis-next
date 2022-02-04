@@ -16,12 +16,17 @@ const {
   getGadgets,
   addGadget,
   editGadget,
+  deleteGadget,
   queryGadget,
   getCustomers,
   getCustomersName,
   addCustomer,
+  editCustomer,
+  deleteCustomer,
+  queryCustomer,
   uploadImage,
   listNintendo,
+  confirmRent,
 } = require('../controllers/auth.controller');
 
 router.post('/loginuser', loginUser);
@@ -39,12 +44,17 @@ router.post(
 );
 router.post('/addgadget', addGadget);
 router.put('/editgadget', verifyToken, editGadget);
+router.delete('/deletegadget', deleteGadget);
 router.post('/querygadget', queryGadget);
 router.get('/getcustomers', getCustomers);
 router.get('/getcustomersname', getCustomersName);
 router.post('/addcustomer', addCustomer);
+router.put('/editcustomer', verifyToken, editCustomer);
+router.delete('/deletecustomer', deleteCustomer);
+router.post('/querycustomer', queryCustomer);
 router.get('/currentuser', verifyToken, currentUser);
 
 //Rent
 router.get('/listnintendo', verifyToken, listNintendo);
+router.post('/confirmrent', confirmRent);
 module.exports = router;

@@ -57,9 +57,9 @@ export default function UserForm({
   setDeletionpassword,
 }) {
   return (
-    <form>
+    <form >
       {/* DELETE FORM */}
-      {formFor == 'deleteUser' && (
+      {formFor == 'delete' && (
         <>
           {setIsButtonSaveOff(!deletionpassword)}
           <div

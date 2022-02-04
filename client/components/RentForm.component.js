@@ -8,17 +8,21 @@ export default function RentForm({
   customername,
   setCustomername,
   nintendorate,
+  startDate,
+  setStartdate,
+  endDate,
+  setEnddate,
   days,
   setDays,
   customers,
   totalrate,
   setTotalrate,
 }) {
-  let startDate = '';
-  let endDate = '';
-
   const { RangePicker } = DatePicker;
 
+  const diffInTime = endDate - startDate;
+
+  setDays(diffInTime / (1000 * 60 * 60 * 24));
   return (
     <form>
       {/* {setIsButtonSaveOff(
@@ -60,22 +64,18 @@ export default function RentForm({
         <div className="col-sm-7 mb-4">
           <RangePicker
             showNow={true}
-            onCalendarChange={(e) => {
-              const oneDay = 1000 * 60 * 60 * 24;
+            onChange={(e) => {
               try {
-                startDate = e[0]._d;
+                setStartdate(e[0]._d);
               } catch (err) {
-                startDate = '';
+                setStartdate('');
               }
 
               try {
-                endDate = e[1]._d;
+                setEnddate(e[1]._d);
               } catch (err) {
-                endDate = '';
+                setEnddate('');
               }
-              const diffInTime = endDate - startDate;
-
-              setDays(diffInTime / oneDay);
             }}
           />
         </div>

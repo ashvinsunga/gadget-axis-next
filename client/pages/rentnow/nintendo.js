@@ -11,12 +11,20 @@ export default function Nintendo() {
   const [nintendos, setNintendos] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [nintendostatus, setNintendostatus] = useState('');
+  const [nintendobrand, setNintendobrand] = useState('');
+  const [nintendproduct, setNintendoproduct] = useState('');
+  const [nintendomodel, setNintendomodel] = useState('');
+  const [nintendoserial, setNintendoserial] = useState('');
   const [nintendorate, setNintendorate] = useState(0);
   const [days, setDays] = useState('');
   const [customers, setCustomers] = useState('');
   const [customerid, setCustomernameid] = useState('');
   const [customername, setCustomername] = useState('');
+  const [rentedby, setRentedby] = useState(state.user.username);
+  const [startDate, setStartdate] = useState(0);
+  const [endDate, setEnddate] = useState(0);
   const [totalrate, setTotalrate] = useState(0);
+  const [confirmloading, setConfirmLoading] = useState(false);
 
   useEffect(() => {
     if (state && state.token) listNintendo(), queryCustomersName();
@@ -34,6 +42,43 @@ export default function Nintendo() {
     }
   };
 
+  const handleConfirmRent = async () => {
+    try {
+      setConfirmLoading(true);
+      const { data } = await axios.post(
+        `http://localhost:8000/rentnow/confirmrent`,
+        {
+          rentedby,
+          nintendobrand,
+          nintendproduct,
+          nintendomodel,
+          nintendoserial,
+          nintendorate,
+          customerid,
+          customername,
+          startDate,
+          endDate,
+          totalrate,
+        }
+      );
+
+      if (data.error) {
+        toast.error(data.error);
+        setConfirmLoading(false);
+      } else {
+        setOk(data.ok);
+        setIsModalVisible(false);
+        setConfirmLoading(false);
+        clearRentForm();
+        toast.success('Rent added successfully');
+        getCustomers();
+      }
+    } catch (err) {
+      setConfirmLoading(false);
+      // toast.error(err);
+    }
+  };
+
   const queryCustomersName = async (req, res) => {
     try {
       const { data } = await axios.get(
@@ -46,6 +91,12 @@ export default function Nintendo() {
     }
   };
 
+  function clearRentForm() {
+    setDays(0);
+    setCustomername('');
+    setStartdate('');
+    setEnddate('');
+  }
   return (
     <>
       <div className="d-flex flex-wrap">
@@ -55,6 +106,7 @@ export default function Nintendo() {
             <GadgetCard
               key={nintendo._id}
               id={nintendo._id}
+              brand={nintendo.brand}
               product={nintendo.product}
               model={nintendo.model}
               serial={nintendo.serial}
@@ -66,22 +118,35 @@ export default function Nintendo() {
               setNintendostatus={setNintendostatus}
               setNintendorate={setNintendorate}
               setCustomernameid={setCustomernameid}
+              setNintendobrand={setNintendobrand}
+              setNintendoproduct={setNintendoproduct}
+              setNintendomodel={setNintendomodel}
+              setNintendoserial={setNintendoserial}
             />
           ))}
       </div>
       <RentModal
+        confirmFunction={handleConfirmRent}
+        clearRentForm={clearRentForm}
         nintendostatus={nintendostatus}
         nintendorate={nintendorate}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
         setDays={setDays}
         setNintendorate={setNintendorate}
+        setCustomername={setCustomername}
+        setStartdate={setStartdate}
+        setEnddate={setEnddate}
       >
         <RentForm
           customers={customers}
           customername={customername}
           setCustomername={setCustomername}
           nintendorate={nintendorate}
+          startDate={startDate}
+          setStartdate={setStartdate}
+          endDate={endDate}
+          setEnddate={setEnddate}
           days={days}
           setDays={setDays}
           totalrate={totalrate}

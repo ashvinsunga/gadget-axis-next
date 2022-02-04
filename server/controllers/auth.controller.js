@@ -309,7 +309,8 @@ const addGadget = async (req, res) => {
 const editGadget = async (req, res) => {
   // console.log('EDIT ENDPOINT =>',req.body);
 
-  const { selecteditem, brand, product, model, serial, color, rate } = req.body;
+  const { selecteditem, brand, product, model, serial, image, color, rate } =
+    req.body;
 
   // validation
   if (!brand) {
@@ -340,12 +341,13 @@ const editGadget = async (req, res) => {
         product,
         model,
         serial,
+        image,
         color,
         rate,
       },
       { new: true }
     );
-    return res.json(gadget);
+    // return res.json(gadget);
 
     // console.log('Passed all validations!', newpassword, confirmpassword);
     // await
@@ -353,6 +355,28 @@ const editGadget = async (req, res) => {
     return res.json({ ok: true });
   } catch (err) {
     return res.json({ error: 'Error. Try again' });
+  }
+};
+
+const deleteGadget = async (req, res) => {
+  const { deletionpassword, currentuser, selecteditem } = req.body;
+  const user = await User.findById(currentuser, '_id password');
+
+  const match = await comparePassword(deletionpassword, user.password);
+  if (!match) {
+    return res.json({ error: 'Invalid password!' });
+  }
+
+  try {
+    const gadget = await Gadget.findByIdAndDelete(selecteditem);
+    // remove image from cloudinary
+    if (gadget.image && gadget.image.public_id) {
+      // console.log(gadget.image.public_id);
+      const image = await cloudinary.uploader.destroy(gadget.image.public_id);
+      return res.json({ ok: 'true' });
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -384,7 +408,7 @@ const getCustomersName = async (req, res) => {
     const data = await Customer.find({}, 'name').sort({ createdAt: -1 });
     // .sort({ createdAt: -1})
     // .limit(10);
-    // console.log(data);
+    console.log(data);
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -426,17 +450,120 @@ const addCustomer = async (req, res) => {
   }
 };
 
+const editCustomer = async (req, res) => {
+  // console.log('EDIT ENDPOINT =>',req.body);
+
+  const { selecteditem, name, idpresented, idno, phone, email } = req.body;
+
+  // validation
+  if (!name) {
+    return res.json({ error: 'Name is required' });
+  }
+  if (!idpresented) {
+    return res.json({ error: 'ID is required' });
+  }
+  if (!idno) {
+    return res.json({ error: 'ID No. is required' });
+  }
+  if (!phone) {
+    return res.json({ error: 'Phone is required' });
+  }
+
+  try {
+    const customer = await Customer.findByIdAndUpdate(
+      selecteditem,
+      {
+        name,
+        id_presented: idpresented,
+        id_no: idno,
+        phone,
+        email,
+      },
+      { new: true }
+    );
+    // return res.json(gadget);
+
+    // console.log('Passed all validations!', newpassword, confirmpassword);
+    // await
+    //   // console.log('REGISTERED USER =>', user);
+    return res.json({ ok: true });
+  } catch (err) {
+    return res.json({ error: 'Error. Try again' });
+  }
+};
+
+const deleteCustomer = async (req, res) => {
+  const { deletionpassword, currentuser, selecteditem } = req.body;
+  const user = await User.findById(currentuser, '_id password');
+
+  const match = await comparePassword(deletionpassword, user.password);
+  if (!match) {
+    return res.json({ error: 'Invalid password!' });
+  }
+
+  try {
+    const customer = await Customer.findByIdAndDelete(selecteditem);
+    return res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const queryCustomer = async (req, res) => {
+  try {
+    const data = await Customer.findById(req.body.selecteditem);
+    res.json(data);
+  } catch (err) {
+    res.sendStatus(400);
+    console.log(err);
+  }
+};
+
 const listNintendo = async (req, res) => {
   //
   try {
     const nintendo = await Gadget.find({
       brand: 'Nintendo',
     });
-    console.log(nintendo);
+    // console.log(nintendo);
     res.json(nintendo);
   } catch (err) {
     console.log(err);
   }
+};
+
+const confirmRent = async (req, res) => {
+  console.log('REGISTER ENDPOINT =>', req.body);
+  // const { name, idpresented, idno, phone, email } = req.body;
+  // validation
+  // if (!name) {
+  //   return res.json({ error: 'Name is required' });
+  // }
+  // if (!idpresented) {
+  //   return res.json({ error: 'ID presented is required' });
+  // }
+  // if (!idno) {
+  //   return res.json({ error: 'ID no is required' });
+  // }
+  // if (!phone) {
+  //   return res.json({ error: 'Phone is required' });
+  // }
+
+  // const customer = new Customer({
+  //   name,
+  //   id_presented: idpresented,
+  //   id_no: idno,
+  //   phone,
+  //   email,
+  // });
+  // try {
+  //   await customer.save(); // await
+  //   // console.log('REGISTERED GADGET =>', gadget);
+  //   return res.json({ ok: true });
+  // } catch (err) {
+  //   console.log(err);
+  //   return res.json({ error: 'Error. Try again' });
+  // }
 };
 
 module.exports = {
@@ -448,12 +575,17 @@ module.exports = {
   getGadgets,
   addGadget,
   editGadget,
+  deleteGadget,
   queryGadget,
   uploadImage,
   getCustomers,
   getCustomersName,
   addCustomer,
+  editCustomer,
+  deleteCustomer,
+  queryCustomer,
   loginUser,
   currentUser,
   listNintendo,
+  confirmRent,
 };

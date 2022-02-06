@@ -27,6 +27,9 @@ const {
   uploadImage,
   listNintendo,
   confirmRent,
+  listRents,
+  listRentHistory,
+  confirmEndRent
 } = require('../controllers/auth.controller');
 
 router.post('/loginuser', loginUser);
@@ -57,4 +60,7 @@ router.get('/currentuser', verifyToken, currentUser);
 //Rent
 router.get('/listnintendo', verifyToken, listNintendo);
 router.post('/confirmrent', confirmRent);
+router.get('/listrents', verifyToken, listRents);
+router.get('/listrenthistory', verifyToken, listRentHistory);
+router.put('/confirmendrent', verifyToken, confirmEndRent);
 module.exports = router;

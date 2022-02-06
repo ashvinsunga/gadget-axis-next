@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Schema;
 
-const { Schema, ObjectId } = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 const rentSchema = new Schema(
   {
@@ -24,11 +25,20 @@ const rentSchema = new Schema(
       type: Date,
       required: true,
     },
+    actual_return_date: {
+      type: Date,
+    },
+    total_rate: {
+      type: Number,
+    },
     day_exceeded: {
       type: Number,
     },
     additional_fee: {
       type: Number,
+    },
+    status: {
+      type: String,
     },
   },
   { timestamps: true } // Rent start will be based on this timestamps

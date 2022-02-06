@@ -1,46 +1,35 @@
 import React from 'react';
-import { Modal, Button, DatePicker } from 'antd';
+import { Modal, Button } from 'antd';
 
-function RentModal({
+function EndRentModal({
   children,
   // GENERIC
-  modalFor,
+  handleEndRent,
   handleCancel,
-  setPickervaluenull,
   isModalVisible,
-  setIsModalVisible,
-  clearRentForm,
   confirmLoading,
   confirmFunction,
   isButtonSaveOff,
-  setDays,
-  nintendostatus,
-  nintendorate,
-  setCustomername,
-  setStartdate,
-  setEnddate,
 }) {
   return (
     <Modal
-      title={`PHP ${nintendorate} / DAY`}
+      title={'END THIS RENT?'}
       width={500}
       closable={false}
       keyboard={true}
-      visible={nintendostatus == 'Available' && isModalVisible}
+      visible={isModalVisible}
       footer={[
         <Button
           type="primary"
           disabled={isButtonSaveOff}
-          onClick={confirmFunction}
+          onClick={handleEndRent}
           loading={confirmLoading}
         >
           CONFIRM
         </Button>,
         <Button
           onClick={(e) => {
-            setPickervaluenull(true)
-            setIsModalVisible(false);
-            clearRentForm();
+            handleCancel();
           }}
         >
           CANCEL
@@ -52,4 +41,4 @@ function RentModal({
   );
 }
 
-export default RentModal;
+export default EndRentModal;

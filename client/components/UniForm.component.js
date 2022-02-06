@@ -57,16 +57,18 @@ export default function UserForm({
   setDeletionpassword,
 }) {
   return (
-    <form >
+    <form>
       {/* DELETE FORM */}
-      {formFor == 'delete' && (
+      {(formFor == 'delete' || formFor == 'endRent') && (
         <>
           {setIsButtonSaveOff(!deletionpassword)}
           <div
             htmlFor="deletionpassword"
             className="d-flex justify-content-center mb-2 row"
           >
-            ENTER YOUR PASSWORD TO CONFIRM DELETION
+            {formFor == 'delete'
+              ? 'ENTER YOUR PASSWORD TO CONFIRM DELETION'
+              : 'ENTER YOUR PASSWORD TO CONFIRM THIS ACTION'}
           </div>
           <div className="d-flex justify-content-center row">
             <div className="col-md-7">

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { DatePicker, Button } from 'antd';
-import moment from 'moment';
+
 
 export default function RentForm({
   // GENERIC
   setIsButtonSaveOff,
   customername,
+  setCustomerid,
   setCustomername,
   nintendorate,
   startDate,
@@ -17,6 +18,8 @@ export default function RentForm({
   customers,
   totalrate,
   setTotalrate,
+  pickervaluenull,
+  setPickervaluenull,
 }) {
   const { RangePicker } = DatePicker;
 
@@ -40,7 +43,10 @@ export default function RentForm({
           <select
             required
             value={customername}
-            onChange={(e) => setCustomername(e.target.value)}
+            onChange={(e) => {
+              setCustomername(e.target.value);
+              setCustomerid(e.target.selectedOptions[0].id);
+            }}
             className="form-control"
             id="customer"
           >
@@ -50,7 +56,7 @@ export default function RentForm({
             {customers &&
               customers.map((customer) => (
                 <>
-                  <option>{customer.name}</option>
+                  <option id={customer._id}>{customer.name}</option>
                 </>
               ))}
           </select>
@@ -65,6 +71,7 @@ export default function RentForm({
           <RangePicker
             showNow={true}
             onChange={(e) => {
+              console.log(e);
               try {
                 setStartdate(e[0]._d);
               } catch (err) {

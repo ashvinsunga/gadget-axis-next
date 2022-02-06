@@ -32,6 +32,7 @@ app.use(morgan('dev'));
 // );
 //manual importing of route
 app.use('/', require(`./routes/auth.route`));
+app.use('/admin', require(`./routes/auth.route`));
 app.use('/admin/users', require(`./routes/auth.route`));
 app.use('/admin/customers', require(`./routes/auth.route`));
 app.use('/admin/gadgets', require(`./routes/auth.route`));

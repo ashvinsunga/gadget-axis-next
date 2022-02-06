@@ -10,15 +10,11 @@ export default function GadgetCard({
   rate,
   image_url,
   status,
-  isModalVisible,
+  setPickervaluenull,
   setIsModalVisible,
-  setCustomernameid,
-  setNintendostatus,
   setNintendorate,
-  setIsModalVisible,
   setNintendostatus,
-  setNintendorate,
-  setCustomernameid,
+  setNintendoid,
   setNintendobrand,
   setNintendoproduct,
   setNintendomodel,
@@ -28,10 +24,11 @@ export default function GadgetCard({
     <>
       <Card
         onClick={(e) => {
+          setPickervaluenull(true);
           setNintendorate(rate);
           setNintendostatus(status);
           setIsModalVisible(true);
-          setCustomernameid(id);
+          setNintendoid(id);
           setNintendobrand(brand),
             setNintendoproduct(product),
             setNintendomodel(model),

@@ -37,6 +37,18 @@ export default function Navbar() {
               </a>
             </Link>
 
+            <Link href="/rentstatus/current">
+              <a
+                className={`nav-link text-light ${
+                  (current === '/rentstatus/current' ||
+                    current === '/rentstatus/history') &&
+                  'active'
+                }`}
+              >
+                RENT STATUS
+              </a>
+            </Link>
+
             <Link href="/rentnow/nintendo">
               <a
                 className={`nav-link text-light ${

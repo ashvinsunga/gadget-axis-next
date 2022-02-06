@@ -39,6 +39,7 @@ export default function Gadgets() {
   const [deletionpassword, setDeletionpassword] = useState('');
   // data grid
   const columnDefs = [
+    { headerName: 'Status', field: 'status' },
     { headerName: 'Brand', field: 'brand' },
     { headerName: 'Product', field: 'product' },
     { headerName: 'Model', field: 'model' },

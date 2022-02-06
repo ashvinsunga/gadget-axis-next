@@ -1,6 +1,7 @@
 const User = require('../models/user.model');
 const Gadget = require('../models/gadget.model');
 const Customer = require('../models/customer.model');
+const Rent = require('../models/rent.model');
 const { hashPassword, comparePassword } = require('../helpers/auth.helper');
 const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary');
@@ -369,12 +370,13 @@ const deleteGadget = async (req, res) => {
 
   try {
     const gadget = await Gadget.findByIdAndDelete(selecteditem);
+
     // remove image from cloudinary
     if (gadget.image && gadget.image.public_id) {
       // console.log(gadget.image.public_id);
       const image = await cloudinary.uploader.destroy(gadget.image.public_id);
-      return res.json({ ok: 'true' });
     }
+    return res.json({ ok: 'true' });
   } catch (err) {
     console.log(err);
   }
@@ -408,7 +410,7 @@ const getCustomersName = async (req, res) => {
     const data = await Customer.find({}, 'name').sort({ createdAt: -1 });
     // .sort({ createdAt: -1})
     // .limit(10);
-    console.log(data);
+    // console.log(data);
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -533,37 +535,103 @@ const listNintendo = async (req, res) => {
 };
 
 const confirmRent = async (req, res) => {
-  console.log('REGISTER ENDPOINT =>', req.body);
-  // const { name, idpresented, idno, phone, email } = req.body;
-  // validation
-  // if (!name) {
-  //   return res.json({ error: 'Name is required' });
-  // }
-  // if (!idpresented) {
-  //   return res.json({ error: 'ID presented is required' });
-  // }
-  // if (!idno) {
-  //   return res.json({ error: 'ID no is required' });
-  // }
-  // if (!phone) {
-  //   return res.json({ error: 'Phone is required' });
-  // }
+  // console.log('REGISTER ENDPOINT =>', req.body);
+  const { customerid, nintendoid, rentedbyid, startDate, endDate, totalrate } =
+    req.body;
+  // validation;
+  if (!customerid) {
+    return res.json({ error: 'Customer is required' });
+  }
+  if (!startDate || !endDate) {
+    return res.json({ error: 'Invalid date range' });
+  }
 
-  // const customer = new Customer({
-  //   name,
-  //   id_presented: idpresented,
-  //   id_no: idno,
-  //   phone,
-  //   email,
-  // });
-  // try {
-  //   await customer.save(); // await
-  //   // console.log('REGISTERED GADGET =>', gadget);
-  //   return res.json({ ok: true });
-  // } catch (err) {
-  //   console.log(err);
-  //   return res.json({ error: 'Error. Try again' });
-  // }
+  const rent = new Rent({
+    customer: customerid,
+    gadget: nintendoid,
+    rented_by: rentedbyid,
+    rent_start: startDate,
+    rent_end: endDate,
+    total_rate: totalrate,
+    status: 'Ongoing',
+  });
+
+  try {
+    await rent.save(); // await
+    // console.log('REGISTERED RENT =>', gadget);
+    const gadget = await Gadget.findByIdAndUpdate(
+      nintendoid,
+      {
+        status: 'Rented',
+      },
+      { new: true }
+    );
+    return res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: 'Error. Try again' });
+  }
+};
+
+const listRents = async (req, res) => {
+  //
+
+  try {
+    const rents = await Rent.find({ status: 'Ongoing' })
+      .populate('customer', 'name phone')
+      .populate('gadget', 'product model serial color rate')
+      .populate('rented_by', 'username');
+    res.json(rents);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const confirmEndRent = async (req, res) => {
+  console.log('REGISTER ENDPOINT =>', req.body);
+  // validation
+  const { deletionpassword, currentuser, selectedrent, selectedgadget } =
+    req.body;
+  const user = await User.findById(currentuser, '_id password');
+
+  const match = await comparePassword(deletionpassword, user.password);
+  if (!match) {
+    return res.json({ error: 'Invalid password!' });
+  }
+
+  try {
+    const rent = await Rent.findByIdAndUpdate(
+      selectedrent,
+      {
+        status: 'Ended',
+        actual_return_date: new Date().toISOString(),
+      },
+      { new: true }
+    );
+    const gadget = await Gadget.findByIdAndUpdate(
+      selectedgadget,
+      {
+        status: 'Available',
+      },
+      { new: true }
+    );
+    return res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: 'Error. Try again' });
+  }
+};
+
+const listRentHistory = async (req, res) => {
+  try {
+    const rents = await Rent.find({ status: 'Ended' })
+      .populate('customer', 'name phone')
+      .populate('gadget', 'product model serial color rate')
+      .populate('rented_by', 'username');
+    res.json(rents);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 module.exports = {
@@ -588,4 +656,7 @@ module.exports = {
   currentUser,
   listNintendo,
   confirmRent,
+  listRents,
+  listRentHistory,
+  confirmEndRent,
 };

@@ -5,12 +5,14 @@ import { UserContext } from '../../context';
 import GadgetCard from '../../components/GadgetCard.component';
 import RentModal from '../../components/RentModal.component';
 import RentForm from '../../components/RentForm.component';
+import { toast } from 'react-toastify';
 
 export default function Nintendo() {
   const [state] = useContext(UserContext);
   const [nintendos, setNintendos] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [nintendostatus, setNintendostatus] = useState('');
+  const [nintendoid, setNintendoid] = useState('');
   const [nintendobrand, setNintendobrand] = useState('');
   const [nintendproduct, setNintendoproduct] = useState('');
   const [nintendomodel, setNintendomodel] = useState('');
@@ -18,13 +20,16 @@ export default function Nintendo() {
   const [nintendorate, setNintendorate] = useState(0);
   const [days, setDays] = useState('');
   const [customers, setCustomers] = useState('');
-  const [customerid, setCustomernameid] = useState('');
+  const [customerid, setCustomerid] = useState('');
   const [customername, setCustomername] = useState('');
+  const [rentedbyid, setRentedbyid] = useState(state.user._id);
   const [rentedby, setRentedby] = useState(state.user.username);
   const [startDate, setStartdate] = useState(0);
   const [endDate, setEnddate] = useState(0);
   const [totalrate, setTotalrate] = useState(0);
   const [confirmloading, setConfirmLoading] = useState(false);
+  const [pickervaluenull, setPickervaluenull] = useState(false);
+  const [ok, setOk] = useState(false);
 
   useEffect(() => {
     if (state && state.token) listNintendo(), queryCustomersName();
@@ -48,7 +53,9 @@ export default function Nintendo() {
       const { data } = await axios.post(
         `http://localhost:8000/rentnow/confirmrent`,
         {
+          rentedbyid,
           rentedby,
+          nintendoid,
           nintendobrand,
           nintendproduct,
           nintendomodel,
@@ -71,7 +78,7 @@ export default function Nintendo() {
         setConfirmLoading(false);
         clearRentForm();
         toast.success('Rent added successfully');
-        getCustomers();
+        listNintendo();
       }
     } catch (err) {
       setConfirmLoading(false);
@@ -114,20 +121,22 @@ export default function Nintendo() {
               rate={nintendo.rate}
               image_url={nintendo.image && nintendo.image.url}
               status={nintendo.status}
+              setNintendoid={setNintendoid}
               setIsModalVisible={setIsModalVisible}
               setNintendostatus={setNintendostatus}
               setNintendorate={setNintendorate}
-              setCustomernameid={setCustomernameid}
               setNintendobrand={setNintendobrand}
               setNintendoproduct={setNintendoproduct}
               setNintendomodel={setNintendomodel}
               setNintendoserial={setNintendoserial}
+              setPickervaluenull={setPickervaluenull}
             />
           ))}
       </div>
       <RentModal
         confirmFunction={handleConfirmRent}
         clearRentForm={clearRentForm}
+        setPickervaluenull={setPickervaluenull}
         nintendostatus={nintendostatus}
         nintendorate={nintendorate}
         isModalVisible={isModalVisible}
@@ -140,6 +149,7 @@ export default function Nintendo() {
       >
         <RentForm
           customers={customers}
+          setCustomerid={setCustomerid}
           customername={customername}
           setCustomername={setCustomername}
           nintendorate={nintendorate}
@@ -151,6 +161,8 @@ export default function Nintendo() {
           setDays={setDays}
           totalrate={totalrate}
           setTotalrate={setTotalrate}
+          pickervaluenull={pickervaluenull}
+          setPickervaluenull={setPickervaluenull}
         />
       </RentModal>
     </>

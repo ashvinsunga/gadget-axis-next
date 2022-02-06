@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { DatePicker, Button } from 'antd';
-
 
 export default function RentForm({
   // GENERIC
-  setIsButtonSaveOff,
+
+  setIsbuttonsaveoff,
   customername,
   setCustomerid,
   setCustomername,
@@ -18,8 +18,6 @@ export default function RentForm({
   customers,
   totalrate,
   setTotalrate,
-  pickervaluenull,
-  setPickervaluenull,
 }) {
   const { RangePicker } = DatePicker;
 
@@ -36,6 +34,7 @@ export default function RentForm({
                   !permission} */}
 
       <div className="mb-2 row">
+        {setIsbuttonsaveoff(!customername || !startDate || !endDate)}
         <label htmlFor="customer" className="col-sm-3 col-form-label">
           CUSTOMER
         </label>

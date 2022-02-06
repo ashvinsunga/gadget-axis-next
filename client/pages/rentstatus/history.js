@@ -4,39 +4,17 @@ import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 import RentStatusLayout from '../../components/layouts/RentStatusLayout.component';
 // import styled from 'styled-components';
-import { Button, Row, Col } from 'antd';
-import { toast } from 'react-toastify';
 import UserVerifier from '../../components/routes/UserVerifier';
 import moment from 'moment';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
-import UniModal from '../../components/UniModal.component';
-import UniForm from '../../components/UniForm.component';
-
 export default function RentHistory() {
   const [state, setState] = useContext(UserContext);
   const [rents, setRents] = useState([]);
   const [gridApi, setGridApi] = useState(null);
-  const [ok, setOk] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [selecteditem, setSelecteditem] = useState('');
-  // for modal
-  const [modalFor, setModalFor] = useState('addGadget');
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
-  // for form
-  const [brand, setBrand] = useState('');
-  const [product, setProduct] = useState('');
-  const [model, setModel] = useState('');
-  const [serial, setSerial] = useState('');
-  const [image, setImage] = useState({});
-  const [uploading, setUploading] = useState(false);
-  const [color, setColor] = useState('');
-  const [rate, setRate] = useState('');
 
-  const [deletionpassword, setDeletionpassword] = useState('');
   // data grid
 
   const columnDefs = [
@@ -61,8 +39,8 @@ export default function RentHistory() {
       },
     },
     {
-      headerName: 'Actual return date',
-      field: 'actual_return_date',
+      headerName: 'Return date',
+      field: 'return_date',
       cellRenderer: (data) => {
         return moment(data.value).format('llll');
       },
@@ -79,29 +57,6 @@ export default function RentHistory() {
 
   const onGridReady = (params) => {
     setGridApi(params);
-  };
-
-  // modal
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    modalFor == 'addGadget' || modalFor == 'editGadget'
-      ? clearFormGadget()
-      : setDeletionpassword('');
-  };
-
-  //clear form
-  const clearFormGadget = () => {
-    setBrand('');
-    setProduct('');
-    setModel('');
-    setSerial('');
-    setImage({});
-    setColor('');
-    setRate('');
   };
 
   //--------------------------------------

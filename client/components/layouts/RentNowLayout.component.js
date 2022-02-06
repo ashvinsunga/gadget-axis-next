@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, Layout } from 'antd';
 import UserVerifier from '../routes/UserVerifier';
@@ -6,6 +6,11 @@ import UserVerifier from '../routes/UserVerifier';
 const { Content, Sider } = Layout;
 
 export default function RentNowLayout({ children }) {
+  const [current, setCurrent] = useState('');
+
+  useEffect(() => {
+    process.browser && setCurrent(window.location.pathname);
+  }, [process.browser && window.location.pathname]);
   return (
     <UserVerifier>
       <div>
@@ -21,14 +26,14 @@ export default function RentNowLayout({ children }) {
           >
             <br />
             <div className="container text-light">WHICH GADGET?</div>
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-              <Menu.Item key="1">
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={[current]}>
+              <Menu.Item key="/rentnow/nintendo">
                 <Link href="/rentnow/nintendo">Nintendo</Link>
               </Menu.Item>
-              <Menu.Item key="2">
+              <Menu.Item key="/rentnow/sony">
                 <Link href="/rentnow/sony">Sony</Link>
               </Menu.Item>
-              <Menu.Item key="3">
+              <Menu.Item key="/rentnow/microsoft">
                 <Link href="/rentnow/microsoft">Microsoft</Link>
               </Menu.Item>
             </Menu>

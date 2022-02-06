@@ -23,12 +23,11 @@ export default function Nintendo() {
   const [customerid, setCustomerid] = useState('');
   const [customername, setCustomername] = useState('');
   const [rentedbyid, setRentedbyid] = useState(state.user._id);
-  const [rentedby, setRentedby] = useState(state.user.username);
   const [startDate, setStartdate] = useState(0);
   const [endDate, setEnddate] = useState(0);
   const [totalrate, setTotalrate] = useState(0);
   const [confirmloading, setConfirmLoading] = useState(false);
-  const [pickervaluenull, setPickervaluenull] = useState(false);
+  const [isbuttonsaveoff, setIsbuttonsaveoff] = useState(true);
   const [ok, setOk] = useState(false);
 
   useEffect(() => {
@@ -53,16 +52,9 @@ export default function Nintendo() {
       const { data } = await axios.post(
         `http://localhost:8000/rentnow/confirmrent`,
         {
-          rentedbyid,
-          rentedby,
-          nintendoid,
-          nintendobrand,
-          nintendproduct,
-          nintendomodel,
-          nintendoserial,
-          nintendorate,
           customerid,
-          customername,
+          nintendoid,
+          rentedbyid,
           startDate,
           endDate,
           totalrate,
@@ -129,23 +121,19 @@ export default function Nintendo() {
               setNintendoproduct={setNintendoproduct}
               setNintendomodel={setNintendomodel}
               setNintendoserial={setNintendoserial}
-              setPickervaluenull={setPickervaluenull}
             />
           ))}
       </div>
+
       <RentModal
         confirmFunction={handleConfirmRent}
         clearRentForm={clearRentForm}
-        setPickervaluenull={setPickervaluenull}
         nintendostatus={nintendostatus}
         nintendorate={nintendorate}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
-        setDays={setDays}
+        isbuttonsaveoff={isbuttonsaveoff}
         setNintendorate={setNintendorate}
-        setCustomername={setCustomername}
-        setStartdate={setStartdate}
-        setEnddate={setEnddate}
       >
         <RentForm
           customers={customers}
@@ -161,8 +149,7 @@ export default function Nintendo() {
           setDays={setDays}
           totalrate={totalrate}
           setTotalrate={setTotalrate}
-          pickervaluenull={pickervaluenull}
-          setPickervaluenull={setPickervaluenull}
+          setIsbuttonsaveoff={setIsbuttonsaveoff}
         />
       </RentModal>
     </>

@@ -10,7 +10,6 @@ export default function GadgetCard({
   rate,
   image_url,
   status,
-  setPickervaluenull,
   setIsModalVisible,
   setNintendorate,
   setNintendostatus,
@@ -23,8 +22,7 @@ export default function GadgetCard({
   return (
     <>
       <Card
-        onClick={(e) => {
-          setPickervaluenull(true);
+        onClick={() => {
           setNintendorate(rate);
           setNintendostatus(status);
           setIsModalVisible(true);

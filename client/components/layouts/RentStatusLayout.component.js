@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, Layout } from 'antd';
 import UserVerifier from '../routes/UserVerifier';
@@ -6,6 +6,11 @@ import UserVerifier from '../routes/UserVerifier';
 const { Content, Sider } = Layout;
 
 export default function RentStatusLayout({ children }) {
+  const [current, setCurrent] = useState('');
+
+  useEffect(() => {
+    process.browser && setCurrent(window.location.pathname);
+  }, [process.browser && window.location.pathname]);
   return (
     <UserVerifier>
       <div>
@@ -19,11 +24,11 @@ export default function RentStatusLayout({ children }) {
               bottom: 0,
             }}
           >
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-              <Menu.Item key="1">
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={[current]}>
+              <Menu.Item key="/rentstatus/current">
                 <Link href="/rentstatus/current">Current</Link>
               </Menu.Item>
-              <Menu.Item key="2">
+              <Menu.Item key="/rentstatus/history">
                 <Link href="/rentstatus/history">History</Link>
               </Menu.Item>
             </Menu>

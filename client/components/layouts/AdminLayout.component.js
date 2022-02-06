@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, Layout } from 'antd';
 import UserVerifier from '../routes/UserVerifier';
@@ -6,6 +6,11 @@ import UserVerifier from '../routes/UserVerifier';
 const { Content, Sider } = Layout;
 
 export default function AdminLayout({ children }) {
+  const [current, setCurrent] = useState('');
+
+  useEffect(() => {
+    process.browser && setCurrent(window.location.pathname);
+  }, [process.browser && window.location.pathname]);
   return (
     <UserVerifier>
       <div>
@@ -19,14 +24,14 @@ export default function AdminLayout({ children }) {
               bottom: 0,
             }}
           >
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-              <Menu.Item key="1">
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={[current]}>
+              <Menu.Item key="/admin/users">
                 <Link href="/admin/users">Users</Link>
               </Menu.Item>
-              <Menu.Item key="2">
+              <Menu.Item key="/admin/gadgets">
                 <Link href="/admin/gadgets">Gadgets</Link>
               </Menu.Item>
-              <Menu.Item key="3">
+              <Menu.Item key="/admin/customers">
                 <Link href="/admin/customers">Customers</Link>
               </Menu.Item>
             </Menu>

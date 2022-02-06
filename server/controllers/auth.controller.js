@@ -604,7 +604,7 @@ const confirmEndRent = async (req, res) => {
       selectedrent,
       {
         status: 'Ended',
-        actual_return_date: new Date().toISOString(),
+        return_date: new Date().toISOString(),
       },
       { new: true }
     );
@@ -625,6 +625,7 @@ const confirmEndRent = async (req, res) => {
 const listRentHistory = async (req, res) => {
   try {
     const rents = await Rent.find({ status: 'Ended' })
+      .sort({ createdAt: -1 })
       .populate('customer', 'name phone')
       .populate('gadget', 'product model serial color rate')
       .populate('rented_by', 'username');

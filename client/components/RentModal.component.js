@@ -4,25 +4,18 @@ import { Modal, Button, DatePicker } from 'antd';
 function RentModal({
   children,
   // GENERIC
-  modalFor,
-  handleCancel,
-  setPickervaluenull,
   isModalVisible,
   setIsModalVisible,
   clearRentForm,
   confirmLoading,
   confirmFunction,
-  isButtonSaveOff,
-  setDays,
+  isbuttonsaveoff,
   nintendostatus,
   nintendorate,
-  setCustomername,
-  setStartdate,
-  setEnddate,
 }) {
   return (
     <Modal
-      title={`PHP ${nintendorate} / DAY`}
+      title={`PHP ${nintendorate} / DAY `}
       width={500}
       closable={false}
       keyboard={true}
@@ -30,15 +23,14 @@ function RentModal({
       footer={[
         <Button
           type="primary"
-          disabled={isButtonSaveOff}
+          disabled={isbuttonsaveoff}
           onClick={confirmFunction}
           loading={confirmLoading}
         >
           CONFIRM
         </Button>,
         <Button
-          onClick={(e) => {
-            setPickervaluenull(true)
+          onClick={() => {
             setIsModalVisible(false);
             clearRentForm();
           }}

@@ -8,7 +8,6 @@ function EndRentModal({
   handleCancel,
   isModalVisible,
   confirmLoading,
-  confirmFunction,
   isButtonSaveOff,
 }) {
   return (
@@ -28,7 +27,7 @@ function EndRentModal({
           CONFIRM
         </Button>,
         <Button
-          onClick={(e) => {
+          onClick={() => {
             handleCancel();
           }}
         >

@@ -25,7 +25,7 @@ const rentSchema = new Schema(
       type: Date,
       required: true,
     },
-    actual_return_date: {
+    return_date: {
       type: Date,
     },
     total_rate: {

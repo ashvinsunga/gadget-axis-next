@@ -52,7 +52,10 @@ export default function Navbar() {
             <Link href="/rentnow/nintendo">
               <a
                 className={`nav-link text-light ${
-                  current === '/rentnow/nintendo' && 'active'
+                  (current === '/rentnow/nintendo' ||
+                    current === '/rentnow/sony' ||
+                    current === '/rentnow/microsoft') &&
+                  'active'
                 }`}
               >
                 RENT NOW!
@@ -62,7 +65,10 @@ export default function Navbar() {
             <Link href="/admin/users">
               <a
                 className={`nav-link text-light ${
-                  current === '/admin/users' && 'active'
+                  (current === '/admin/users' ||
+                    current === '/admin/gadgets' ||
+                    current === '/admin/customers') &&
+                  'active'
                 }`}
               >
                 ADMIN

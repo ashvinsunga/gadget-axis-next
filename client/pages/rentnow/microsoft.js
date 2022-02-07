@@ -1,12 +1,9 @@
 import React from 'react';
+import RentContent from '../../components/RentContent.component';
 import RentNowLayout from '../../components/layouts/RentNowLayout.component';
 
 export default function Microsoft() {
-  return (
-    <div>
-      <h1> This is Microsoft</h1>
-    </div>
-  );
+  return <RentContent gadgetListLink={'listmicrosoft'} />;
 }
 
 Microsoft.Layout = RentNowLayout;

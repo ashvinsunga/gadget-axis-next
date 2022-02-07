@@ -14,19 +14,33 @@ export default function RentHistory() {
   const [state, setState] = useContext(UserContext);
   const [rents, setRents] = useState([]);
   const [gridApi, setGridApi] = useState(null);
-
+  const cellStyle = { 'background-color': '#DFDFDF', textAlign: 'left' };
   // data grid
 
   const columnDefs = [
-    { headerName: 'Rented to', field: 'customer.name' },
-    { headerName: 'Rented by', field: 'rented_by.username' },
-    { headerName: 'Product', field: 'gadget.product' },
-    { headerName: 'Model', field: 'gadget.model' },
-    { headerName: 'Serial', field: 'gadget.serial' },
-    { headerName: 'Gadget rate', field: 'gadget.rate' },
+    {
+      headerName: 'Rented to',
+      field: 'customer.name',
+      cellStyle: cellStyle,
+    },
+    {
+      headerName: 'Rented by',
+      field: 'rented_by.username',
+      cellStyle: cellStyle,
+    },
+    {
+      headerName: 'Product',
+      field: 'gadget.product',
+      cellStyle: cellStyle,
+      type: 'leftAligned',
+    },
+    { headerName: 'Model', field: 'gadget.model', cellStyle: cellStyle },
+    { headerName: 'Serial', field: 'gadget.serial', cellStyle: cellStyle },
+    { headerName: 'Gadget rate', field: 'gadget.rate', cellStyle: cellStyle },
     {
       headerName: 'Rent Start',
       field: 'rent_start',
+      cellStyle: cellStyle,
       cellRenderer: (data) => {
         return moment(data.value).format('llll');
       },
@@ -34,6 +48,9 @@ export default function RentHistory() {
     {
       headerName: 'Rent End',
       field: 'rent_end',
+      width: 220,
+
+      cellStyle: cellStyle,
       cellRenderer: (data) => {
         return moment(data.value).format('llll');
       },
@@ -41,18 +58,29 @@ export default function RentHistory() {
     {
       headerName: 'Return date',
       field: 'return_date',
+      width: 220,
+      cellStyle: cellStyle,
       cellRenderer: (data) => {
         return moment(data.value).format('llll');
       },
     },
-    { headerName: 'Total', field: 'total_rate' },
+    { headerName: 'Total', field: 'total_rate', cellStyle: cellStyle },
     // { headerName: 'Date Added', field: 'createdAt' },
   ];
 
   const defaultColDef = {
+    resizable: true,
     sortable: true,
     filter: true,
-    floatingFilter: true,
+    // floatingFilter: true,
+  };
+
+  const autoSizeColumns = (params) => {
+    const colIds = params.columnApi
+      .getAllDisplayedColumns()
+      .map((col) => col.getColId());
+
+    params.columnApi.autoSizeColumns(colIds);
   };
 
   const onGridReady = (params) => {
@@ -94,6 +122,7 @@ export default function RentHistory() {
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
           onGridReady={onGridReady}
+          onFirstDataRendered={autoSizeColumns}
           onRowClicked={(e) => {
             // console.log(e);
             // setSelecteditem(e.data._id);

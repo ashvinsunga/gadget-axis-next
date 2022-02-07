@@ -9,17 +9,18 @@ function RentModal({
   clearRentForm,
   confirmLoading,
   confirmFunction,
+  currentuserpermission,
   isbuttonsaveoff,
-  nintendostatus,
-  nintendorate,
+  gadgetstatus,
+  gadgetrate,
 }) {
   return (
     <Modal
-      title={`PHP ${nintendorate} / DAY `}
+      title={`PHP ${gadgetrate} / DAY `}
       width={500}
       closable={false}
       keyboard={true}
-      visible={nintendostatus == 'Available' && isModalVisible}
+      visible={currentuserpermission == 'Full' && gadgetstatus == 'Available' && isModalVisible}
       footer={[
         <Button
           type="primary"

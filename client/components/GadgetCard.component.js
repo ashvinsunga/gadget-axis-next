@@ -2,39 +2,32 @@ import { Card } from 'antd';
 
 export default function GadgetCard({
   id,
-  brand,
   product,
   model,
-  serial,
   color,
   rate,
   image_url,
   status,
+  currentuserpermission,
   setIsModalVisible,
-  setNintendorate,
-  setNintendostatus,
-  setNintendoid,
-  setNintendobrand,
-  setNintendoproduct,
-  setNintendomodel,
-  setNintendoserial,
+  setGadgetrate,
+  setGadgetstatus,
+  setGadgetid,
 }) {
   return (
     <>
       <Card
         onClick={() => {
-          setNintendorate(rate);
-          setNintendostatus(status);
+          setGadgetrate(rate);
+          setGadgetstatus(status);
           setIsModalVisible(true);
-          setNintendoid(id);
-          setNintendobrand(brand),
-            setNintendoproduct(product),
-            setNintendomodel(model),
-            setNintendoserial(serial);
+          setGadgetid(id);
         }}
-        hoverable={status == 'Available' && true}
+        hoverable={
+          currentuserpermission == 'Full' && status == 'Available' && true
+        }
         style={
-          status == 'Available'
+          currentuserpermission == 'Full' && status == 'Available'
             ? {
                 marginTop: 10,
                 marginRight: 15,

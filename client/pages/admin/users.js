@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../../context';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
+import UserVerifier from '../../components/routes/UserVerifier';
 // import styled from 'styled-components';
 import { Button } from 'antd';
 import { toast } from 'react-toastify';
@@ -33,25 +34,39 @@ export default function Users() {
   const [confirmpassword, setConfirmpassword] = useState('');
   const [phone, setPhone] = useState('');
   const [permission, setPermission] = useState('');
+  const [currentuserpermission, setCurrentuserpermission] = useState('');
 
   const [deletionpassword, setDeletionpassword] = useState('');
   const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
   // data grid
+
+  const textLeftAligned = { textAlign: 'left' };
+
   const columnDefs = [
-    { headerName: 'Username', field: 'username' },
-    { headerName: 'Description', field: 'description' },
-    { headerName: 'Phone', field: 'phone' },
-    { headerName: 'Permission', field: 'permission' },
+    { headerName: 'Username', field: 'username', cellStyle: textLeftAligned },
+    {
+      headerName: 'Description',
+      field: 'description',
+      cellStyle: textLeftAligned,
+    },
+    { headerName: 'Phone', field: 'phone', cellStyle: textLeftAligned },
+    {
+      headerName: 'Permission',
+      field: 'permission',
+      cellStyle: textLeftAligned,
+    },
   ];
 
   const defaultColDef = {
+    resizable: true,
     sortable: true,
     filter: true,
-    floatingFilter: true,
+    // floatingFilter: true,
   };
 
   const onGridReady = (params) => {
     setGridApi(params);
+    params.api.sizeColumnsToFit();
   };
 
   // modal
@@ -90,6 +105,9 @@ export default function Users() {
   useEffect(() => {
     if (state && state.token) {
       getUsers();
+    }
+    if (state && state.user && state.user.permission) {
+      setCurrentuserpermission(state.user.permission);
     }
   }, [state && state.token]);
 
@@ -230,103 +248,109 @@ export default function Users() {
   };
 
   return (
-    <div className="ag-theme-alpine" style={{ height: 500, width: '103%' }}>
-      <AgGridReact
-        rowData={users}
-        columnDefs={columnDefs}
-        defaultColDef={defaultColDef}
-        onGridReady={onGridReady}
-        onRowClicked={(e) => {
-          setSelecteditem(e.data._id);
-        }}
-      />
-      <br />
-
-      <div className="col-sm-10">
+    <UserVerifier>
+      <div className="ag-theme-alpine" style={{ height: 500, width: '103%' }}>
+        <AgGridReact
+          rowData={users}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          onGridReady={onGridReady}
+          rowSelection={'single'}
+          onRowClicked={(e) => {
+            setSelecteditem(e.data._id);
+          }}
+        />
         <br />
-        <div className="row">
-          <div className="col-sm-2">
-            <Button
-              type="primary"
-              onClick={() => {
-                setModalFor('addUser');
-                showModal();
-              }}
-            >
-              {' '}
-              ADD USER ...{' '}
-            </Button>
-          </div>
 
-          <div className="col-sm-2">
-            <Button
-              type="primary"
-              onClick={() => {
-                setModalFor('editUser');
-                handleQueryUser();
-                showModal();
-              }}
-            >
-              {' '}
-              EDIT USER ...{' '}
-            </Button>
-          </div>
+        <div className="col-sm-10">
+          <br />
+          <div className="row">
+            <div className="col-sm-2">
+              <Button
+                disabled={currentuserpermission != 'Full'}
+                type="primary"
+                onClick={() => {
+                  setModalFor('addUser');
+                  showModal();
+                }}
+              >
+                {' '}
+                ADD USER ...{' '}
+              </Button>
+            </div>
 
-          <div className="col-sm-2">
-            <Button
-              type="primary"
-              onClick={() => {
-                setModalFor('delete');
-                showModal();
-              }}
-            >
-              {' '}
-              DELETE USER ...{' '}
-            </Button>
+            <div className="col-sm-2">
+              <Button
+                disabled={currentuserpermission != 'Full'}
+                type="primary"
+                onClick={() => {
+                  setModalFor('editUser');
+                  handleQueryUser();
+                  showModal();
+                }}
+              >
+                {' '}
+                EDIT USER ...{' '}
+              </Button>
+            </div>
+
+            <div className="col-sm-2">
+              <Button
+                disabled={currentuserpermission != 'Full'}
+                type="primary"
+                onClick={() => {
+                  setModalFor('delete');
+                  showModal();
+                }}
+              >
+                {' '}
+                DELETE USER ...{' '}
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <UniModal
-        // GENERIC (MODAL)
-        modalFor={modalFor}
-        isModalVisible={isModalVisible}
-        saveFunction={
-          modalFor == 'addUser' ? handleSaveUser : handleSaveEditedUser
-        }
-        deleteFunction={handleDeleteUser}
-        handleCancel={handleCancel}
-        confirmLoading={confirmLoading}
-        isButtonSaveOff={isButtonSaveOff}
-        setDeletionpassword={setDeletionpassword}
-      >
-        <UniForm
-          formFor={modalFor}
-          username={username}
-          setUsername={setUsername}
-          description={description}
-          setDescription={setDescription}
-          phone={phone}
-          setPhone={setPhone}
-          // for edit function
-          newpassword={newpassword}
-          setNewPassword={setNewPassword}
-          oldpassword={oldpassword}
-          setOldPassword={setOldPassword}
-          //
-          password={password}
-          setPassword={setPassword}
-          confirmpassword={confirmpassword}
-          setConfirmpassword={setConfirmpassword}
-          permission={permission}
-          setPermission={setPermission}
-          setIsButtonSaveOff={setIsButtonSaveOff}
-          // for delete function
-          deletionpassword={deletionpassword}
+        <UniModal
+          // GENERIC (MODAL)
+          modalFor={modalFor}
+          isModalVisible={isModalVisible}
+          saveFunction={
+            modalFor == 'addUser' ? handleSaveUser : handleSaveEditedUser
+          }
+          deleteFunction={handleDeleteUser}
+          handleCancel={handleCancel}
+          confirmLoading={confirmLoading}
+          isButtonSaveOff={isButtonSaveOff}
           setDeletionpassword={setDeletionpassword}
-        />
-      </UniModal>
-    </div>
+        >
+          <UniForm
+            formFor={modalFor}
+            username={username}
+            setUsername={setUsername}
+            description={description}
+            setDescription={setDescription}
+            phone={phone}
+            setPhone={setPhone}
+            // for edit function
+            newpassword={newpassword}
+            setNewPassword={setNewPassword}
+            oldpassword={oldpassword}
+            setOldPassword={setOldPassword}
+            //
+            password={password}
+            setPassword={setPassword}
+            confirmpassword={confirmpassword}
+            setConfirmpassword={setConfirmpassword}
+            permission={permission}
+            setPermission={setPermission}
+            setIsButtonSaveOff={setIsButtonSaveOff}
+            // for delete function
+            deletionpassword={deletionpassword}
+            setDeletionpassword={setDeletionpassword}
+          />
+        </UniModal>
+      </div>
+    </UserVerifier>
   );
 }
 Users.Layout = AdminLayout;

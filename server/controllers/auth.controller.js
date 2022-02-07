@@ -534,9 +534,35 @@ const listNintendo = async (req, res) => {
   }
 };
 
+const listSony = async (req, res) => {
+  //
+  try {
+    const sony = await Gadget.find({
+      brand: 'Sony',
+    });
+    // console.log(nintendo);
+    res.json(sony);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const listMicrosoft = async (req, res) => {
+  //
+  try {
+    const microsoft = await Gadget.find({
+      brand: 'Microsoft',
+    });
+    // console.log(nintendo);
+    res.json(microsoft);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const confirmRent = async (req, res) => {
   // console.log('REGISTER ENDPOINT =>', req.body);
-  const { customerid, nintendoid, rentedbyid, startDate, endDate, totalrate } =
+  const { customerid, gadgetid, rentedbyid, startDate, endDate, totalrate } =
     req.body;
   // validation;
   if (!customerid) {
@@ -548,7 +574,7 @@ const confirmRent = async (req, res) => {
 
   const rent = new Rent({
     customer: customerid,
-    gadget: nintendoid,
+    gadget: gadgetid,
     rented_by: rentedbyid,
     rent_start: startDate,
     rent_end: endDate,
@@ -560,7 +586,7 @@ const confirmRent = async (req, res) => {
     await rent.save(); // await
     // console.log('REGISTERED RENT =>', gadget);
     const gadget = await Gadget.findByIdAndUpdate(
-      nintendoid,
+      gadgetid,
       {
         status: 'Rented',
       },
@@ -656,6 +682,8 @@ module.exports = {
   loginUser,
   currentUser,
   listNintendo,
+  listSony,
+  listMicrosoft,
   confirmRent,
   listRents,
   listRentHistory,

@@ -26,10 +26,12 @@ const {
   queryCustomer,
   uploadImage,
   listNintendo,
+  listSony,
+  listMicrosoft,
   confirmRent,
   listRents,
   listRentHistory,
-  confirmEndRent
+  confirmEndRent,
 } = require('../controllers/auth.controller');
 
 router.post('/loginuser', loginUser);
@@ -59,6 +61,8 @@ router.get('/currentuser', verifyToken, currentUser);
 
 //Rent
 router.get('/listnintendo', verifyToken, listNintendo);
+router.get('/listsony', verifyToken, listSony);
+router.get('/listmicrosoft', verifyToken, listMicrosoft);
 router.post('/confirmrent', confirmRent);
 router.get('/listrents', verifyToken, listRents);
 router.get('/listrenthistory', verifyToken, listRentHistory);

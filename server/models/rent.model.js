@@ -19,7 +19,7 @@ const rentSchema = new Schema(
     },
     rent_start: {
       type: Date,
-      default: Date.now,
+      required: true,
     },
     rent_end: {
       type: Date,

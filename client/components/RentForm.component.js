@@ -8,7 +8,7 @@ export default function RentForm({
   customername,
   setCustomerid,
   setCustomername,
-  nintendorate,
+  gadgetrate,
   startDate,
   setStartdate,
   endDate,
@@ -70,7 +70,6 @@ export default function RentForm({
           <RangePicker
             showNow={true}
             onChange={(e) => {
-              console.log(e);
               try {
                 setStartdate(e[0]._d);
               } catch (err) {
@@ -91,7 +90,7 @@ export default function RentForm({
         <div className="col-sm-3 col-form-label">TOTAL</div>
         <div className="col-sm-7 mb-2">
           <Button type="primary" danger ghost shape="round">
-            {setTotalrate(nintendorate * days)}
+            {setTotalrate(gadgetrate * days)}
             PHP {totalrate}
           </Button>
         </div>

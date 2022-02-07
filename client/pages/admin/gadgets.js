@@ -5,7 +5,7 @@ import { AgGridReact } from 'ag-grid-react';
 // import styled from 'styled-components';
 import { Button, Row, Col } from 'antd';
 import { toast } from 'react-toastify';
-import UserVerifier from '../../components/routes/UserVerifier';
+import moment from 'moment';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -35,24 +35,74 @@ export default function Gadgets() {
   const [uploading, setUploading] = useState(false);
   const [color, setColor] = useState('');
   const [rate, setRate] = useState('');
+  const [buttondisabled, setButtondisabled] = useState('');
+  const [currentuserpermission, setCurrentuserpermission] = useState('false');
 
   const [deletionpassword, setDeletionpassword] = useState('');
   // data grid
+  const textLeftAligned = { textAlign: 'left' };
+
+  function changeRowColor(params) {
+    if (params.data.status == 'Rented') {
+      return { 'background-color': '#A2E860', textAlign: 'left' };
+    } else {
+      return { textAlign: 'left' };
+    }
+  }
   const columnDefs = [
-    { headerName: 'Status', field: 'status' },
-    { headerName: 'Brand', field: 'brand' },
-    { headerName: 'Product', field: 'product' },
-    { headerName: 'Model', field: 'model' },
-    { headerName: 'Serial no.', field: 'serial' },
-    { headerName: 'Color', field: 'color' },
-    { headerName: 'Rate', field: 'rate' },
-    // { headerName: 'Date Added', field: 'createdAt' },
+    {
+      headerName: 'Brand',
+      field: 'brand',
+      cellStyle: changeRowColor,
+    },
+    {
+      headerName: 'Product',
+      field: 'product',
+      cellStyle: changeRowColor,
+    },
+    {
+      headerName: 'Model',
+      field: 'model',
+      cellStyle: changeRowColor,
+    },
+    {
+      headerName: 'Serial no.',
+      field: 'serial',
+      cellStyle: changeRowColor,
+    },
+    {
+      headerName: 'Color',
+      field: 'color',
+      cellStyle: changeRowColor,
+    },
+    {
+      headerName: 'Rate',
+      field: 'rate',
+      cellStyle: changeRowColor,
+    },
+    {
+      headerName: 'Date Added',
+      field: 'createdAt',
+      cellStyle: changeRowColor,
+      cellRenderer: (data) => {
+        return moment(data.value).format('llll');
+      },
+    },
   ];
 
   const defaultColDef = {
+    resizable: true,
     sortable: true,
     filter: true,
     floatingFilter: true,
+  };
+
+  const autoSizeColumns = (params) => {
+    const colIds = params.columnApi
+      .getAllDisplayedColumns()
+      .map((col) => col.getColId());
+
+    params.columnApi.autoSizeColumns(colIds);
   };
 
   const onGridReady = (params) => {
@@ -85,6 +135,9 @@ export default function Gadgets() {
   //--------------------------------------
   useEffect(() => {
     if (state && state.token) getGadgets();
+    if (state && state.user && state.user.permission) {
+      setCurrentuserpermission(state.user.permission);
+    }
   }, [state && state.token]);
 
   const getGadgets = async () => {
@@ -255,8 +308,17 @@ export default function Gadgets() {
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         onGridReady={onGridReady}
+        onFirstDataRendered={autoSizeColumns}
+        rowSelection={'single'}
         onRowClicked={(e) => {
           // console.log(e);
+          if (currentuserpermission == 'Full') {
+            if (e.data.status === 'Rented') {
+              setButtondisabled(true);
+            } else {
+              setButtondisabled(false);
+            }
+          }
           setSelecteditem(e.data._id);
         }}
       ></AgGridReact>
@@ -268,6 +330,7 @@ export default function Gadgets() {
         <div className="row">
           <div className="col-sm-2">
             <Button
+              disabled={currentuserpermission != 'Full'}
               type="primary"
               onClick={() => {
                 setModalFor('addGadget');
@@ -281,6 +344,7 @@ export default function Gadgets() {
 
           <div className="col-sm-2">
             <Button
+              disabled={currentuserpermission != 'Full' ? true : buttondisabled}
               type="primary"
               onClick={() => {
                 setModalFor('editGadget');
@@ -295,6 +359,7 @@ export default function Gadgets() {
 
           <div className="col-sm-2">
             <Button
+              disabled={currentuserpermission != 'Full' ? true : buttondisabled}
               type="primary"
               onClick={() => {
                 setModalFor('delete');

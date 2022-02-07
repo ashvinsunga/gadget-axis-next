@@ -4,7 +4,7 @@ import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 import RentStatusLayout from '../../components/layouts/RentStatusLayout.component';
 // import styled from 'styled-components';
-import { Button, Row, Col } from 'antd';
+import { Button } from 'antd';
 import { toast } from 'react-toastify';
 import UserVerifier from '../../components/routes/UserVerifier';
 import moment from 'moment';
@@ -25,6 +25,8 @@ export default function RentStatus() {
   const [selectedgadget, setSelectedgadget] = useState('');
   // for modal
   const [modalFor, setModalFor] = useState('endRent');
+
+  const [currentuserpermission, setCurrentuserpermission] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
   // for form
@@ -39,16 +41,19 @@ export default function RentStatus() {
 
   const [deletionpassword, setDeletionpassword] = useState('');
   // data grid
-
+  const textLeftAligned = { textAlign: 'left' };
   const columnDefs = [
     {
       headerName: 'ACTION',
       field: '_id',
+      cellStyle: textLeftAligned,
       cellRendererFramework: (params) => (
         <div>
           <Button
+            disabled={currentuserpermission != 'Full'}
+            type="primary"
+            ghost
             variant="outlined"
-            color="primary"
             onClick={() => {
               setSelectedrent(params.data._id);
               setSelectedgadget(params.data.gadget._id);
@@ -60,15 +65,37 @@ export default function RentStatus() {
         </div>
       ),
     },
-    { headerName: 'Rented to', field: 'customer.name' },
-    { headerName: 'Rented by', field: 'rented_by.username' },
-    { headerName: 'Product', field: 'gadget.product' },
-    { headerName: 'Model', field: 'gadget.model' },
-    { headerName: 'Serial', field: 'gadget.serial' },
-    { headerName: 'Gadget rate', field: 'gadget.rate' },
+    {
+      headerName: 'Rented to',
+      field: 'customer.name',
+      cellStyle: textLeftAligned,
+    },
+    {
+      headerName: 'Rented by',
+      field: 'rented_by.username',
+      cellStyle: textLeftAligned,
+    },
+    {
+      headerName: 'Product',
+      field: 'gadget.product',
+      cellStyle: textLeftAligned,
+    },
+    { headerName: 'Model', field: 'gadget.model', cellStyle: textLeftAligned },
+    {
+      headerName: 'Serial',
+      field: 'gadget.serial',
+      cellStyle: textLeftAligned,
+    },
+    {
+      headerName: 'Gadget rate',
+      field: 'gadget.rate',
+      cellStyle: textLeftAligned,
+    },
     {
       headerName: 'Rent start',
       field: 'rent_start',
+      cellStyle: textLeftAligned,
+      width: 230,
       cellRenderer: (data) => {
         return moment(data.value).format('llll');
       },
@@ -76,18 +103,29 @@ export default function RentStatus() {
     {
       headerName: 'Rent end',
       field: 'rent_end',
+      cellStyle: textLeftAligned,
+      width: 230,
       cellRenderer: (data) => {
         return moment(data.value).format('llll');
       },
     },
-    { headerName: 'Total', field: 'total_rate' },
+    { headerName: 'Total', field: 'total_rate', cellStyle: textLeftAligned },
     // { headerName: 'Date Added', field: 'createdAt' },
   ];
 
   const defaultColDef = {
+    resizable: true,
     sortable: true,
     filter: true,
-    floatingFilter: true,
+    // floatingFilter: true,
+  };
+
+  const autoSizeColumns = (params) => {
+    const colIds = params.columnApi
+      .getAllDisplayedColumns()
+      .map((col) => col.getColId());
+
+    params.columnApi.autoSizeColumns(colIds);
   };
 
   const onGridReady = (params) => {
@@ -103,6 +141,9 @@ export default function RentStatus() {
   //--------------------------------------
   useEffect(() => {
     if (state && state.token) listRents();
+    if (state && state.user && state.user.permission) {
+      setCurrentuserpermission(state.user.permission);
+    }
   }, [state && state.token]);
 
   const listRents = async () => {
@@ -130,7 +171,6 @@ export default function RentStatus() {
   const handleEndRent = async (params) => {
     console.log(params);
     let currentuser = state.user._id;
-    console.log(currentuser);
     try {
       setConfirmLoading(true);
 
@@ -168,6 +208,8 @@ export default function RentStatus() {
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
           onGridReady={onGridReady}
+          onFirstDataRendered={autoSizeColumns}
+          rowSelection={'single'}
           onRowClicked={(e) => {
             // console.log(e);
             // setSelecteditem(e.data._id);

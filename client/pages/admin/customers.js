@@ -5,6 +5,7 @@ import { AgGridReact } from 'ag-grid-react';
 // import styled from 'styled-components';
 import { Button, Row, Col } from 'antd';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -31,22 +32,45 @@ export default function Customers() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [deletionpassword, setDeletionpassword] = useState('');
+  const [currentuserpermission, setCurrentuserpermission] = useState('');
+
   // modal and form
   const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
   // data grid
+  const textLeftAligned = { textAlign: 'left' };
   const columnDefs = [
-    { headerName: 'Name', field: 'name' },
-    { headerName: 'ID Presented', field: 'id_presented' },
-    { headerName: 'ID No.', field: 'id_no' },
-    { headerName: 'Phone', field: 'phone' },
-    { headerName: 'Email', field: 'email' },
-    { headerName: 'Date added', field: 'createdAt' },
+    { headerName: 'Name', field: 'name', cellStyle: textLeftAligned },
+    {
+      headerName: 'ID Presented',
+      field: 'id_presented',
+      cellStyle: textLeftAligned,
+    },
+    { headerName: 'ID No.', field: 'id_no', cellStyle: textLeftAligned },
+    { headerName: 'Phone', field: 'phone', cellStyle: textLeftAligned },
+    { headerName: 'Email', field: 'email', cellStyle: textLeftAligned },
+    {
+      headerName: 'Date added',
+      field: 'createdAt',
+      cellStyle: textLeftAligned,
+      cellRenderer: (data) => {
+        return moment(data.value).format('llll');
+      },
+    },
   ];
 
   const defaultColDef = {
+    resizable: true,
     sortable: true,
     filter: true,
     floatingFilter: true,
+  };
+
+  const autoSizeColumns = (params) => {
+    const colIds = params.columnApi
+      .getAllDisplayedColumns()
+      .map((col) => col.getColId());
+
+    params.columnApi.autoSizeColumns(colIds);
   };
 
   const onGridReady = (params) => {
@@ -78,6 +102,9 @@ export default function Customers() {
   //--------------------------------------
   useEffect(() => {
     if (state && state.token) getCustomers();
+    if (state && state.user && state.user.permission) {
+      setCurrentuserpermission(state.user.permission);
+    }
   }, [state && state.token]);
 
   const getCustomers = async () => {
@@ -222,17 +249,20 @@ export default function Customers() {
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         onGridReady={onGridReady}
+        onFirstDataRendered={autoSizeColumns}
+        rowSelection={'single'}
         onRowClicked={(e) => {
           setSelecteditem(e.data._id);
         }}
       ></AgGridReact>
 
       <br />
-      <div className="col-sm-10">
+      <div className="col-sm-11">
         <br />
         <div className="row">
           <div className="col-sm-2">
             <Button
+              disabled={currentuserpermission != 'Full'}
               type="primary"
               onClick={() => {
                 setModalFor('addCustomer');
@@ -246,6 +276,7 @@ export default function Customers() {
 
           <div className="col-sm-2">
             <Button
+              disabled={currentuserpermission != 'Full'}
               type="primary"
               onClick={(e) => {
                 setModalFor('editCustomer');
@@ -260,6 +291,7 @@ export default function Customers() {
 
           <div className="col-sm-2">
             <Button
+              disabled={currentuserpermission != 'Full'}
               type="primary"
               onClick={() => {
                 setModalFor('delete');

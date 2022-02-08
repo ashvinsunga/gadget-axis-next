@@ -56,6 +56,35 @@ export default function UserForm({
   deletionpassword,
   setDeletionpassword,
 }) {
+  const inputs = document.querySelectorAll('input[name]');
+
+  // regex patterns
+  const patterns = {
+    phone: /^09[\d]{9}$/,
+    username: /^[a-z\d]{5,12}$/i,
+    password: /^[\d\w@-]{8,20}$/i,
+    newpassword: /^[\d\w@-]{8,20}$/i,
+    email: /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/,
+    description: /[\w]*/,
+    //             yourname @ domain   .  com          ( .uk )
+  };
+
+  // validation function
+  function validate(field, regex) {
+    if (regex.test(field.value)) {
+      field.className = 'form-control valid';
+    } else {
+      field.className = 'form-control invalid';
+    }
+  }
+
+  // attach keyup events to inputs
+  inputs.forEach((input) => {
+    input.addEventListener('keyup', (e) => {
+      // console.log(patterns[e.target.attributes.name.value]);
+      validate(e.target, patterns[e.target.attributes.name.value]);
+    });
+  });
   return (
     <form>
       {/* DELETE FORM */}
@@ -111,8 +140,10 @@ export default function UserForm({
                 }}
                 type="text"
                 className="form-control"
+                name="username"
                 id="username"
               />
+              <p>Must contain 5 - 12 characters</p>
             </div>
           </div>
 
@@ -141,8 +172,10 @@ export default function UserForm({
                 onChange={(e) => setPhone(e.target.value)}
                 type="text"
                 className="form-control"
+                name="phone"
                 id="phone"
               />
+              <p>Must be a valid PH phone no. (11 digits) e.g. '09XXXXXXXXX'</p>
             </div>
           </div>
 
@@ -182,8 +215,13 @@ export default function UserForm({
                   onChange={(e) => setPassword(e.target.value)}
                   type="text"
                   className="form-control"
+                  name="password"
                   id="password"
                 />
+                <p>
+                  Must alphanumeric (@, _ and - are allowed) and be 8 - 20
+                  characters
+                </p>
               </div>
             </div>
           )}
@@ -200,8 +238,13 @@ export default function UserForm({
                   onChange={(e) => setNewPassword(e.target.value)}
                   type="text"
                   className="form-control"
+                  name="newpassword"
                   id="newpassword"
                 />
+                <p>
+                  Password must alphanumeric (@, _ and - are also allowed) and
+                  be 8 - 20 characters
+                </p>
               </div>
             </div>
           )}
@@ -460,13 +503,35 @@ export default function UserForm({
               ID PRESENTED
             </label>
             <div className="col-sm-6">
-              <input
+              <select
+                required
                 value={idpresented}
                 onChange={(e) => setIdpresented(e.target.value)}
-                type="text"
                 className="form-control"
                 id="idpresented"
-              />
+              >
+                <option value="" hidden>
+                  --
+                </option>
+
+                <option>e-Card / UMID</option>
+                <option>Employee’s ID / Office Id</option>
+                <option>Driver’s License</option>
+                <option>BIR (TIN)</option>
+                <option>Passport</option>
+                <option>Senior Citizen ID</option>
+                <option>SSS ID</option>
+                <option>Voter’s ID</option>
+                <option>Philippine Identification (PhilID)</option>
+                <option>NBI Clearance</option>
+                <option>Firearms License</option>
+                <option>Pag-ibig ID</option>
+                <option>Person’s With Disability (PWD) ID</option>
+                <option>Philippine Postal ID </option>
+                <option>Phil-health ID</option>
+                <option>Barangay ID</option>
+                <option>School ID</option>
+              </select>
             </div>
           </div>
 
@@ -495,8 +560,10 @@ export default function UserForm({
                 onChange={(e) => setPhone(e.target.value)}
                 type="text"
                 className="form-control"
+                name="phone"
                 id="phone"
               />
+              <p>Must be a valid PH phone no. (11 digits) e.g. '09XXXXXXXXX'</p>
             </div>
           </div>
 
@@ -510,8 +577,10 @@ export default function UserForm({
                 onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 className="form-control"
+                name="email"
                 id="email"
               />
+              <p>Email must be a valid address, e.g. me@mydomain.com</p>
             </div>
           </div>
         </>

@@ -51,7 +51,17 @@ function UniModal({
         >
           {modalFor != 'delete' ? 'SAVE' : 'DELETE'}
         </Button>,
-        <Button onClick={handleCancel}>CANCEL</Button>,
+        <Button
+          onClick={() => {
+            handleCancel();
+            const inputs = document.querySelectorAll('input[name]');
+            inputs.forEach((input) => {
+              input.classList.remove('invalid');
+            });
+          }}
+        >
+          CANCEL
+        </Button>,
       ]}
     >
       {children}

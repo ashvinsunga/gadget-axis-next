@@ -65,7 +65,7 @@ export default function UserForm({
     password: /^[\d\w@-]{8,20}$/i,
     newpassword: /^[\d\w@-]{8,20}$/i,
     email: /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/,
-    description: /[\w]*/,
+
     //             yourname @ domain   .  com          ( .uk )
   };
 
@@ -106,7 +106,7 @@ export default function UserForm({
                 onChange={(e) => {
                   setDeletionpassword(e.target.value);
                 }}
-                type="text"
+                type="password"
                 className="form-control"
                 id="deletionPassword"
               />
@@ -195,7 +195,7 @@ export default function UserForm({
                   <input
                     value={oldpassword}
                     onChange={(e) => setOldPassword(e.target.value)}
-                    type="text"
+                    type="password"
                     className="form-control"
                     id="oldpassword"
                   />
@@ -213,7 +213,7 @@ export default function UserForm({
                 <input
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  type="text"
+                  type="password"
                   className="form-control"
                   name="password"
                   id="password"
@@ -236,7 +236,7 @@ export default function UserForm({
                   value={newpassword}
                   disabled={formFor == 'editUser' && !oldpassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  type="text"
+                  type="password"
                   className="form-control"
                   name="newpassword"
                   id="newpassword"
@@ -261,7 +261,7 @@ export default function UserForm({
                 value={confirmpassword}
                 disabled={formFor == 'editUser' && !oldpassword}
                 onChange={(e) => setConfirmpassword(e.target.value)}
-                type="text"
+                type="password"
                 className="form-control"
                 id="confirmpassword"
               />
@@ -327,6 +327,7 @@ export default function UserForm({
               </label>
               <div className="col-sm-7">
                 <select
+                  disabled={!brand}
                   required
                   value={product}
                   onChange={(e) => setProduct(e.target.value)}

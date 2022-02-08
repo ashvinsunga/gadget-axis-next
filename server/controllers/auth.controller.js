@@ -75,6 +75,22 @@ const addUser = async (req, res) => {
     permission,
   } = req.body;
   // validation
+  const regexUsername = /^[a-z\d]{5,12}$/i;
+  const regexPhone = /^09[\d]{9}$/;
+  const regexPassword = /^[\d\w@-]{8,20}$/i;
+
+  if (!regexUsername.test(username)) {
+    return res.json({ error: 'Username is invalid' });
+  }
+
+  if (!regexPhone.test(phone)) {
+    return res.json({ error: 'Phone no. is invalid' });
+  }
+
+  if (!regexPassword.test(password)) {
+    return res.json({ error: 'Password is invalid' });
+  }
+
   if (!username) {
     return res.json({ error: 'Username is required' });
   }
@@ -130,14 +146,20 @@ const editUser = async (req, res) => {
 
   let { newpassword, confirmpassword } = req.body;
   // validation
+  const regexPhone = /^09[\d]{9}$/;
+  const regexPassword = /^[\d\w@-]{8,20}$/i;
+
+  if (!regexPhone.test(phone)) {
+    return res.json({ error: 'Phone no. is invalid' });
+  }
 
   if (!description) {
     return res.json({ error: 'Description is required' });
   }
 
   if (oldpassword) {
-    if (!newpassword || newpassword.length < 6) {
-      return res.json({ error: 'Password must be longer than 6 characters' });
+    if (!regexPassword.test(newpassword)) {
+      return res.json({ error: 'Password is invalid' });
     }
     if (newpassword != confirmpassword) {
       return res.json({ error: 'Passwords do not match' });
@@ -422,6 +444,17 @@ const addCustomer = async (req, res) => {
   // console.log('REGISTER ENDPOINT =>', req.body);
   const { name, idpresented, idno, phone, email } = req.body;
   // validation
+  const regexPhone = /^09[\d]{9}$/;
+  const regexEmail = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/;
+
+  if (!regexPhone.test(phone)) {
+    return res.json({ error: 'Phone no. is invalid' });
+  }
+
+  if (!regexEmail.test(email)) {
+    return res.json({ error: 'Email is invalid' });
+  }
+
   if (!name) {
     return res.json({ error: 'Name is required' });
   }

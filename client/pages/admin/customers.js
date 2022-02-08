@@ -276,7 +276,7 @@ export default function Customers() {
 
           <div className="col-sm-2">
             <Button
-              disabled={currentuserpermission != 'Full'}
+              disabled={currentuserpermission != 'Full' || selecteditem == ''}
               type="primary"
               onClick={(e) => {
                 setModalFor('editCustomer');
@@ -291,7 +291,7 @@ export default function Customers() {
 
           <div className="col-sm-2">
             <Button
-              disabled={currentuserpermission != 'Full'}
+              disabled={currentuserpermission != 'Full' || selecteditem == ''}
               type="primary"
               onClick={() => {
                 setModalFor('delete');

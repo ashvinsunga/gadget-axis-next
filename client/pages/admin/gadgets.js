@@ -344,7 +344,11 @@ export default function Gadgets() {
 
           <div className="col-sm-2">
             <Button
-              disabled={currentuserpermission != 'Full' ? true : buttondisabled}
+              disabled={
+                currentuserpermission != 'Full' || selecteditem == ''
+                  ? true
+                  : buttondisabled
+              }
               type="primary"
               onClick={() => {
                 setModalFor('editGadget');
@@ -359,7 +363,11 @@ export default function Gadgets() {
 
           <div className="col-sm-2">
             <Button
-              disabled={currentuserpermission != 'Full' ? true : buttondisabled}
+              disabled={
+                currentuserpermission != 'Full' || selecteditem == ''
+                  ? true
+                  : buttondisabled
+              }
               type="primary"
               onClick={() => {
                 setModalFor('delete');

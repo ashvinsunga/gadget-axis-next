@@ -20,7 +20,11 @@ function RentModal({
       width={500}
       closable={false}
       keyboard={true}
-      visible={currentuserpermission == 'Full' && gadgetstatus == 'Available' && isModalVisible}
+      visible={
+        currentuserpermission == 'Full' &&
+        gadgetstatus == 'Available' &&
+        isModalVisible
+      }
       footer={[
         <Button
           type="primary"

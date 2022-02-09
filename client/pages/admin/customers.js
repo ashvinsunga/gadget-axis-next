@@ -278,7 +278,7 @@ export default function Customers() {
             <Button
               disabled={currentuserpermission != 'Full' || selecteditem == ''}
               type="primary"
-              onClick={(e) => {
+              onClick={() => {
                 setModalFor('editCustomer');
                 handleQueryCustomer();
                 showModal();

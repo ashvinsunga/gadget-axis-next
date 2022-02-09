@@ -1,9 +1,10 @@
 import React from 'react';
 import { DatePicker, Button } from 'antd';
+import moment from 'moment';
 
 export default function RentForm({
   // GENERIC
-
+  pickervaluetonull,
   setIsbuttonsaveoff,
   customername,
   setCustomerid,
@@ -20,6 +21,11 @@ export default function RentForm({
   setTotalrate,
 }) {
   const { RangePicker } = DatePicker;
+
+  function disabledDate(current) {
+    // Can not select days before today and today
+    return current < moment().subtract(1, 'days').endOf('day');
+  }
 
   const diffInTime = endDate - startDate;
 
@@ -68,7 +74,8 @@ export default function RentForm({
         </label>
         <div className="col-sm-7 mb-4">
           <RangePicker
-            showNow={true}
+            disabledDate={disabledDate}
+            disabled={!customername}
             onChange={(e) => {
               try {
                 setStartdate(e[0]._d);

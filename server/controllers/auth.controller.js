@@ -625,6 +625,15 @@ const confirmRent = async (req, res) => {
       },
       { new: true }
     );
+
+    const customer = await Customer.findByIdAndUpdate(
+      customerid,
+      {
+        $push: { current_rent: gadgetid },
+      },
+      { new: true }
+    );
+
     return res.json({ ok: true });
   } catch (err) {
     console.log(err);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Avatar } from 'antd';
 import { CameraOutlined, LoadingOutlined } from '@ant-design/icons';
 
@@ -6,6 +6,11 @@ export default function UserForm({
   // GENERIC
   formFor,
   setIsButtonSaveOff,
+  // saveFunction,
+  handleDeleteUser,
+  handleDeleteGadget,
+  handleDeleteCustomer,
+  handleEndRent,
 
   // USER
   username,
@@ -56,7 +61,12 @@ export default function UserForm({
   deletionpassword,
   setDeletionpassword,
 }) {
+  const [current, setCurrent] = useState('');
   const inputs = document.querySelectorAll('input[name]');
+
+  useEffect(() => {
+    process.browser && setCurrent(window.location.pathname);
+  }, [process.browser && window.location.pathname]);
 
   // regex patterns
   const patterns = {
@@ -102,6 +112,23 @@ export default function UserForm({
           <div className="d-flex justify-content-center row">
             <div className="col-md-7">
               <input
+                onKeyDown={(e) => {
+                  if (e.keyCode == 13) {
+                    if (current == '/admin/users') {
+                      handleDeleteUser();
+                      e.preventDefault();
+                    } else if (current == '/admin/gadgets') {
+                      handleDeleteGadget();
+                      e.preventDefault();
+                    } else if (current == '/admin/customers') {
+                      handleDeleteCustomer();
+                      e.preventDefault();
+                    } else {
+                      handleEndRent();
+                      e.preventDefault();
+                    }
+                  }
+                }}
                 value={deletionpassword}
                 onChange={(e) => {
                   setDeletionpassword(e.target.value);
@@ -182,7 +209,7 @@ export default function UserForm({
           {formFor == 'editUser' && (
             <>
               {oldpassword == '' &&
-                (setConfirmpassword(''), setNewPassword(''))}
+                (setNewPassword(''), setConfirmpassword(''))}
 
               <div className="mb-2 row">
                 <label
@@ -236,7 +263,7 @@ export default function UserForm({
                   value={newpassword}
                   disabled={formFor == 'editUser' && !oldpassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  type="password"
+                  type="text"
                   className="form-control"
                   name="newpassword"
                   id="newpassword"
@@ -261,7 +288,7 @@ export default function UserForm({
                 value={confirmpassword}
                 disabled={formFor == 'editUser' && !oldpassword}
                 onChange={(e) => setConfirmpassword(e.target.value)}
-                type="password"
+                type="text"
                 className="form-control"
                 id="confirmpassword"
               />

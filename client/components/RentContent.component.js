@@ -23,7 +23,6 @@ export default function RentContent({ gadgetListLink }) {
   const [totalrate, setTotalrate] = useState(0);
   const [currentuserpermission, setCurrentuserpermission] = useState(0);
   const [confirmloading, setConfirmLoading] = useState(false);
-  const [pickervaluetonull, setPickervaluetonull] = useState('false');
   const [isbuttonsaveoff, setIsbuttonsaveoff] = useState(true);
   const [ok, setOk] = useState(false);
 
@@ -133,6 +132,7 @@ export default function RentContent({ gadgetListLink }) {
         setIsModalVisible={setIsModalVisible}
         isbuttonsaveoff={isbuttonsaveoff}
         setGadgetrate={setGadgetrate}
+        setPickervaluetonull={setPickervaluetonull}
       >
         <RentForm
           customers={customers}

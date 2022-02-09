@@ -4,7 +4,6 @@ import moment from 'moment';
 
 export default function RentForm({
   // GENERIC
-  pickervaluetonull,
   setIsbuttonsaveoff,
   customername,
   setCustomerid,
@@ -61,7 +60,9 @@ export default function RentForm({
             {customers &&
               customers.map((customer) => (
                 <>
-                  <option id={customer._id}>{customer.name}</option>
+                  <option key={customer._id} id={customer._id}>
+                    {customer.name}
+                  </option>
                 </>
               ))}
           </select>

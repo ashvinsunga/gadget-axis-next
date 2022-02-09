@@ -245,6 +245,7 @@ export default function RentStatus() {
             setRate={setRate}
             deletionpassword={deletionpassword}
             setDeletionpassword={setDeletionpassword}
+            handleEndRent={handleEndRent}
           />
         </EndRentModal>
       </div>

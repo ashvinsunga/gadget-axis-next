@@ -26,6 +26,7 @@ export default function Gadgets() {
   const [modalFor, setModalFor] = useState('addGadget');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
+  const [page, setPage] = useState('');
   // for form
   const [brand, setBrand] = useState('');
   const [product, setProduct] = useState('');
@@ -37,6 +38,7 @@ export default function Gadgets() {
   const [rate, setRate] = useState('');
   const [buttondisabled, setButtondisabled] = useState('');
   const [currentuserpermission, setCurrentuserpermission] = useState('false');
+  
 
   const [deletionpassword, setDeletionpassword] = useState('');
   // data grid
@@ -137,6 +139,7 @@ export default function Gadgets() {
     if (state && state.token) getGadgets();
     if (state && state.user && state.user.permission) {
       setCurrentuserpermission(state.user.permission);
+      setPage('gadgets')
     }
   }, [state && state.token]);
 
@@ -243,7 +246,8 @@ export default function Gadgets() {
     }
   };
 
-  const handleDeleteGadget = async () => {
+  const handleDeleteGadget = async (e) => {
+    e.preventDefault();
     let currentuser = state.user._id;
     console.log(currentuser);
     try {
@@ -414,6 +418,8 @@ export default function Gadgets() {
           setRate={setRate}
           deletionpassword={deletionpassword}
           setDeletionpassword={setDeletionpassword}
+          page={page}
+          handleDeleteGadget={handleDeleteGadget}
         />
       </UniModal>
     </div>

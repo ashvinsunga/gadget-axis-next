@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, DatePicker } from 'antd';
+import { Modal, Button } from 'antd';
 
 function RentModal({
   children,

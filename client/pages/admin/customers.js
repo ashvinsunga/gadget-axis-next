@@ -3,7 +3,7 @@ import { UserContext } from '../../context';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 // import styled from 'styled-components';
-import { Button, Row, Col } from 'antd';
+import { Button } from 'antd';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 
@@ -35,23 +35,33 @@ export default function Customers() {
   const [currentuserpermission, setCurrentuserpermission] = useState('');
 
   // modal and form
+  const [page, setPage] = useState('');
+  const [buttondisabled, setButtondisabled] = useState(true);
   const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
   // data grid
-  const textLeftAligned = { textAlign: 'left' };
+
+  function changeRowColor(params) {
+    if (params.data.current_rent.length > 0) {
+      return { 'background-color': '#A2E860', textAlign: 'left' };
+    } else {
+      return { textAlign: 'left' };
+    }
+  }
+
   const columnDefs = [
-    { headerName: 'Name', field: 'name', cellStyle: textLeftAligned },
+    { headerName: 'Name', field: 'name', cellStyle: changeRowColor },
     {
       headerName: 'ID Presented',
       field: 'id_presented',
-      cellStyle: textLeftAligned,
+      cellStyle: changeRowColor,
     },
-    { headerName: 'ID No.', field: 'id_no', cellStyle: textLeftAligned },
-    { headerName: 'Phone', field: 'phone', cellStyle: textLeftAligned },
-    { headerName: 'Email', field: 'email', cellStyle: textLeftAligned },
+    { headerName: 'ID No.', field: 'id_no', cellStyle: changeRowColor },
+    { headerName: 'Phone', field: 'phone', cellStyle: changeRowColor },
+    { headerName: 'Email', field: 'email', cellStyle: changeRowColor },
     {
       headerName: 'Date added',
       field: 'createdAt',
-      cellStyle: textLeftAligned,
+      cellStyle: changeRowColor,
       cellRenderer: (data) => {
         return moment(data.value).format('llll');
       },
@@ -104,6 +114,7 @@ export default function Customers() {
     if (state && state.token) getCustomers();
     if (state && state.user && state.user.permission) {
       setCurrentuserpermission(state.user.permission);
+      setPage('customers');
     }
   }, [state && state.token]);
 
@@ -252,6 +263,11 @@ export default function Customers() {
         onFirstDataRendered={autoSizeColumns}
         rowSelection={'single'}
         onRowClicked={(e) => {
+          if (e.data.current_rent.length > 0) {
+            setButtondisabled(true);
+          } else {
+            setButtondisabled(false);
+          }
           setSelecteditem(e.data._id);
         }}
       ></AgGridReact>
@@ -276,7 +292,11 @@ export default function Customers() {
 
           <div className="col-sm-2">
             <Button
-              disabled={currentuserpermission != 'Full' || selecteditem == ''}
+              disabled={
+                currentuserpermission != 'Full' || selecteditem == ''
+                  ? true
+                  : buttondisabled
+              }
               type="primary"
               onClick={() => {
                 setModalFor('editCustomer');
@@ -291,7 +311,11 @@ export default function Customers() {
 
           <div className="col-sm-2">
             <Button
-              disabled={currentuserpermission != 'Full' || selecteditem == ''}
+              disabled={
+                currentuserpermission != 'Full' || selecteditem == ''
+                  ? true
+                  : buttondisabled
+              }
               type="primary"
               onClick={() => {
                 setModalFor('delete');
@@ -337,6 +361,8 @@ export default function Customers() {
           setPhone={setPhone}
           deletionpassword={deletionpassword}
           setDeletionpassword={setDeletionpassword}
+          page={page}
+          handleDeleteCustomer={handleDeleteCustomer}
         />
       </UniModal>
     </div>

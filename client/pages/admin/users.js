@@ -38,6 +38,7 @@ export default function Users() {
 
   const [deletionpassword, setDeletionpassword] = useState('');
   const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
+  const [page, setPage] = useState('');
   // data grid
 
   const textLeftAligned = { textAlign: 'left' };
@@ -104,6 +105,7 @@ export default function Users() {
   //--------------------------------------
   useEffect(() => {
     if (state && state.token) {
+      setPage('users');
       getUsers();
     }
     if (state && state.user && state.user.permission) {
@@ -347,6 +349,8 @@ export default function Users() {
             // for delete function
             deletionpassword={deletionpassword}
             setDeletionpassword={setDeletionpassword}
+            page={page}
+            handleDeleteUser={handleDeleteUser}
           />
         </UniModal>
       </div>

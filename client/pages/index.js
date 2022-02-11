@@ -32,7 +32,7 @@ export default function Login() {
         });
         // save in local storage
         window.localStorage.setItem('axistoken', JSON.stringify(data));
-        router.push('/rentnow/nintendo');
+        router.push('/rentstatus/current');
       }
     } catch (err) {
       toast.error(err.response.data);
@@ -40,7 +40,7 @@ export default function Login() {
     }
   };
 
-  if (state && state.token) router.push('/rentnow/nintendo');
+  if (state && state.token) router.push('/rentstatus/current');
   return (
     <>
       {state === null && (

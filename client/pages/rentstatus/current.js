@@ -3,6 +3,7 @@ import { UserContext } from '../../context';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 import RentStatusLayout from '../../components/layouts/RentStatusLayout.component';
+import io from 'socket.io-client';
 // import styled from 'styled-components';
 import { Button } from 'antd';
 import { toast } from 'react-toastify';
@@ -16,6 +17,9 @@ import EndRentModal from '../../components/EndRentModal.component';
 import UniForm from '../../components/UniForm.component';
 
 export default function RentStatus() {
+  const socket = io(process.env.NEXT_PUBLIC_SOCKETIO, {
+    reconnection: true,
+  });
   const [state, setState] = useContext(UserContext);
   const [rents, setRents] = useState([]);
   const [gridApi, setGridApi] = useState(null);
@@ -23,6 +27,7 @@ export default function RentStatus() {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [selectedrent, setSelectedrent] = useState('');
   const [selectedgadget, setSelectedgadget] = useState('');
+  const [customerid, setCustomerid] = useState('');
   // for modal
   const [modalFor, setModalFor] = useState('endRent');
 
@@ -57,6 +62,7 @@ export default function RentStatus() {
             onClick={() => {
               setSelectedrent(params.data._id);
               setSelectedgadget(params.data.gadget._id);
+              setCustomerid(params.data.customer._id);
               setIsModalVisible(true);
             }}
           >
@@ -65,16 +71,7 @@ export default function RentStatus() {
         </div>
       ),
     },
-    {
-      headerName: 'Rented to',
-      field: 'customer.name',
-      cellStyle: textLeftAligned,
-    },
-    {
-      headerName: 'Rented by',
-      field: 'rented_by.username',
-      cellStyle: textLeftAligned,
-    },
+
     {
       headerName: 'Product',
       field: 'gadget.product',
@@ -89,6 +86,16 @@ export default function RentStatus() {
     {
       headerName: 'Gadget rate',
       field: 'gadget.rate',
+      cellStyle: textLeftAligned,
+    },
+    {
+      headerName: 'Rented to',
+      field: 'customer.name',
+      cellStyle: textLeftAligned,
+    },
+    {
+      headerName: 'Rented by',
+      field: 'rented_by.username',
       cellStyle: textLeftAligned,
     },
     {
@@ -143,6 +150,7 @@ export default function RentStatus() {
     if (state && state.token) listRents();
     if (state && state.user && state.user.permission) {
       setCurrentuserpermission(state.user.permission);
+      
     }
   }, [state && state.token]);
 
@@ -180,6 +188,7 @@ export default function RentStatus() {
           selectedrent,
           selectedgadget,
           deletionpassword,
+          customerid,
           currentuser,
         }
       );

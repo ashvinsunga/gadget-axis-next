@@ -24,7 +24,7 @@ export default function Navbar() {
       {state !== null && (
         <nav className="nav bg-dark d-flex justify-content-end fixed-top">
           <>
-            <Link href="/rentnow/nintendo">
+            <Link href="/rentstatus/current">
               <a className="navbar-brand text-light me-auto">
                 <img
                   src="images/logo-white.png"
@@ -76,7 +76,7 @@ export default function Navbar() {
             </Link>
 
             <div>
-              <Avatar size={40} className="mt-1">
+              <Avatar size={40} className="mt-1 mx-1">
                 {state &&
                   state.user &&
                   state.user.username &&

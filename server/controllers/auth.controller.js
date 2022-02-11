@@ -289,6 +289,16 @@ const addGadget = async (req, res) => {
   // console.log('REGISTER ENDPOINT =>', req.body);
   const { brand, product, model, serial, color, image, rate } = req.body;
   // validation
+  let imageData = {};
+  if (!image.url || !image.public_id) {
+    imageData = {
+      url: 'https://res.cloudinary.com/dnx7ywtdu/image/upload/v1644474291/logo-black_btksxg.png',
+      public_id: 'garbles',
+    };
+  } else {
+    imageData = image;
+  }
+
   if (!brand) {
     return res.json({ error: 'Brand is required' });
   }
@@ -315,7 +325,7 @@ const addGadget = async (req, res) => {
     model,
     serial,
     color,
-    image,
+    image: imageData,
     rate,
     status: 'Available',
   });
@@ -477,8 +487,9 @@ const addCustomer = async (req, res) => {
   });
   try {
     await customer.save(); // await
-    // console.log('REGISTERED GADGET =>', gadget);
-    return res.json({ ok: true });
+    const data = await Customer.findById(customer._id);
+    return res.json(data);
+    // return res.json({ ok: true });
   } catch (err) {
     console.log(err);
     return res.json({ error: 'Error. Try again' });
@@ -656,10 +667,15 @@ const listRents = async (req, res) => {
 };
 
 const confirmEndRent = async (req, res) => {
-  console.log('REGISTER ENDPOINT =>', req.body);
+  // console.log('REGISTER ENDPOINT =>', req.body);
   // validation
-  const { deletionpassword, currentuser, selectedrent, selectedgadget } =
-    req.body;
+  const {
+    deletionpassword,
+    currentuser,
+    customerid,
+    selectedrent,
+    selectedgadget,
+  } = req.body;
   const user = await User.findById(currentuser, '_id password');
 
   const match = await comparePassword(deletionpassword, user.password);
@@ -683,6 +699,15 @@ const confirmEndRent = async (req, res) => {
       },
       { new: true }
     );
+
+    const customer = await Customer.findByIdAndUpdate(
+      customerid,
+      {
+        $pull: { current_rent: selectedgadget },
+      },
+      { new: true }
+    );
+
     return res.json({ ok: true });
   } catch (err) {
     console.log(err);

@@ -132,7 +132,6 @@ export default function RentContent({ gadgetListLink }) {
         setIsModalVisible={setIsModalVisible}
         isbuttonsaveoff={isbuttonsaveoff}
         setGadgetrate={setGadgetrate}
-        setPickervaluetonull={setPickervaluetonull}
       >
         <RentForm
           customers={customers}
@@ -149,7 +148,6 @@ export default function RentContent({ gadgetListLink }) {
           totalrate={totalrate}
           setTotalrate={setTotalrate}
           setIsbuttonsaveoff={setIsbuttonsaveoff}
-          pickervaluetonull={pickervaluetonull}
         />
       </RentModal>
     </>

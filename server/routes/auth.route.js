@@ -47,23 +47,23 @@ router.post(
   formidable({ maxFileSize: 5 * 1024 * 1024 }),
   uploadImage
 );
-router.post('/addgadget', addGadget);
-router.put('/editgadget', verifyToken, editGadget);
-router.delete('/deletegadget', deleteGadget);
-router.post('/querygadget', queryGadget);
-router.get('/getcustomers', getCustomers);
-router.get('/getcustomersname', getCustomersName);
-router.post('/addcustomer', addCustomer);
+router.post('/addgadget', verifyToken, addGadget);
+router.put('/editgadget', verifyToken, verifyToken, editGadget);
+router.delete('/deletegadget', verifyToken, deleteGadget);
+router.post('/querygadget', verifyToken, queryGadget);
+router.get('/getcustomers', verifyToken, getCustomers);
+router.get('/getcustomersname', verifyToken, getCustomersName);
+router.post('/addcustomer', verifyToken, addCustomer);
 router.put('/editcustomer', verifyToken, editCustomer);
-router.delete('/deletecustomer', deleteCustomer);
-router.post('/querycustomer', queryCustomer);
+router.delete('/deletecustomer', verifyToken, deleteCustomer);
+router.post('/querycustomer', verifyToken, queryCustomer);
 router.get('/currentuser', verifyToken, currentUser);
 
 //Rent
 router.get('/listnintendo', verifyToken, listNintendo);
 router.get('/listsony', verifyToken, listSony);
 router.get('/listmicrosoft', verifyToken, listMicrosoft);
-router.post('/confirmrent', confirmRent);
+router.post('/confirmrent', verifyToken, confirmRent);
 router.get('/listrents', verifyToken, listRents);
 router.get('/listrenthistory', verifyToken, listRentHistory);
 router.put('/confirmendrent', verifyToken, confirmEndRent);

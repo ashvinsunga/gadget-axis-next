@@ -38,7 +38,6 @@ export default function Gadgets() {
   const [rate, setRate] = useState('');
   const [buttondisabled, setButtondisabled] = useState('');
   const [currentuserpermission, setCurrentuserpermission] = useState('false');
-  
 
   const [deletionpassword, setDeletionpassword] = useState('');
   // data grid
@@ -139,7 +138,7 @@ export default function Gadgets() {
     if (state && state.token) getGadgets();
     if (state && state.user && state.user.permission) {
       setCurrentuserpermission(state.user.permission);
-      setPage('gadgets')
+      setPage('gadgets');
     }
   }, [state && state.token]);
 
@@ -169,6 +168,7 @@ export default function Gadgets() {
     let formData = new FormData();
     formData.append('image', file);
     setUploading(true);
+
     // console.log(state);
     try {
       const { data } = await axios.post(
@@ -247,7 +247,7 @@ export default function Gadgets() {
   };
 
   const handleDeleteGadget = async (e) => {
-    e.preventDefault();
+
     let currentuser = state.user._id;
     console.log(currentuser);
     try {

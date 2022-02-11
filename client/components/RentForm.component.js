@@ -54,7 +54,7 @@ export default function RentForm({
             className="form-control"
             id="customer"
           >
-            <option value="" hidden>
+            <option key="random" value="" hidden>
               --
             </option>
             {customers &&

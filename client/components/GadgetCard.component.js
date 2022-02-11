@@ -31,13 +31,13 @@ export default function GadgetCard({
             ? {
                 marginTop: 10,
                 marginRight: 15,
-                width: '20%',
+                width: '18%',
                 height: '40%',
               }
             : {
                 marginTop: 10,
                 marginRight: 15,
-                width: '20%',
+                width: '18%',
                 height: '40%',
                 backgroundColor: 'grey',
                 opacity: 0.5,

@@ -6,6 +6,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { Button } from 'antd';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+// import io from 'socket.io-client';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -16,8 +17,12 @@ import UniForm from '../../components/UniForm.component';
 import AdminLayout from '../../components/layouts/AdminLayout.component';
 
 export default function Customers() {
+  // const socket = io(process.env.NEXT_PUBLIC_SOCKETIO, {
+  //   reconnection: true,
+  // });
   const [state, setState] = useContext(UserContext);
   const [customers, setCustomers] = useState([]);
+  const [iocustomers, setIocustomers] = useState([]);
   const [gridApi, setGridApi] = useState(null);
   const [ok, setOk] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -35,7 +40,6 @@ export default function Customers() {
   const [currentuserpermission, setCurrentuserpermission] = useState('');
 
   // modal and form
-  const [page, setPage] = useState('');
   const [buttondisabled, setButtondisabled] = useState(true);
   const [isButtonSaveOff, setIsButtonSaveOff] = useState(true);
   // data grid
@@ -114,7 +118,12 @@ export default function Customers() {
     if (state && state.token) getCustomers();
     if (state && state.user && state.user.permission) {
       setCurrentuserpermission(state.user.permission);
-      setPage('customers');
+      // console.log('SOCKETIO ON JOIN', socket);
+      //   if (customers)
+      //     socket.on('new-customer', (newCustomer) => {
+      //       setIocustomers([newCustomer, ...customers]);
+      //       console.log(customers);
+      //     });
     }
   }, [state && state.token]);
 
@@ -151,12 +160,14 @@ export default function Customers() {
         toast.error(data.error);
         setConfirmLoading(false);
       } else {
-        setOk(data.ok);
+        // setOk(data.ok);
         setIsModalVisible(false);
         setConfirmLoading(false);
         clearFormCustomer();
         toast.success('Customer added successfully ');
         getCustomers();
+        //socket
+        socket.emit('new-customer', data);
       }
     } catch (err) {
       setConfirmLoading(false);
@@ -253,10 +264,11 @@ export default function Customers() {
     }
   };
 
+  const dataSet = iocustomers > 0 ? iocustomers : customers;
   return (
     <div className="ag-theme-alpine" style={{ height: 500, width: '103%' }}>
       <AgGridReact
-        rowData={customers}
+        rowData={dataSet}
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         onGridReady={onGridReady}
@@ -361,7 +373,6 @@ export default function Customers() {
           setPhone={setPhone}
           deletionpassword={deletionpassword}
           setDeletionpassword={setDeletionpassword}
-          page={page}
           handleDeleteCustomer={handleDeleteCustomer}
         />
       </UniModal>

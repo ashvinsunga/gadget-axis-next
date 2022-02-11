@@ -19,6 +19,14 @@ export default function RentHistory() {
 
   const columnDefs = [
     {
+      headerName: 'Product',
+      field: 'gadget.product',
+      cellStyle: cellStyle,
+    },
+    { headerName: 'Model', field: 'gadget.model', cellStyle: cellStyle },
+    { headerName: 'Serial', field: 'gadget.serial', cellStyle: cellStyle },
+    { headerName: 'Gadget rate', field: 'gadget.rate', cellStyle: cellStyle },
+    {
       headerName: 'Rented to',
       field: 'customer.name',
       cellStyle: cellStyle,
@@ -28,15 +36,6 @@ export default function RentHistory() {
       field: 'rented_by.username',
       cellStyle: cellStyle,
     },
-    {
-      headerName: 'Product',
-      field: 'gadget.product',
-      cellStyle: cellStyle,
-      type: 'leftAligned',
-    },
-    { headerName: 'Model', field: 'gadget.model', cellStyle: cellStyle },
-    { headerName: 'Serial', field: 'gadget.serial', cellStyle: cellStyle },
-    { headerName: 'Gadget rate', field: 'gadget.rate', cellStyle: cellStyle },
     {
       headerName: 'Rent Start',
       field: 'rent_start',

@@ -35,6 +35,18 @@ export default function AdminLayout({ children }) {
                 <Link href="/admin/customers">Customers</Link>
               </Menu.Item>
             </Menu>
+            <br />
+            <br />
+            <br />
+            <br />
+
+            <div className="container row text-warning">
+              • Only users with full permission are allowed to edit and delete
+              records
+              <br />
+              <br />• Highlighted record has an ongoing transaction and cannot
+              be modified or deleted
+            </div>
           </Sider>
           <Layout className="site-layout" style={{ marginLeft: 160 }}>
             {/* <Header className="site-layout-background" style={{ padding: 0 }} /> */}

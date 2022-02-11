@@ -12,6 +12,11 @@ function MyApp({ Component, pageProps }) {
     <UserProvider>
       <Head>
         <link rel="stylesheet" href="/css/styles.css" />
+        <link
+          rel="shortcut icon"
+          type="image/jpg"
+          href="images/logo-black.png"
+        />
         <title>GADGET AXIS - A gadget rental system for everyone</title>
         <meta
           name="description"

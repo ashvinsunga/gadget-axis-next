@@ -115,7 +115,7 @@ export default function RentHistory() {
 
   return (
     <UserVerifier>
-      <div className="ag-theme-alpine" style={{ height: 550, width: '103%' }}>
+      <div className="ag-theme-alpine" style={{ height: 585, width: '103%' }}>
         <AgGridReact
           rowData={rents}
           columnDefs={columnDefs}

@@ -150,7 +150,6 @@ export default function RentStatus() {
     if (state && state.token) listRents();
     if (state && state.user && state.user.permission) {
       setCurrentuserpermission(state.user.permission);
-      
     }
   }, [state && state.token]);
 
@@ -211,7 +210,7 @@ export default function RentStatus() {
 
   return (
     <UserVerifier>
-      <div className="ag-theme-alpine" style={{ height: 500, width: '103%' }}>
+      <div className="ag-theme-alpine" style={{ height: 585, width: '103%' }}>
         <AgGridReact
           rowData={rents}
           columnDefs={columnDefs}

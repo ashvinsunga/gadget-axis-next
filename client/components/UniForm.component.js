@@ -288,7 +288,7 @@ export default function UserForm({
                 value={confirmpassword}
                 disabled={formFor == 'editUser' && !oldpassword}
                 onChange={(e) => setConfirmpassword(e.target.value)}
-                type="text"
+                type="password"
                 className="form-control"
                 id="confirmpassword"
               />

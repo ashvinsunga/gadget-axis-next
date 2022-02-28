@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../../context';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
-import UserVerifier from '../../components/routes/UserVerifier';
 // import styled from 'styled-components';
 import { Button } from 'antd';
 import { toast } from 'react-toastify';
@@ -117,7 +116,7 @@ export default function Users() {
     // axios based data request from the api/server
     try {
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/getusers`
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/getusers`
       );
       setUsers(data);
     } catch (err) {
@@ -138,7 +137,7 @@ export default function Users() {
     try {
       setConfirmLoading(true);
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/adduser`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/adduser`,
         { username, description, phone, password, confirmpassword, permission }
       );
 
@@ -164,7 +163,7 @@ export default function Users() {
     try {
       // setConfirmLoading(true);
       const { data } = await axios.put(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/edituser`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/edituser`,
         {
           selecteditem,
           description,
@@ -201,7 +200,7 @@ export default function Users() {
       setConfirmLoading(true);
 
       const { data } = await axios.delete(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/deleteuser`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/deleteuser`,
         {
           data: {
             selecteditem,
@@ -230,7 +229,7 @@ export default function Users() {
   const handleQueryUser = async () => {
     try {
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/queryuser`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/queryuser`,
         { selecteditem }
       );
       if (data.error) {
@@ -250,111 +249,109 @@ export default function Users() {
   };
 
   return (
-    <UserVerifier>
-      <div className="ag-theme-alpine" style={{ height: 500, width: '103%' }}>
-        <AgGridReact
-          rowData={users}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          onGridReady={onGridReady}
-          rowSelection={'single'}
-          onRowClicked={(e) => {
-            setSelecteditem(e.data._id);
-          }}
-        />
+    <div className="ag-theme-alpine" style={{ height: 500, width: '103%' }}>
+      <AgGridReact
+        rowData={users}
+        columnDefs={columnDefs}
+        defaultColDef={defaultColDef}
+        onGridReady={onGridReady}
+        rowSelection={'single'}
+        onRowClicked={(e) => {
+          setSelecteditem(e.data._id);
+        }}
+      />
+      <br />
+
+      <div className="col-sm-10">
         <br />
+        <div className="row">
+          <div className="col-sm-2">
+            <Button
+              disabled={currentuserpermission != 'Full'}
+              type="primary"
+              onClick={() => {
+                setModalFor('addUser');
+                showModal();
+              }}
+            >
+              {' '}
+              ADD USER ...{' '}
+            </Button>
+          </div>
 
-        <div className="col-sm-10">
-          <br />
-          <div className="row">
-            <div className="col-sm-2">
-              <Button
-                disabled={currentuserpermission != 'Full'}
-                type="primary"
-                onClick={() => {
-                  setModalFor('addUser');
-                  showModal();
-                }}
-              >
-                {' '}
-                ADD USER ...{' '}
-              </Button>
-            </div>
+          <div className="col-sm-2">
+            <Button
+              disabled={currentuserpermission != 'Full' || selecteditem == ''}
+              type="primary"
+              onClick={() => {
+                setModalFor('editUser');
+                handleQueryUser();
+                showModal();
+              }}
+            >
+              {' '}
+              EDIT USER ...{' '}
+            </Button>
+          </div>
 
-            <div className="col-sm-2">
-              <Button
-                disabled={currentuserpermission != 'Full' || selecteditem == ''}
-                type="primary"
-                onClick={() => {
-                  setModalFor('editUser');
-                  handleQueryUser();
-                  showModal();
-                }}
-              >
-                {' '}
-                EDIT USER ...{' '}
-              </Button>
-            </div>
-
-            <div className="col-sm-2">
-              <Button
-                disabled={currentuserpermission != 'Full' || selecteditem == ''}
-                type="primary"
-                onClick={() => {
-                  setModalFor('delete');
-                  showModal();
-                }}
-              >
-                {' '}
-                DELETE USER ...{' '}
-              </Button>
-            </div>
+          <div className="col-sm-2">
+            <Button
+              disabled={currentuserpermission != 'Full' || selecteditem == ''}
+              type="primary"
+              onClick={() => {
+                setModalFor('delete');
+                showModal();
+              }}
+            >
+              {' '}
+              DELETE USER ...{' '}
+            </Button>
           </div>
         </div>
-
-        <UniModal
-          // GENERIC (MODAL)
-          modalFor={modalFor}
-          isModalVisible={isModalVisible}
-          saveFunction={
-            modalFor == 'addUser' ? handleSaveUser : handleSaveEditedUser
-          }
-          deleteFunction={handleDeleteUser}
-          handleCancel={handleCancel}
-          confirmLoading={confirmLoading}
-          isButtonSaveOff={isButtonSaveOff}
-          setDeletionpassword={setDeletionpassword}
-        >
-          <UniForm
-            formFor={modalFor}
-            username={username}
-            setUsername={setUsername}
-            description={description}
-            setDescription={setDescription}
-            phone={phone}
-            setPhone={setPhone}
-            // for edit function
-            newpassword={newpassword}
-            setNewPassword={setNewPassword}
-            oldpassword={oldpassword}
-            setOldPassword={setOldPassword}
-            //
-            password={password}
-            setPassword={setPassword}
-            confirmpassword={confirmpassword}
-            setConfirmpassword={setConfirmpassword}
-            permission={permission}
-            setPermission={setPermission}
-            setIsButtonSaveOff={setIsButtonSaveOff}
-            // for delete function
-            deletionpassword={deletionpassword}
-            setDeletionpassword={setDeletionpassword}
-            page={page}
-            handleDeleteUser={handleDeleteUser}
-          />
-        </UniModal>
       </div>
-    </UserVerifier>
+
+      <UniModal
+        // GENERIC (MODAL)
+        modalFor={modalFor}
+        isModalVisible={isModalVisible}
+        saveFunction={
+          modalFor == 'addUser' ? handleSaveUser : handleSaveEditedUser
+        }
+        deleteFunction={handleDeleteUser}
+        handleCancel={handleCancel}
+        confirmLoading={confirmLoading}
+        isButtonSaveOff={isButtonSaveOff}
+        setDeletionpassword={setDeletionpassword}
+      >
+        <UniForm
+          formFor={modalFor}
+          username={username}
+          setUsername={setUsername}
+          description={description}
+          setDescription={setDescription}
+          phone={phone}
+          setPhone={setPhone}
+          // for edit function
+          newpassword={newpassword}
+          setNewPassword={setNewPassword}
+          oldpassword={oldpassword}
+          setOldPassword={setOldPassword}
+          //
+          password={password}
+          setPassword={setPassword}
+          confirmpassword={confirmpassword}
+          setConfirmpassword={setConfirmpassword}
+          permission={permission}
+          setPermission={setPermission}
+          setIsButtonSaveOff={setIsButtonSaveOff}
+          // for delete function
+          deletionpassword={deletionpassword}
+          setDeletionpassword={setDeletionpassword}
+          page={page}
+          handleDeleteUser={handleDeleteUser}
+        />
+      </UniModal>
+    </div>
   );
 }
 Users.Layout = AdminLayout;

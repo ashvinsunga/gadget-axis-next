@@ -57,8 +57,8 @@ export default function GadgetCard({
             backgroundImage: 'url(' + image_url + ')',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center center',
-            backgroundSize: 'cover',
-            height: '150px',
+            backgroundSize: 'contain',
+            height: '100px',
           }}
         >
           <br />

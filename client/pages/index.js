@@ -7,8 +7,8 @@ import { UserContext } from '../context';
 
 export default function Login() {
   const [state, setState] = useContext(UserContext);
-  const [username, setUsername] = useState('ashvinsunga');
-  const [password, setPassword] = useState('123456');
+  const [username, setUsername] = useState('admin');
+  const [password, setPassword] = useState('12345678');
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -17,10 +17,13 @@ export default function Login() {
     e.preventDefault();
     try {
       setLoading(true);
-      const { data } = await axios.post(`http://localhost:8000/loginuser`, {
-        username,
-        password,
-      });
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/loginuser`,
+        {
+          username,
+          password,
+        }
+      );
       if (data.error) {
         toast.error(data.error);
         setLoading(false);
@@ -47,8 +50,8 @@ export default function Login() {
         <div className="container">
           <div className="modal-dialog">
             <div className="modal-content">
-              <div className="modal-header">
-                <div className="h4 justiy-content">
+              <div className="modal-header d-flex justify-content-center">
+                <div className="h4 ">
                   <img
                     src="images/logo-black.png"
                     width="40"
@@ -56,10 +59,11 @@ export default function Login() {
                     className="d-inline-block h1 "
                     alt=""
                   />
-                  ADGET AXIS GADGET RENTAL SYSTEM
+                  ADGET AXIS <br />
+                  <h5>GADGET RENTAL SYSTEM</h5>
                 </div>
               </div>
-              <div className="modal-body col-md-10 offset-1">
+              <div className="modal-body col-md-12 ">
                 <form onSubmit={loginSubmit}>
                   <div className="mb-3">
                     <label className="form-label">Login</label>

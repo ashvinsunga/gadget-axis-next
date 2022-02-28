@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Avatar } from 'antd';
 import { CameraOutlined, LoadingOutlined } from '@ant-design/icons';
 
-export default function UserForm({
+export default function UniForm({
   // GENERIC
   formFor,
   setIsButtonSaveOff,
@@ -263,7 +263,7 @@ export default function UserForm({
                   value={newpassword}
                   disabled={formFor == 'editUser' && !oldpassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  type="text"
+                  type="password"
                   className="form-control"
                   name="newpassword"
                   id="newpassword"
@@ -310,8 +310,8 @@ export default function UserForm({
                 <option value="" hidden>
                   --
                 </option>
-                <option>Read only</option>
-                <option>Full</option>
+                <option key="random1">Read only</option>
+                <option key="random2">Full</option>
               </select>
             </div>
           </div>
@@ -337,13 +337,13 @@ export default function UserForm({
                   className="form-control"
                   id="brand"
                 >
-                  <option value="" hidden>
+                  <option key="random1" value="" hidden>
                     --
                   </option>
 
-                  <option>Sony</option>
-                  <option>Nintendo</option>
-                  <option>Microsoft</option>
+                  <option key="random2">Sony</option>
+                  <option key="random3">Nintendo</option>
+                  <option key="random4">Microsoft</option>
                 </select>
               </div>
             </div>
@@ -361,56 +361,56 @@ export default function UserForm({
                   className="form-control"
                   id="product"
                 >
-                  <option value="" hidden>
+                  <option key="random1" value="" hidden>
                     --
                   </option>
                   {brand == 'Nintendo' && (
                     <>
-                      <option>Nintendo Switch</option>
-                      <option>Nintendo Switch Lite</option>
-                      <option>Nintendo Switch OLED</option>
-                      <option>New Nintendo 3DS XL</option>
-                      <option>New Nintendo 2DS XL</option>
-                      <option>New Nintendo 3DS</option>
-                      <option>Nintendo 2DS</option>
-                      <option>Nintendo 3DS XL</option>
-                      <option>Nintendo DSi</option>
-                      <option>Nintendo DS</option>
-                      <option>Nintendo Lite</option>
-                      <option>Gameboy Advance</option>
-                      <option>Gameboy Color</option>
-                      <option>Gameboy</option>
-                      <option>Nintendo GameCube</option>
-                      <option>Nintendo 64</option>
-                      <option>SNES</option>
-                      <option>NES</option>
+                      <option key="random2">Nintendo Switch</option>
+                      <option key="random3">Nintendo Switch Lite</option>
+                      <option key="random4">Nintendo Switch OLED</option>
+                      <option key="random5">New Nintendo 3DS XL</option>
+                      <option key="random6">New Nintendo 2DS XL</option>
+                      <option key="random7">New Nintendo 3DS</option>
+                      <option key="random8">Nintendo 2DS</option>
+                      <option key="random9">Nintendo 3DS XL</option>
+                      <option key="random10">Nintendo DSi</option>
+                      <option key="random11">Nintendo DS</option>
+                      <option key="random12">Nintendo Lite</option>
+                      <option key="random13">Gameboy Advance</option>
+                      <option key="random14">Gameboy Color</option>
+                      <option key="random15">Gameboy</option>
+                      <option key="random16">Nintendo GameCube</option>
+                      <option key="random17">Nintendo 64</option>
+                      <option key="random18">SNES</option>
+                      <option key="random19">NES</option>
                     </>
                   )}
 
                   {brand == 'Sony' && (
                     <>
-                      <option>PlayStation 5</option>
-                      <option>PlayStation 4 Pro</option>
-                      <option>PlayStation 4 Slim</option>
-                      <option>PlayStation 4</option>
-                      <option>PlayStation Vita (PS Vita)</option>
-                      <option>PlayStation 3 Super Slim</option>
-                      <option>PlayStation 3 Slim</option>
-                      <option>PlayStation Portable (PSP)</option>
-                      <option>PlayStation 2 Slim</option>
-                      <option>PlayStation 2 </option>
-                      <option>PS One </option>
-                      <option>PlayStation</option>
+                      <option key="random1">PlayStation 5</option>
+                      <option key="random2">PlayStation 4 Pro</option>
+                      <option key="random3">PlayStation 4 Slim</option>
+                      <option key="random4">PlayStation 4</option>
+                      <option key="random5">PlayStation Vita (PS Vita)</option>
+                      <option key="random6">PlayStation 3 Super Slim</option>
+                      <option key="random7">PlayStation 3 Slim</option>
+                      <option key="random8">PlayStation Portable (PSP)</option>
+                      <option key="random9">PlayStation 2 Slim</option>
+                      <option key="random10">PlayStation 2 </option>
+                      <option key="random11">PS One </option>
+                      <option key="random12">PlayStation</option>
                     </>
                   )}
 
                   {brand == 'Microsoft' && (
                     <>
-                      <option>XBOX</option>
-                      <option>XBOX 360</option>
-                      <option>XBOX One</option>
-                      <option>XBOX Series X</option>
-                      <option>XBOX Series S</option>
+                      <option key="random1">XBOX</option>
+                      <option key="random2">XBOX 360</option>
+                      <option key="random3">XBOX One</option>
+                      <option key="random4">XBOX Series X</option>
+                      <option key="random5">XBOX Series S</option>
                     </>
                   )}
                 </select>
@@ -538,27 +538,31 @@ export default function UserForm({
                 className="form-control"
                 id="idpresented"
               >
-                <option value="" hidden>
+                <option key="random1" value="" hidden>
                   --
                 </option>
 
-                <option>e-Card / UMID</option>
-                <option>Employee’s ID / Office Id</option>
-                <option>Driver’s License</option>
-                <option>BIR (TIN)</option>
-                <option>Passport</option>
-                <option>Senior Citizen ID</option>
-                <option>SSS ID</option>
-                <option>Voter’s ID</option>
-                <option>Philippine Identification (PhilID)</option>
-                <option>NBI Clearance</option>
-                <option>Firearms License</option>
-                <option>Pag-ibig ID</option>
-                <option>Person’s With Disability (PWD) ID</option>
-                <option>Philippine Postal ID </option>
-                <option>Phil-health ID</option>
-                <option>Barangay ID</option>
-                <option>School ID</option>
+                <option key="random2">e-Card / UMID</option>
+                <option key="random3">Employee’s ID / Office Id</option>
+                <option key="random4">Driver’s License</option>
+                <option key="random5">BIR (TIN)</option>
+                <option key="random6">Passport</option>
+                <option key="random7">Senior Citizen ID</option>
+                <option key="random8">SSS ID</option>
+                <option key="random9">Voter’s ID</option>
+                <option key="random10">
+                  Philippine Identification (PhilID)
+                </option>
+                <option key="random11">NBI Clearance</option>
+                <option key="random12">Firearms License</option>
+                <option key="random13">Pag-ibig ID</option>
+                <option key="random14">
+                  Person’s With Disability (PWD) ID
+                </option>
+                <option key="random15">Philippine Postal ID </option>
+                <option key="random16">Phil-health ID</option>
+                <option key="random17">Barangay ID</option>
+                <option key="random18">School ID</option>
               </select>
             </div>
           </div>

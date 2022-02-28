@@ -3,11 +3,9 @@ import { UserContext } from '../../context';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 import RentStatusLayout from '../../components/layouts/RentStatusLayout.component';
-import io from 'socket.io-client';
 // import styled from 'styled-components';
 import { Button } from 'antd';
 import { toast } from 'react-toastify';
-import UserVerifier from '../../components/routes/UserVerifier';
 import moment from 'moment';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -17,9 +15,6 @@ import EndRentModal from '../../components/EndRentModal.component';
 import UniForm from '../../components/UniForm.component';
 
 export default function RentStatus() {
-  const socket = io(process.env.NEXT_PUBLIC_SOCKETIO, {
-    reconnection: true,
-  });
   const [state, setState] = useContext(UserContext);
   const [rents, setRents] = useState([]);
   const [gridApi, setGridApi] = useState(null);
@@ -209,55 +204,53 @@ export default function RentStatus() {
   };
 
   return (
-    <UserVerifier>
-      <div className="ag-theme-alpine" style={{ height: 585, width: '103%' }}>
-        <AgGridReact
-          rowData={rents}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          onGridReady={onGridReady}
-          onFirstDataRendered={autoSizeColumns}
-          rowSelection={'single'}
-          onRowClicked={(e) => {
-            // console.log(e);
-            // setSelecteditem(e.data._id);
-          }}
-        ></AgGridReact>
+    <div className="ag-theme-alpine" style={{ height: 585, width: '103%' }}>
+      <AgGridReact
+        rowData={rents}
+        columnDefs={columnDefs}
+        defaultColDef={defaultColDef}
+        onGridReady={onGridReady}
+        onFirstDataRendered={autoSizeColumns}
+        rowSelection={'single'}
+        onRowClicked={(e) => {
+          // console.log(e);
+          // setSelecteditem(e.data._id);
+        }}
+      ></AgGridReact>
 
-        <EndRentModal
-          // GENERIC (MODAL)
-          handleEndRent={handleEndRent}
-          modalFor={modalFor}
-          isModalVisible={isModalVisible}
-          handleCancel={handleCancel}
-          confirmLoading={confirmLoading}
-          isButtonSaveOff={isButtonSaveOff}
+      <EndRentModal
+        // GENERIC (MODAL)
+        handleEndRent={handleEndRent}
+        modalFor={modalFor}
+        isModalVisible={isModalVisible}
+        handleCancel={handleCancel}
+        confirmLoading={confirmLoading}
+        isButtonSaveOff={isButtonSaveOff}
+        setDeletionpassword={setDeletionpassword}
+      >
+        <UniForm
+          formFor={modalFor}
+          setIsButtonSaveOff={setIsButtonSaveOff}
+          uploading={uploading}
+          image={image}
+          brand={brand}
+          setBrand={setBrand}
+          product={product}
+          setProduct={setProduct}
+          model={model}
+          setModel={setModel}
+          serial={serial}
+          setSerial={setSerial}
+          color={color}
+          setColor={setColor}
+          rate={rate}
+          setRate={setRate}
+          deletionpassword={deletionpassword}
           setDeletionpassword={setDeletionpassword}
-        >
-          <UniForm
-            formFor={modalFor}
-            setIsButtonSaveOff={setIsButtonSaveOff}
-            uploading={uploading}
-            image={image}
-            brand={brand}
-            setBrand={setBrand}
-            product={product}
-            setProduct={setProduct}
-            model={model}
-            setModel={setModel}
-            serial={serial}
-            setSerial={setSerial}
-            color={color}
-            setColor={setColor}
-            rate={rate}
-            setRate={setRate}
-            deletionpassword={deletionpassword}
-            setDeletionpassword={setDeletionpassword}
-            handleEndRent={handleEndRent}
-          />
-        </EndRentModal>
-      </div>
-    </UserVerifier>
+          handleEndRent={handleEndRent}
+        />
+      </EndRentModal>
+    </div>
   );
 }
 

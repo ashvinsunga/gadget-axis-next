@@ -15,11 +15,7 @@ const UserVerifier = ({ children }) => {
 
   const getCurrentUser = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/currentuser`, {
-        headers: {
-          Authorization: `Bearer ${state.token}`,
-        },
-      });
+      const { data } = await axios.get(`{NEXT_PUBLIC_ADMIN_API}/currentuser`);
       if (data.ok) setOk(true);
     } catch (err) {
       router.push('/');

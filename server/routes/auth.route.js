@@ -36,9 +36,9 @@ const {
 
 router.post('/loginuser', loginUser);
 router.get('/getusers', getUsers);
-router.post('/adduser', addUser);
+router.post('/adduser', verifyToken, addUser);
 router.put('/edituser', verifyToken, editUser);
-router.delete('/deleteuser', deleteUser);
+router.delete('/deleteuser', verifyToken, deleteUser);
 router.post('/queryuser', queryUser);
 router.get('/getgadgets', getGadgets);
 router.post(
@@ -50,21 +50,21 @@ router.post(
 router.post('/addgadget', verifyToken, addGadget);
 router.put('/editgadget', verifyToken, verifyToken, editGadget);
 router.delete('/deletegadget', verifyToken, deleteGadget);
-router.post('/querygadget', verifyToken, queryGadget);
+router.post('/querygadget', queryGadget);
 router.get('/getcustomers', verifyToken, getCustomers);
-router.get('/getcustomersname', verifyToken, getCustomersName);
+router.get('/getcustomersname', getCustomersName);
 router.post('/addcustomer', verifyToken, addCustomer);
 router.put('/editcustomer', verifyToken, editCustomer);
 router.delete('/deletecustomer', verifyToken, deleteCustomer);
-router.post('/querycustomer', verifyToken, queryCustomer);
-router.get('/currentuser', verifyToken, currentUser);
+router.post('/querycustomer', queryCustomer);
+router.get('/currentuser', currentUser);
 
 //Rent
 router.get('/listnintendo', verifyToken, listNintendo);
 router.get('/listsony', verifyToken, listSony);
 router.get('/listmicrosoft', verifyToken, listMicrosoft);
 router.post('/confirmrent', verifyToken, confirmRent);
-router.get('/listrents', verifyToken, listRents);
+router.get('/listrents', listRents);
 router.get('/listrenthistory', verifyToken, listRentHistory);
 router.put('/confirmendrent', verifyToken, confirmEndRent);
 module.exports = router;

@@ -4,7 +4,6 @@ import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 import RentStatusLayout from '../../components/layouts/RentStatusLayout.component';
 // import styled from 'styled-components';
-import UserVerifier from '../../components/routes/UserVerifier';
 import moment from 'moment';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -114,21 +113,19 @@ export default function RentHistory() {
   };
 
   return (
-    <UserVerifier>
-      <div className="ag-theme-alpine" style={{ height: 585, width: '103%' }}>
-        <AgGridReact
-          rowData={rents}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          onGridReady={onGridReady}
-          onFirstDataRendered={autoSizeColumns}
-          onRowClicked={(e) => {
-            // console.log(e);
-            // setSelecteditem(e.data._id);
-          }}
-        ></AgGridReact>
-      </div>
-    </UserVerifier>
+    <div className="ag-theme-alpine" style={{ height: 585, width: '103%' }}>
+      <AgGridReact
+        rowData={rents}
+        columnDefs={columnDefs}
+        defaultColDef={defaultColDef}
+        onGridReady={onGridReady}
+        onFirstDataRendered={autoSizeColumns}
+        onRowClicked={(e) => {
+          // console.log(e);
+          // setSelecteditem(e.data._id);
+        }}
+      ></AgGridReact>
+    </div>
   );
 }
 

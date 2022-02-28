@@ -146,7 +146,7 @@ export default function Gadgets() {
     // axios based data request from the api/server
     try {
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/users/getgadgets`
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/getgadgets`
       );
       setGadgets(data);
     } catch (err) {
@@ -172,7 +172,7 @@ export default function Gadgets() {
     // console.log(state);
     try {
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/gadgets/uploadimage`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/uploadimage`,
         formData
       );
       // console.log('uploaded image ==>', data);
@@ -191,7 +191,7 @@ export default function Gadgets() {
     try {
       setConfirmLoading(true);
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/gadgets/addgadget`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/addgadget`,
         { brand, product, model, serial, image, color, rate }
       );
 
@@ -216,7 +216,7 @@ export default function Gadgets() {
     try {
       setConfirmLoading(true);
       const { data } = await axios.put(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/gadgets/editgadget`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/editgadget`,
         {
           selecteditem,
           brand,
@@ -254,7 +254,7 @@ export default function Gadgets() {
       setConfirmLoading(true);
 
       const { data } = await axios.delete(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/gadgets/deletegadget`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/deletegadget`,
         {
           data: {
             selecteditem,
@@ -283,7 +283,7 @@ export default function Gadgets() {
   const handleQueryGadget = async () => {
     try {
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/gadgets/querygadget`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/querygadget`,
         { selecteditem }
       );
       if (data.error) {

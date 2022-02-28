@@ -49,3 +49,22 @@ input.invalid + p {
   height: auto;
   margin-bottom: 5px;
 }
+
+/* Login */
+
+.modal-content {
+  width: 80% !important;
+}
+
+@media screen and (max-width: 320px) {
+  .modal-content {
+    width: 80% !important;
+  }
+  .modal-header .h4 {
+    justify-content: center;
+    font-size: 14px;
+  }
+  .modal-header .h4 h5 {
+    font-size: 15px;
+  }
+}

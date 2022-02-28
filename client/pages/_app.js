@@ -8,6 +8,7 @@ import 'antd/dist/antd.css';
 
 function MyApp({ Component, pageProps }) {
   const Layout = Component.Layout || EmptyLayout;
+
   return (
     <UserProvider>
       <Head>

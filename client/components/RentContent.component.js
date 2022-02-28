@@ -37,7 +37,7 @@ export default function RentContent({ gadgetListLink }) {
   const listGadgets = async (req, res) => {
     try {
       const { data } = await axios.get(
-        `http://localhost:8000/rentnow/${gadgetListLink}`
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/${gadgetListLink}`
       );
       // console.log(data);
       setGadgets(data);
@@ -50,7 +50,7 @@ export default function RentContent({ gadgetListLink }) {
     try {
       setConfirmLoading(true);
       const { data } = await axios.post(
-        `http://localhost:8000/rentnow/confirmrent`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/confirmrent`,
         {
           customerid,
           gadgetid,
@@ -81,7 +81,7 @@ export default function RentContent({ gadgetListLink }) {
   const queryCustomersName = async (req, res) => {
     try {
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/customers/getcustomersname`
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/getcustomersname`
       );
       setCustomers(data);
       // console.log(customersname);

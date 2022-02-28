@@ -6,7 +6,6 @@ import { AgGridReact } from 'ag-grid-react';
 import { Button } from 'antd';
 import { toast } from 'react-toastify';
 import moment from 'moment';
-// import io from 'socket.io-client';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -17,9 +16,6 @@ import UniForm from '../../components/UniForm.component';
 import AdminLayout from '../../components/layouts/AdminLayout.component';
 
 export default function Customers() {
-  // const socket = io(process.env.NEXT_PUBLIC_SOCKETIO, {
-  //   reconnection: true,
-  // });
   const [state, setState] = useContext(UserContext);
   const [customers, setCustomers] = useState([]);
   const [iocustomers, setIocustomers] = useState([]);
@@ -118,12 +114,6 @@ export default function Customers() {
     if (state && state.token) getCustomers();
     if (state && state.user && state.user.permission) {
       setCurrentuserpermission(state.user.permission);
-      // console.log('SOCKETIO ON JOIN', socket);
-      //   if (customers)
-      //     socket.on('new-customer', (newCustomer) => {
-      //       setIocustomers([newCustomer, ...customers]);
-      //       console.log(customers);
-      //     });
     }
   }, [state && state.token]);
 
@@ -131,7 +121,7 @@ export default function Customers() {
     // axios based data request from the api/server
     try {
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/customers/getcustomers`
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/getcustomers`
       );
       setCustomers(data);
     } catch (err) {
@@ -152,7 +142,7 @@ export default function Customers() {
     try {
       setConfirmLoading(true);
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/customers/addCustomer`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/addCustomer`,
         { name, idpresented, idno, phone, email }
       );
 
@@ -166,8 +156,6 @@ export default function Customers() {
         clearFormCustomer();
         toast.success('Customer added successfully ');
         getCustomers();
-        //socket
-        socket.emit('new-customer', data);
       }
     } catch (err) {
       setConfirmLoading(false);
@@ -179,7 +167,7 @@ export default function Customers() {
     try {
       setConfirmLoading(true);
       const { data } = await axios.put(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/customers/editcustomer`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/editcustomer`,
         {
           selecteditem,
           name,
@@ -214,7 +202,7 @@ export default function Customers() {
       setConfirmLoading(true);
 
       const { data } = await axios.delete(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/customers/deletecustomer`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/deletecustomer`,
         {
           data: {
             selecteditem,
@@ -243,7 +231,7 @@ export default function Customers() {
   const handleQueryCustomer = async () => {
     try {
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_ADMIN_API}/customers/querycustomer`,
+        `${process.env.NEXT_PUBLIC_ADMIN_API}/querycustomer`,
         { selecteditem }
       );
       console.log(data);

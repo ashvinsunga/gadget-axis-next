@@ -10,7 +10,7 @@ const app = express();
 
 //db
 mongoose
-  .connect(process.env.ATLAS_URI)
+  .connect(process.env.ATLAS_URI, { useNewUrlParser: true, family: 4 })
   .then(() => console.log('Database connected!'))
   .catch((err) => console.log('Database connection error =>', err));
 
